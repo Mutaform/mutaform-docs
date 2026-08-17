@@ -1,0 +1,20 @@
+# Сборка MkDocs
+site/
+
+# Клоны исходников аддонов, которые CI кладёт рядом
+sources/
+
+# Отчёт check_drift.py
+drift.md
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Редакторы и ОС
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini

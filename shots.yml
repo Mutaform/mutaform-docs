@@ -1,0 +1,108 @@
+# Чек-лист иллюстраций.
+#
+# Пока файла по указанному пути нет, `tools/make_placeholders.py` рисует на его
+# месте заглушку, и страница выглядит цельной. Настоящая картинка кладётся по
+# тому же пути — больше ничего править не нужно.
+#
+#     python tools/make_placeholders.py --list
+#
+# Большинство снимков сделано автоматически: скрипты в scratchpad-сессии
+# поднимали нужное состояние в работающем Blender через MCP-мост (localhost:9876),
+# снимали окно через `bpy.ops.screen.screenshot` и обрезали до нужной области.
+# Ниже помечено, что снято так, а что требует ручной съёмки и почему.
+
+shots:
+  # --- QC Bake ------------------------------------------------------------
+  - path: qc-bake/img/panel-main.png
+    done: auto
+    caption: >-
+      N-панель QC Bake целиком со всеми свитками, справа видна активная вкладка.
+
+  - path: qc-bake/img/naming.png
+    done: auto
+    caption: >-
+      Свиток Naming с пресетом Custom — видны все три поля суффиксов.
+
+  - path: qc-bake/img/visibility.png
+    done: auto
+    caption: >-
+      Свиток Visibility: High скрыт (вдавлен Hide с закрытым глазом), Low и Cage
+      показаны, All в смешанном состоянии.
+
+  - path: qc-bake/img/outliner-per-asset.png
+    done: auto
+    caption: >-
+      Аутлайнер после Per Asset: зелёные Bake_barrel / Bake_crate / Bake_pillar
+      и красная Bake_lamp с неполной парой.
+
+  - path: qc-bake/img/reduce-before-after.png
+    done: auto
+    caption: >-
+      Составной кадр: слева три отдельные пары, справа они же, слитые в
+      BakeGroup_01, неполная пара осталась отдельно.
+
+  - path: qc-bake/img/create-namepair.gif
+    done: manual
+    size: [640, 360]
+    caption: >-
+      ГИФКА, снять вручную: выделение двух объектов -> Create Namepair -> имена
+      в аутлайнере меняются на asset_low и asset_high. Записать нечем
+      автоматически — нужна запись экрана (ShareX / ScreenToGif), 10-15 секунд.
+
+  # --- Scene QC Validator -------------------------------------------------
+  - path: qc-validator/img/panel-main.png
+    done: auto
+    caption: >-
+      Панель валидатора после прогона: красная полоса «8 failing checks», Scope,
+      Validate, Review Scene, чек-лист и результаты.
+
+  - path: qc-validator/img/checklist.png
+    done: auto
+    caption: >-
+      Чек-лист с развёрнутым Check Settings: вкладки Mesh/Objects/Mapping/
+      Material, счётчик включённых, список проверок с уровнями.
+
+  - path: qc-validator/img/results.png
+    done: auto
+    caption: >-
+      Свиток Results: строки Fail, одна заглушённая, детализация выбранной
+      строки и кнопки Ignore / Select / Fix Me.
+
+  - path: qc-validator/img/padding-preview.png
+    done: manual
+    size: [720, 380]
+    caption: >-
+      Снять вручную: редактор UV с включённым Show Padding на реальной
+      развёртке. Автоматически не собрать — нужен ассет с осмысленной
+      развёрткой, на кубе-заглушке картинка ничего не объясняет.
+
+  # --- Mutaform Studio Render ---------------------------------------------
+  - path: qc-daily-render/img/panel.png
+    done: auto
+    caption: >-
+      Панель QC Render после Setup: Render / Open Folder, Restore, табы
+      Camera Settings и Render Settings.
+
+  # --- QC Maya Viewport ---------------------------------------------------
+  - path: qc-maya-viewport/img/header-menu.png
+    done: manual
+    size: [420, 280]
+    caption: >-
+      Снять вручную: шапка вьюпорта с вдавленной иконкой сферы и раскрытым
+      меню. Автоматически не выходит — всплывающая панель живёт только пока
+      её держит мышь и в снимок окна не попадает.
+
+  - path: qc-maya-viewport/img/mode-normal.png
+    done: manual
+    size: [720, 400]
+    caption: >-
+      Снять вручную: модель в режиме Normal Only. Нужен ассет с реальной
+      запечённой картой нормалей — на голой геометрии режим показывает ровную
+      заливку и ничего не объясняет.
+
+  # --- QC Bridge ----------------------------------------------------------
+  - path: qc-bridge/img/panel.png
+    done: auto
+    caption: >-
+      Панель QC Maya Bridge: строка отчёта Ready., кнопки передачи, свёрнутый
+      Convert Scene и развёрнутые настройки папки обмена.

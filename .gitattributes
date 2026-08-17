@@ -1,0 +1,12 @@
+# Переводы строк — всегда LF в репозитории.
+#
+# Работаем на Windows, а CI собирает документацию на Linux. Без этого файла git
+# записал бы CRLF, и bash-скрипт внутри .github/workflows/docs.yml сломался бы
+# на раннере: heredoc с CRLF читается как строки с висящим \r.
+* text=auto eol=lf
+
+# Бинарники не трогать.
+*.png binary
+*.gif binary
+*.jpg binary
+*.blend binary

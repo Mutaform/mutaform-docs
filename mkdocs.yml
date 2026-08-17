@@ -1,0 +1,147 @@
+site_name: Mutaform Addons
+site_description: Документация к студийным аддонам Mutaform для Blender
+site_url: https://mutaform.github.io/mutaform-docs/
+copyright: Mutaform Studio
+
+repo_url: https://github.com/mutaform/mutaform-docs
+repo_name: mutaform/mutaform-docs
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: ru
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    # navigation.instant несовместим с переключателем языка из mkdocs-static-i18n:
+    # при мгновенной подгрузке ссылка на вторую локаль ведёт не туда.
+    - navigation.tracking
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - content.code.copy
+    - content.tabs.link
+    - content.action.edit
+    - search.suggest
+    - search.highlight
+  palette:
+    # Тема по умолчанию следует за системной; переключатель перекрывает её.
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Переключить тему
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Тёмная тема
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Светлая тема
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+plugins:
+  - search:
+      lang:
+        - ru
+        - en
+  # Двуязычность по суффиксу файла: page.md — русский, page.en.md — английский.
+  # Русский помечен default, поэтому он лежит в корне сайта, а английский —
+  # в /en/. Ссылка на несуществующий перевод ведёт на русскую страницу.
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      languages:
+        - locale: ru
+          name: Русский
+          default: true
+          build: true
+        - locale: en
+          name: English
+          build: true
+          site_name: Mutaform Addons
+          nav_translations:
+            Начало: Getting started
+            Аддоны: Add-ons
+            Обзор: Overview
+            Справочник: Reference
+            Установка: Installation
+            Что нового: Changelog
+
+nav:
+  - Начало:
+      - index.md
+      - Установка: install.md
+      - Что нового: changelog.md
+  # Обзор пишется руками, справочник генерируется из исходников аддона.
+  - Аддоны:
+      - QC Bake:
+          - Обзор: qc-bake/index.md
+          - Справочник: qc-bake/reference.md
+      - Scene QC Validator:
+          - Обзор: qc-validator/index.md
+          - Справочник: qc-validator/reference.md
+      - Mutaform Studio Render:
+          - Обзор: qc-daily-render/index.md
+          - Справочник: qc-daily-render/reference.md
+      - QC Maya Viewport:
+          - Обзор: qc-maya-viewport/index.md
+          - Справочник: qc-maya-viewport/reference.md
+      - QC Bridge Maya ↔ Blender:
+          - Обзор: qc-bridge/index.md
+          - Справочник: qc-bridge/reference.md
+
+extra:
+  alternate:
+    - name: Русский
+      link: /mutaform-docs/
+      lang: ru
+    - name: English
+      link: /mutaform-docs/en/
+      lang: en
+  version:
+    provider: mike
+    default: latest
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/mutaform
+
+# Битая внутренняя ссылка — это страница, до которой художник не дойдёт,
+# поэтому сборка на них падает, а не предупреждает.
+strict: true
+validation:
+  links:
+    absolute_links: relative_to_docs
+    unrecognized_links: warn

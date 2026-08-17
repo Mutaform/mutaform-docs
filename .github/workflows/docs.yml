@@ -1,0 +1,143 @@
+name: docs
+
+# Документация пересобирается из исходников аддонов, поэтому её сборку
+# запускает не только пуш в этот репозиторий, но и ручной вызов — им же
+# пользуются репозитории аддонов, чтобы дёрнуть пересборку после релиза.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Метка версии для mike (по умолчанию — из даты релиза)"
+        required: false
+        default: ""
+  # Раз в неделю — страховка на случай, если релиз аддона прошёл мимо хука.
+  schedule:
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Забрать репозиторий документации
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Исходники аддонов лежат в отдельных публичных репозиториях. Клонируем
+      # их в sources/ — генератор ждёт именно такую раскладку.
+      - name: Забрать исходники аддонов
+        run: |
+          mkdir -p sources
+          while read -r name url; do
+            [ -z "$name" ] && continue
+            echo "::group::$name"
+            git clone --depth 1 "$url" "sources/$name"
+            echo "::endgroup::"
+          done <<'REPOS'
+          qc_bake https://github.com/Mutaform/qc-bake
+          qc_validator https://github.com/Mutaform/scene-qc-validator
+          qc_daily_render https://github.com/Mutaform/qc-daily-render
+          qc_maya_viewport https://github.com/Mutaform/qc-maya-viewport
+          qc_mutaform_bridge https://github.com/Mutaform/qc-bridge-blender-maya
+          REPOS
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Установить зависимости
+        run: pip install -r requirements.txt
+
+      # Сравнение с закоммиченным слепком делается ДО генерации: после неё
+      # манифест уже переписан и сравнивать будет не с чем.
+      - name: Найти расхождения с документацией
+        id: drift
+        continue-on-error: true
+        run: |
+          python tools/check_drift.py --source-root sources | tee drift.md
+
+      - name: Собрать страницы справочника
+        run: python tools/gen_pages.py --source-root sources
+
+      - name: Дорисовать недостающие скриншоты
+        run: python tools/make_placeholders.py
+
+      - name: Проверить сборку
+        run: mkdocs build --strict
+
+      # На pull request дальше не идём: проверили, что собирается, и хватит.
+      - name: Опубликовать
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          VERSION="${{ github.event.inputs.version }}"
+          if [ -z "$VERSION" ]; then
+            VERSION=$(date +%Y.%m.%d)
+          fi
+          mike deploy --push --update-aliases "$VERSION" latest
+          mike set-default --push latest
+
+      # Расхождения не роняют сборку — документация всё равно выкладывается.
+      # Но список того, что надо дописать руками, повисает как issue.
+      - name: Завести issue о расхождениях
+        if: steps.drift.outcome == 'failure' && github.event_name != 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('drift.md', 'utf8');
+            const title = 'Документация разошлась с кодом аддонов';
+
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'drift',
+            });
+
+            const text = [
+              'Сборка нашла изменения в аддонах, которые не отражены в гайдах.',
+              'Справочник обновился сам — дописать нужно только руками написанные страницы.',
+              '',
+              '```',
+              body.slice(0, 60000),
+              '```',
+            ].join('\n');
+
+            if (existing.data.length > 0) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.data[0].number,
+                body: text,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body: text,
+                labels: ['drift'],
+              });
+            }
+
+      # Слепок API коммитится обратно, чтобы следующая сборка сравнивала
+      # с текущим состоянием, а не сообщала об одних и тех же изменениях снова.
+      - name: Обновить слепок API
+        if: github.event_name != 'pull_request'
+        run: |
+          git add data/api-manifest.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: обновить слепок API аддонов"
+            git push
+          fi

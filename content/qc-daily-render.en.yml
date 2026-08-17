@@ -1,0 +1,251 @@
+# English content for the Mutaform Studio Render reference.
+
+title: What every button does
+intro: >-
+  A walk through the QC Render panel. Until the studio is built everything in
+  the tabs is greyed out — Setup first, settings after.
+
+sections:
+  - title: The top of the panel
+    intro: >-
+      Always visible. Before Setup there is only Setup.
+    controls: [actions, restore, tabs]
+
+  - title: Camera Settings — how the shot looks
+    intro: >-
+      Everything that shapes the image: material, lens, light, colour grading.
+    controls:
+      [material, camera-fold, fov, lighting, post-fold, tone, post-sliders,
+       sharpen, frame-bg, wireframe]
+
+  - title: Render Settings — the technical side
+    intro: >-
+      Engine, frame size, quality and where files go.
+    controls: [engine, resolution, quality, output]
+
+controls:
+  actions:
+    label: Setup Render Scene / Render / Open Folder
+    shot: c/actions.png
+    covers: [mutaform.studio_setup, mutaform.studio_render, mutaform.open_output]
+    what: >-
+      Before the studio is built there is a single **Setup Render Scene**
+      button. Afterwards, **Render** and **Open Folder**.
+    when: >-
+      The working order: Setup → find your angle with the viewport → Render. No
+      camera to place: the add-on creates one from the current view and removes
+      it after the shot.
+    result: >-
+      Setup builds the studio — HDRI light, one material, a contact shadow
+      catcher, post-processing. The viewport switches to Rendered and shows a
+      guide for the frame; anything outside it will not be in the shot.
+
+      Render saves an auto-numbered PNG with a transparent background without
+      moving your view. Open Folder opens the folder holding the results.
+    note: >-
+      Setup picks a fast configuration for the machine on its own: the best
+      available backend, GPU only with no CPU hybrid, persistent data. All of it
+      is restored on the way out.
+
+  restore:
+    label: Restore (exit)
+    shot: c/restore.png
+    covers: [mutaform.studio_restore]
+    what: >-
+      Rolls the scene back completely and leaves studio mode.
+    when: >-
+      When the shots are done. Nothing to fear: the add-on recorded the scene at
+      Setup and puts exactly that back.
+    result: >-
+      Everything created is removed; object materials, render settings and the
+      device selection are restored.
+
+  tabs:
+    label: Camera Settings / Render Settings
+    shot: c/tabs.png
+    covers: [mutaform_tab]
+    what: >-
+      Switches the panel between the image and the technical side.
+    note: >-
+      Until the studio is built both tabs are greyed out. That is not a fault —
+      there is nothing to configure without a scene.
+
+  material:
+    label: Use Default Material
+    shot: c/material.png
+    covers: [use_default_material, mat_base_color, mat_roughness, mat_metallic]
+    what: >-
+      Renders everything with one studio material instead of the objects' own.
+      Below it: colour, roughness and metallic.
+    default: "on"
+    when: >-
+      Leave it on for dailies: the model reads by form and silhouette rather
+      than texture, and every asset in the feed looks consistent. Turn it off
+      when the textures are the point.
+
+  camera-fold:
+    label: Camera Settings (the fold)
+    shot: c/camera-fold.png
+    covers: [show_camera_block]
+    what: >-
+      Opens the block holding the lens, lighting and post-processing.
+    default: collapsed
+    when: >-
+      An ordinary daily needs none of it — the defaults are tuned for the studio
+      look. Open it when a shot needs finishing.
+
+  fov:
+    label: Field of View
+    shot: c/fov.png
+    covers: [cam_fov]
+    what: >-
+      Vertical field of view, in degrees.
+    default: 15°
+    when: >-
+      A small value is a long-lens look with almost no perspective distortion —
+      it is what makes the shot read as studio photography rather than a
+      viewport grab. Raise it only when the asset does not fit or you want a
+      deliberately wide look.
+
+  lighting:
+    label: HDRI Brightness and HDRI Rotation
+    shot: c/lighting.png
+    covers: [env_strength, env_yaw]
+    what: >-
+      Environment brightness and its rotation about the vertical axis.
+    when: >-
+      Rotation is the quickest fix for a flat shot: the light direction and the
+      highlights move while the model stays put. It updates live — turn it and
+      watch.
+
+  post-fold:
+    label: Post Effect (the fold)
+    shot: c/post-fold.png
+    covers: [show_posteffect]
+    what: >-
+      Opens the colour grading.
+    default: expanded
+
+  tone:
+    label: Tone Mapping and Curves
+    shot: c/tone.png
+    covers: [tone_mapping, mutaform.curves]
+    what: >-
+      How luminance is mapped into the displayable range, plus a button for
+      precise curves.
+    when: >-
+      Tone Mapping is rarely changed. Curves are for when the highlight and
+      shadow sliders are not enough — lifting only the deepest darks, say.
+
+  post-sliders:
+    label: The grading sliders
+    shot: c/post-sliders.png
+    covers: [exposure, highlights, midtones, shadows, clarity, contrast,
+             contrast_center, saturation, mutaform.reset_prop, prop]
+    what: >-
+      Exposure, highlights, midtones, shadows, local contrast, overall contrast
+      with its pivot, and saturation.
+    when: >-
+      Clarity brings out mid-scale detail — the model looks crisper without
+      touching sharpening. Contrast Center sets the luminance the contrast opens
+      around: lower it when the shadows crush to black.
+    note: >-
+      Every row has an arrow button on the right that resets it. The defaults
+      here are the studio's reference values, not Blender's factory ones, so
+      resetting is safe.
+
+  sharpen:
+    label: Sharpen
+    shot: c/sharpen.png
+    covers: [show_sharpen, sharpen_strength, sharpen_limit]
+    what: >-
+      Sharpening with a limiter.
+    when: >-
+      Strength adds bite, Limit keeps bright halos from forming along contours.
+      When a white fringe appears around the model, lower Limit rather than
+      Strength.
+
+  frame-bg:
+    label: Frame Guide and Background
+    shot: c/frame-bg.png
+    covers: [show_vignette, vignette_strength, vignette_softness, frame_opacity,
+             background_color]
+    what: >-
+      On the left, how much everything outside the frame is dimmed; on the
+      right, the preview backdrop colour.
+    when: >-
+      The frame guide lets you compose in the viewport: what is dimmed will not
+      be in the shot.
+    note: >-
+      The background colour only shows in the preview. The saved PNG is
+      transparent and the contact shadow lands in the alpha, so the shot
+      composites onto any background.
+
+      The collapsed Vignette fold, with strength and softness, lives here too.
+
+  wireframe:
+    label: Wireframe
+    shot: c/wireframe.png
+    covers: [wireframe_on, wireframe_color, wireframe_thickness,
+             wireframe_opacity]
+    what: >-
+      Lays the model's topology over the shading. Below: line colour, thickness
+      and opacity.
+    default: "off"
+    when: >-
+      For a daily that needs to show topology. The wireframe follows the real
+      quads, without triangulation diagonals — it shows what you modelled.
+
+  engine:
+    label: Cycles / EEVEE
+    shot: c/engine.png
+    covers: [preview_engine]
+    what: >-
+      The engine used for both the preview and the saved frame.
+    default: Cycles
+    when: >-
+      EEVEE is the quick look while you hunt for an angle on a heavy scene. Take
+      the final frame in Cycles.
+    note: >-
+      EEVEE has no ground shadow: the transparent shadow catcher is a Cycles
+      feature. The model floats in empty space, and that is not a fault.
+
+  resolution:
+    label: Resolution
+    shot: c/resolution.png
+    covers: [render_x, render_y, mutaform.res_scale, factor]
+    what: >-
+      Frame size, with two arrow buttons: halve and double.
+    default: 3840 × 2160
+    when: >-
+      The arrows preserve the aspect ratio, so the frame guide does not jump.
+      Halve it while looking for an angle and restore it before the final shot.
+
+  quality:
+    label: Samples, Denoiser, Ground Shadow
+    shot: c/quality.png
+    covers: [samples, denoiser, use_shadow_catcher]
+    what: >-
+      Sample count, denoiser and the ground shadow.
+    default: 128 samples, OptiX, shadow on.
+    when: >-
+      The default sample count is enough for a daily. Raise it only when noise
+      shows in the shadows of the final frame.
+    note: >-
+      Without an NVIDIA card the OptiX denoiser falls back to OpenImageDenoise
+      on its own — nothing to choose.
+
+  output:
+    label: Output Folder and Name
+    shot: c/output.png
+    covers: [output_dir, output_base]
+    what: >-
+      Where frames are saved and the base of their file name.
+    default: "name `shot`; folder empty."
+    when: >-
+      Leave the folder empty and the add-on creates `renders` next to the file,
+      showing the resolved path in grey under the fields so you can see where
+      things will land.
+    note: >-
+      The name gets auto-numbering appended, so earlier frames are never
+      overwritten.

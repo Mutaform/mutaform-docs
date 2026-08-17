@@ -1,0 +1,5 @@
+mkdocs-material>=9.5
+mkdocs-static-i18n>=1.2
+mike>=2.1
+pyyaml>=6.0
+pillow>=10.0

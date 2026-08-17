@@ -1,0 +1,91 @@
+# English content for the QC Maya Viewport reference.
+
+title: What every button does
+intro: >-
+  The add-on does not live in the sidebar: a sphere icon in the 3D viewport
+  header toggles the mode, and the arrow beside it opens the menu with the
+  settings.
+
+  The screenshots below show that menu's contents. A popover cannot be captured
+  in a window screenshot — it only exists while the mouse holds it open — so the
+  same set of buttons was rendered in a side panel instead. Order, labels and
+  appearance are identical; only the frame around them differs.
+
+sections:
+  - title: Display modes
+    intro: >-
+      Four mutually exclusive modes. The active one stays depressed.
+    controls: [mode-normal-only, mode-normal-ao, mode-ao, mode-default]
+
+  - title: The rest of the menu
+    controls: [reimport, convention]
+
+controls:
+  mode-normal-only:
+    label: Normal Only
+    shot: c/mode-normal-only.png
+    covers: [mvm.set_custom_mode, mvm.apply_custom, mode]
+    what: >-
+      Shows the normal map alone, unlit.
+    when: >-
+      The main mode for signing off a baked normal. Without light you see what
+      shading usually hides: seams along UV borders, gradients from a bad cage,
+      artefacts where the high poly intersected itself.
+    note: >-
+      If the relief reads inside-out — bumps looking like dents — the map is not
+      at fault; the convention is. The toggle is at the bottom of the menu.
+
+  mode-normal-ao:
+    label: Normal + AO
+    shot: c/mode-normal-ao.png
+    what: >-
+      Normals together with occlusion.
+    when: >-
+      Closest to how the model will look in the engine. Good for the final look
+      once the normal has been checked in Normal Only.
+
+  mode-ao:
+    label: AO Only
+    shot: c/mode-ao.png
+    what: >-
+      Occlusion alone, no maps.
+    when: >-
+      When you need to judge form and volume and the texture is a distraction.
+      Dents and areas where the high poly did not transfer show up clearly.
+
+  mode-default:
+    label: Default Material
+    shot: c/mode-default.png
+    what: >-
+      One flat grey material: no normals, no occlusion.
+    when: >-
+      Clean silhouette and topology — the same view as a clay render. If the
+      form is bad, no map will save it.
+
+  reimport:
+    label: Reimport Textures
+    shot: c/reimport.png
+    covers: [mvm.reimport_textures]
+    what: >-
+      Re-reads the textures from disk.
+    when: >-
+      After every re-bake in an external application. Blender caches textures
+      and does not notice the change on its own: the viewport keeps showing the
+      old image, and it is easy to spend half an hour studying an artefact that
+      is already gone.
+
+  convention:
+    label: OpenGL / DirectX
+    shot: c/convention.png
+    covers: [mvm.set_normal_convention, mvm.disable_viewer, convention]
+    what: >-
+      The direction of the normal map's green channel.
+    default: OpenGL
+    when: >-
+      Set whatever your engine expects. **OpenGL** is Y up: Blender, Marmoset,
+      Unreal. **DirectX** is Y down: Unity's default and some in-house engines.
+    note: >-
+      The toggle only changes the display inside Blender. If the map was baked
+      in one convention and the engine expects the other, the fix belongs in the
+      bake. This button is here so you can look at the map the way the engine
+      will.

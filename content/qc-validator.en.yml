@@ -1,0 +1,496 @@
+# English content for the Scene QC Validator reference.
+
+title: What every button does
+intro: >-
+  Every control in the QC Validator panel, then a table of all the checks, and
+  at the end what those checks look like on a real model.
+
+sections:
+  - title: The top of the panel
+    intro: >-
+      Always visible: the scope, the run button and the status bar above them.
+    controls: [scope, validate]
+
+  - title: Results — working through what was found
+    intro: >-
+      The list of problems after a run. Until Validate has been pressed the fold
+      is empty and says so.
+    controls: [filter, results-list, result-actions]
+
+  - title: Checklist — what gets checked
+    intro: >-
+      The set of checks lives in a project and is split into stages of the work.
+      The UV inspection tools live here too, but they do not always appear — see
+      below.
+    controls:
+      [project, stages, stage-tools, check-settings, tabs, select-all,
+       check-list, check-params]
+
+  - title: UV inspection tools
+    intro: >-
+      Three interactive tools. They report nothing into the results; they show
+      the state directly in the UV editor.
+    controls: [show-overlaps, show-padding, show-texel]
+
+  - title: Review Scene — materials and the checker
+    intro: >-
+      Collapsed by default. Inside: a breakdown of the materials in the scene,
+      and a checker texture for judging UVs.
+    controls: [materials, checker-tiling, checker-buttons]
+
+controls:
+  scope:
+    label: Scope
+    shot: c/scope.png
+    covers: [validation_scope]
+    what: >-
+      Which objects the run covers.
+    default: Selection — selected meshes only.
+    when: >-
+      Keep it on Selection while working on one asset: it is noticeably faster
+      on a heavy scene. Visible Scene and Entire Scene are for the hand-off,
+      when you need to be sure nothing forgotten is left in the file. The
+      difference between them is one thing: Entire Scene looks at hidden objects
+      too.
+
+  validate:
+    label: Validate
+    shot: c/validate.png
+    covers: [sqc.run_validate, sqc.init_checks]
+    what: >-
+      Runs every enabled check and fills the results list.
+    when: >-
+      After each meaningful step, not once before the hand-off: the earlier a
+      problem is caught, the cheaper it is to fix.
+    result: >-
+      The status bar above the button turns green ("All checks passed") or red
+      with the number of blocking problems. The list appears below, in the
+      Results fold.
+    note: >-
+      A fresh file has no checklist, and instead of Validate the panel shows
+      **Initialize Checklist**. Press it once — the checks are created from the
+      active project — and the button never comes back.
+
+  filter:
+    label: The list filter and Fix All
+    shot: c/filter.png
+    covers: [result_filter, sqc.fix_all]
+    what: >-
+      On the left, what to narrow the list to; on the right, the "fix everything
+      fixable" button.
+    default: All Results — every row is shown.
+    when: >-
+      The filter helps on a long list: **Fixable Only** leaves what will close
+      automatically, so you can see how much hand work remains. It affects the
+      display only — the verdict does not change.
+    result: >-
+      Fix All walks the list and fixes everything it can, showing progress. On a
+      heavy scene it is not instant.
+    note: >-
+      Always run Validate again afterwards. Some fixes alter geometry, and new
+      findings can appear on the changed model — triangulating n-gons, for
+      instance, can produce degenerate faces.
+
+  results-list:
+    label: The list of problems
+    shot: c/results-list.png
+    covers: [results, active_result_index, object_name, message, muted]
+    what: >-
+      Each row is one problem on one object: the object name, the check name and
+      a severity icon.
+    when: >-
+      Click through the rows. A click does more than highlight the row: the
+      add-on selects the offending object and enters edit mode with the exact
+      vertices, edges or faces that triggered the check already selected.
+    note: >-
+      A red icon is Fail and blocks the hand-off. A crossed-out grey eye is a
+      silenced row that no longer affects the verdict. Severity is set per check
+      in the checklist.
+
+  result-actions:
+    label: Ignore / Select / Fix Me
+    shot: c/result-actions.png
+    covers: [sqc.toggle_result_mute, sqc.select_result, sqc.fix_result]
+    what: >-
+      Actions on the selected row, with a plain-text explanation of what the
+      check found above them.
+    when: >-
+      **Select** puts the selection back on the offending elements if you have
+      selected something else since. **Fix Me** fixes this row alone and only
+      appears on checks that have a fix. **Ignore** silences the problem.
+    result: >-
+      A silenced row stops affecting the verdict and survives re-running
+      Validate: the ignore list is stored in the scene, separately from the
+      results. The button changes to Restore.
+    note: >-
+      An ignore is bound to the pair "object + check". Rename the object and it
+      detaches, and the problem comes back.
+
+  project:
+    label: The Project row
+    shot: c/project.png
+    covers: [sqc.load_project, sqc.save_project, sqc.import_project_file,
+             sqc.export_project_file, sqc.delete_project, active_project_name,
+             new_project_name, project_name]
+    what: >-
+      The project picker and three buttons: save the current set as a project,
+      load one from a file, write one out to a file.
+    when: >-
+      A project is a set of stages. You make your own when the rules differ from
+      the studio's: different naming, different tolerances. To hand a set to
+      someone else, export to JSON and let them import it.
+    note: >-
+      A bundled project cannot be overwritten — saving always creates a user
+      copy in the extension's folder, so the studio set is safe from accidents.
+
+  stages:
+    label: The stage buttons
+    shot: c/stages.png
+    covers: [sqc.load_stage, active_stage_name, applied_stage_key, stage_name]
+    what: >-
+      The row of buttons under the project line. Each is a saved set: which
+      checks are on, at what severity, with which parameters.
+    when: >-
+      Switch as the work progresses. Strictness grows left to right: Blockout
+      enables 9 checks, Textures 23. Demanding clean UVs during blockout is
+      pointless; before texturing it is mandatory.
+    result: >-
+      Pressing one applies it immediately: checkboxes move, parameters fill in.
+      The active stage stays depressed.
+    note: >-
+      LP_UVs is a special case: only on that stage do the three UV inspection
+      tools appear in the panel. On every other stage they simply are not there.
+
+  stage-tools:
+    label: The small buttons beside the stages
+    shot: c/stage-tools.png
+    covers: [sqc.save_stage, sqc.delete_stage, new_stage_name]
+    what: >-
+      A small row of icons: write the current checklist into a stage, save the
+      whole project as a copy, delete a stage.
+    when: >-
+      When you have tuned the checklist for a particular job and want it back
+      tomorrow.
+    note: >-
+      The delete button only exists for user projects; a bundled one cannot lose
+      a stage.
+
+  check-settings:
+    label: Check Settings
+    shot: c/check-settings.png
+    covers: [show_check_settings]
+    what: >-
+      Opens the checklist itself.
+    default: collapsed
+    when: >-
+      When you need to switch individual checks on or off, change a severity or
+      adjust a parameter.
+    note: >-
+      This is the first thing newcomers trip over: while the row is collapsed no
+      checks are visible at all — only the project and stage pickers. It looks
+      as though there is no checklist.
+
+  tabs:
+    label: The Mesh / Objects / Mapping / Material tabs
+    shot: c/tabs.png
+    covers: [checklist_tab]
+    what: >-
+      Split the checks by kind: geometry, objects and transforms, UVs,
+      materials.
+    when: >-
+      Simply to avoid scrolling 26 rows. Below the tabs is a count of how many
+      checks are enabled on the current one.
+    note: >-
+      A tab only changes what you see. Validate always runs every enabled check,
+      not just the ones on screen.
+
+  select-all:
+    label: Select All / Deselect All
+    shot: c/select-all.png
+    covers: [sqc.select_all_checks, current_tab_only, enable]
+    what: >-
+      Turns every check on the current tab on or off at once.
+    when: >-
+      The quick way to build your own set: clear everything, then tick what you
+      need, rather than switching two dozen checkboxes one by one.
+
+  check-list:
+    label: The check list
+    shot: c/check-list.png
+    covers: [checks, active_check_index, enabled, severity]
+    what: >-
+      A checkbox enables the check; the dropdown on the right sets its severity.
+    when: >-
+      Severity is worth changing more often than the checkbox. **Fail** blocks
+      the hand-off, **Info** only reports. If a check is desirable but not
+      mandatory in your pipeline, move it to Info — it stays visible without
+      spoiling the verdict.
+    note: >-
+      Changes apply to the current scene. To carry them across files, save a
+      stage.
+
+  check-params:
+    label: The check description and parameters
+    shot: c/check-params.png
+    covers: [float_param_1, float_param_2, int_param_1, string_param_1,
+             bool_param_1, description, label, category, can_fix,
+             fix_is_destructive, check_id, check_label]
+    what: >-
+      The box under the list: a description of the selected check and its
+      settings, where it has any.
+    when: >-
+      You come here when a check complains about something that is normal in
+      your project. Object Name Pattern, for instance, is a regular expression —
+      this is where you match it to your own naming.
+    note: >-
+      Most checks have no settings and the box shows only the description. What
+      each parameter means differs per check; it is spelled out in the table
+      below.
+
+  show-overlaps:
+    label: Show Overlaps
+    shot: c/show-overlaps.png
+    covers: [sqc.toggle_overlap_visual, overlap_visual_use_material_scope,
+             overlap_visual_uv_set_number]
+    what: >-
+      Highlights UV islands sitting on top of each other in the UV editor.
+    when: >-
+      When the Overlapped UV check has reported an overlap and your eyes cannot
+      find it. The results list only says an overlap exists — this shows where.
+    result_shot: g/uv-overlaps-pair.png
+    note: >-
+      The checkbox on the left matters more than it looks. Without it only the
+      active object is inspected; with it, every visible mesh sharing the same
+      material — that is, everything headed for the same atlas. Two objects can
+      each be clean and still overlap each other, and without this checkbox that
+      never surfaces.
+
+      The UV set field on the right is the set number, counting from one.
+
+  show-padding:
+    label: Show Padding
+    shot: c/show-padding.png
+    covers: [sqc.toggle_padding_visual, padding_visual_use_material_scope,
+             sqc.step_padding_value, padding_texture_input, padding_value_input,
+             target, direction]
+    what: >-
+      Shows what the gaps between islands become at a given texture size.
+    when: >-
+      Before baking, to see whether neighbouring islands will bleed into each
+      other. The arrows change two numbers: texture size on the left, padding in
+      pixels on the right.
+    result_shot: g/uv-padding-pair.png
+    note: >-
+      Changing the texture size rescales the padding proportionally — the ratio
+      holds and there is no arithmetic to do in your head.
+
+  show-texel:
+    label: Show Texel Density
+    shot: c/show-texel.png
+    covers: [sqc.toggle_texel_density_visual,
+             texel_density_visual_use_material_scope]
+    what: >-
+      Colours objects by texel density.
+    when: >-
+      With several assets in a scene, to confirm they share a UV scale. An
+      object that is out of line shows up immediately by colour — on the texture
+      it would appear as a difference in detail sharpness.
+
+  materials:
+    label: The material list
+    shot: c/materials.png
+    covers: [sqc.select_material_users, material_name]
+    what: >-
+      Every material in the current scope: how many objects and slots use it,
+      with a selection button on the right.
+    when: >-
+      Before baking, to see what will end up in one atlas. The button selects
+      every visible mesh using that material.
+    note: >-
+      The list follows the chosen Scope. With Selection it shows only the
+      materials of the selected objects.
+
+  checker-tiling:
+    label: Checker Tiling
+    shot: c/checker-tiling.png
+    covers: [uv_checker_tiling]
+    what: >-
+      Checker texture density.
+    default: "0.25"
+    when: >-
+      Adjusts live while the checker is on. A fine checker shows stretching more
+      precisely; a coarse one makes the overall scale clearer.
+
+  checker-buttons:
+    label: Square Checker / Line Checker
+    shot: c/checker-buttons.png
+    covers: [sqc.toggle_uv_checker, checker_type]
+    what: >-
+      Put a test texture on every material: a checker or stripes.
+    when: >-
+      The checker shows stretching and scale, the stripes show UV direction and
+      skew. Pressing again removes the texture.
+    note: >-
+      The original materials are not harmed — the add-on remembers them and puts
+      them back. Still, do not save a file with the test texture on: it is easy
+      to forget and hand the asset over in that state.
+
+checks:
+  title: Every check
+  intro: >-
+    Labels and the auto-fix flag come straight from the add-on, so the table
+    cannot drift from what you see in the panel. "Alters geometry" means the fix
+    edits the model rather than merely flagging the problem.
+  items:
+    geo_has_soft_edges:
+      what: >-
+        Catches a mesh where every edge is marked hard. Usually a leftover from
+        an import or from Shade Flat applied to the whole model.
+    geo_ngons:
+      what: "Faces with more than four vertices. The fix triangulates them."
+    geo_non_manifold:
+      what: >-
+        Invalid topology: edges shared by three or more faces, inverted fans,
+        holes in a solid. The fix splits fans and welds vertices only within
+        each separate piece, so neighbouring parts do not fuse.
+    geo_zero_area:
+      what: "Degenerate faces — area below the tolerance."
+    geo_zero_length:
+      what: "Edges shorter than the tolerance, usually doubled vertices."
+    geo_non_planar:
+      what: >-
+        Quads whose vertices do not lie in one plane. In an engine such a face
+        splits into triangles unpredictably.
+    geo_concave_faces:
+      what: "Faces with a concave corner."
+    geo_duplicate_faces:
+      what: "Two faces on the same set of vertices."
+    geo_loose:
+      what: >-
+        Vertices and edges not part of any face. They are lost on export, or
+        arrive as junk.
+    geo_animation_keys:
+      what: >-
+        Animation left on the object, the mesh or its shape keys — dead weight
+        in the FBX of a static asset.
+    tr_unapplied:
+      what: >-
+        Location, rotation or scale differ from the defaults. The fix applies
+        the transform, which moves vertex coordinates.
+    tr_world_origin:
+      what: "The object's origin is not at the world origin."
+    tr_pivot_center:
+      what: >-
+        The origin is not centred on the geometry. There is deliberately no
+        fix: where the pivot belongs depends on how the asset is placed in a
+        level.
+    uv_missing:
+      what: "The mesh has no UV set at all."
+    uv_set_count:
+      what: "More UV sets than the parameter allows."
+    uv_single_tile:
+      what: >-
+        Islands have left the first 0-1 tile. An error for an ordinary asset;
+        for a UDIM pipeline the check is switched off.
+    uv_set_names:
+      what: >-
+        Blender's `UVMap` names become `map1`, `map2` — what Maya and some
+        engines expect.
+    uv_overlap:
+      what: >-
+        UVs sitting on top of each other. Hits are expanded to whole islands so
+        the selection means something.
+    uv_padding:
+      what: >-
+        Not a check but an interactive padding preview. It reports nothing and
+        does not appear in the checklist.
+    uv_no_hard_edge_on_uv_borders:
+      what: >-
+        Every edge on an island border must be hard. Otherwise a gradient runs
+        along the seam on the baked normal.
+    uv_random_sharp:
+      what: >-
+        The reverse check: hard edges with no UV border under them. Such an edge
+        creates a needless seam in the normals.
+    uv_unaligned_edges:
+      what: >-
+        Island borders off-axis by fractions of a degree, on layouts that are
+        otherwise rectilinear. Invisible to the eye, but the texture comes out
+        ragged along that edge.
+    nm_object_pattern:
+      what: "The object name must match a regular expression."
+    mat_missing:
+      what: "No material assigned to the object or to some of its faces."
+    mat_material_count:
+      what: "More materials on one mesh than allowed."
+    mat_material_name:
+      what: "Material names must match the pattern."
+
+examples:
+  title: What it looks like on a model
+  intro: >-
+    On the left, what gets highlighted when you click a result row. On the
+    right, what remains after Fix Me. Every frame comes from a real validator
+    run on deliberately broken geometry.
+  items:
+    - title: N-Gons
+      shot: g/ngons.png
+      what: >-
+        The cylinder caps are ten-vertex faces. The fix triangulates them and
+        leaves the side quads alone.
+    - title: Loose Geometry
+      shot: g/loose.png
+      what: >-
+        A vertex and an edge belonging to no face. You cannot see them in the
+        scene until you turn on the wireframe or click the result row.
+    - title: Non-Manifold Geometry
+      shot: g/non-manifold.png
+      what: >-
+        Three faces meeting on one edge. The edge itself is highlighted, which
+        points straight at where the piece was built wrong.
+    - title: Concave Faces
+      shot: g/concave.png
+      what: >-
+        A face with a concave corner. The fix splits it into convex ones.
+    - title: Non-Planar Faces
+      shot: g/non-planar.png
+      what: >-
+        A quad with one vertex lifted out of the plane of the others. The fix
+        splits the face so the engine has nothing left to guess.
+    - title: Zero Area Faces
+      shot: g/zero-area.png
+      what: >-
+        A face with no area: two of its vertices sit in the same spot. It is
+        invisible on the model and turns into junk on export.
+    - title: Zero Length Edges
+      shot: g/zero-length.png
+      what: >-
+        An edge between two coincident vertices. The fix welds them.
+    - title: Duplicate Faces
+      shot: g/duplicate-faces.png
+      what: >-
+        Two faces on the same set of vertices. The model looks fine, but at bake
+        time those faces fight over the same texels.
+    - title: Too Much Hard Edge
+      shot: g/hard-edges.png
+      what: >-
+        A sphere with every single edge marked hard. The fix clears the marks
+        and the smoothing comes back.
+    - title: Pivot Not Centered
+      shot: g/pivot-center.png
+      what: >-
+        The object's origin sits away from its geometry. There is deliberately
+        no fix: where the pivot belongs depends on how the asset is placed in a
+        level, and the add-on will not guess for you.
+    - title: Show Overlaps
+      shot: g/uv-overlaps-pair.png
+      what: >-
+        On the left the ordinary UV view: the overlap is there but the eye will
+        not catch it. On the right Show Overlaps is on and the intersection is
+        filled with colour.
+    - title: Show Padding
+      shot: g/uv-padding-pair.png
+      what: >-
+        On the right, the islands that lack clearance from their neighbours at
+        the chosen texture size. Baked as-is, those islands bleed into one
+        another.

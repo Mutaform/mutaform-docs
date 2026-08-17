@@ -1,0 +1,320 @@
+# English content for the QC Bake reference.
+# Structure mirrors qc-bake.ru.yml; the screenshots are shared.
+
+title: What every button does
+intro: >-
+  Every control in the QC Bake panel: what it looks like, what it does and when
+  it earns its place. Sections follow the order of the panel itself.
+
+sections:
+  - title: The main buttons
+    intro: >-
+      Always visible, no fold needed. Both act on the current selection.
+    controls: [create-namepair, swap]
+
+  - title: Visibility — show and hide
+    intro: >-
+      Hides and shows objects by role across the whole scene, regardless of
+      what is selected. There are four rows — High, Low, Cage and All — built
+      the same way, so one stands for the others.
+    controls: [vis-row, vis-all]
+
+  - title: Utilities — scene-wide work
+    intro: >-
+      Two unrelated things: merging bake groups, and sorting objects into
+      collections. Both pick objects by the suffix in their name, so props and
+      helper geometry are never touched.
+    controls: [group-prefix, reduce, layout-flat, layout-per-asset]
+
+  - title: Naming — which suffixes to use
+    intro: >-
+      Decides how roles are marked and which metric separates the high poly
+      from the low poly.
+    controls: [convention, custom-suffixes, detect-by]
+
+  - title: Options — how renaming behaves
+    intro: >-
+      Six checkboxes that shape what Create Namepair actually does.
+    controls:
+      [opt-random, opt-datablock, opt-cage, opt-collection, opt-hide, opt-collisions]
+
+controls:
+  create-namepair:
+    label: Create Namepair
+    shot: c/create-namepair.png
+    covers: [qcbake.create_namepair]
+    what: >-
+      Renames the selected objects so a baker can tell which is the high poly
+      and which is the low poly.
+    when: >-
+      As soon as a sculpt and the low poly built for it sit side by side.
+      Select both — order does not matter — and press.
+
+      With more than two objects, select the sculpts first and the low poly
+      last: the active object (the one with the lighter outline) is the one the
+      add-on treats as the low poly.
+    result: >-
+      The objects become `barrel_low` and `barrel_high`. The base name comes
+      from the low poly with any old suffix stripped. Several sculpts get
+      numbered: `barrel_high_01`, `barrel_high_02`. The status bar reports what
+      happened.
+    result_shot: r/create-namepair.png
+    disabled: >-
+      Fewer than two objects are selected. Only meshes count — curves, empties
+      and lights do not.
+    note: >-
+      The comparison uses triangle counts from the evaluated mesh, modifiers
+      included. A Subdivision Surface on the low poly can make it heavier than
+      the sculpt and flip the roles. The next button fixes that.
+
+  swap:
+    label: Swap High / Low
+    shot: c/swap.png
+    covers: [qcbake.swap]
+    what: >-
+      Swaps the roles of two objects: the one named `_low` becomes `_high` and
+      the other way round.
+    when: >-
+      Right after Create Namepair, when you can see the guess went the wrong
+      way. Faster than renaming by hand: the two names usually share a base, so
+      by hand you would have to go through a temporary name.
+    result: >-
+      Both objects trade names. Mesh data follows if Also Rename Mesh Data is
+      on.
+    disabled: >-
+      Not exactly two objects are selected, or they are not one low-suffixed
+      and one high-suffixed object.
+
+  vis-row:
+    label: A group row (High, Low, Cage)
+    shot: c/vis-row.png
+    covers: [qcbake.toggle_visibility]
+    what: >-
+      Shows or hides every object of that role across the scene. The Low and
+      Cage rows work identically.
+    when: >-
+      When the sculpts are in the way of looking at the low poly, or the
+      reverse. Handy with many pairs in the scene: nothing needs selecting, the
+      add-on finds objects by suffix.
+    result: >-
+      The objects hide or reappear in the viewport. Whichever button matches the
+      group's current state is depressed and wears the eye icon.
+    note: >-
+      Read the state like this: depressed with an eye — the whole group is in
+      that state; neither depressed — some hidden, some not; the whole row
+      greyed out — no objects with that suffix exist at all.
+
+  vis-all:
+    label: The All row
+    shot: c/vis-all.png
+    covers: [qcbake.toggle_visibility]
+    what: >-
+      The same, but for every role at once — high, low and cage.
+    when: >-
+      To clear everything bake-related out of sight in one press and look at the
+      rest of the scene — and to bring it all back just as quickly.
+
+  group-prefix:
+    label: Prefix and Minimum Gap
+    shot: c/group-prefix.png
+    covers: [reduce_group_prefix, reduce_min_gap]
+    what: >-
+      Two fields feeding the Reduce Bake Groups button next to them. **Prefix**
+      is the base name for merged groups, with a number appended. **Minimum
+      Gap** is how far apart assets must stand before they are allowed to share
+      one bake pass.
+    default: >-
+      Prefix `BakeGroup`, Minimum Gap 5 centimetres (the value assumes a scene
+      in metres).
+    when: >-
+      Raise Minimum Gap when traces of neighbouring assets show up on the baked
+      maps. The larger it is, the more conservative the merge and the more
+      groups survive.
+    note: >-
+      Spaces in Prefix become underscores. An empty field falls back to
+      `BakeGroup`.
+
+  reduce:
+    label: Reduce Bake Groups
+    shot: c/reduce.png
+    covers: [qcbake.reduce_groups, qcbake.restore_reduce_groups]
+    what: >-
+      Merges several separate pairs into shared bake groups under a common name.
+    when: >-
+      When a scene holds a dozen small assets and baking each in its own pass is
+      wasteful. Objects far apart in space cannot project into one another, so
+      they can be baked together.
+
+      The usual order: spread the assets out → make a pair for each → press
+      Reduce → sort into collections.
+    result: >-
+      Members of a merged group become `BakeGroup_01_low`,
+      `BakeGroup_01_high_01` and so on. The status bar reports how many assets
+      merged and how many incomplete pairs were skipped.
+
+      If no safe merge exists, nothing is renamed — the assets sit too close.
+    result_shot: r/reduce-scale.png
+    note: >-
+      The arrow button on the right undoes the last run. Old names are stored on
+      the objects themselves, so the undo survives saving and reloading the file
+      and does not depend on Blender's undo history.
+
+      Only the **most recent** run can be undone. Run Reduce twice and the first
+      set of names is gone for good. The arrow is greyed out when there is
+      nothing to restore.
+
+  layout-flat:
+    label: "Flat ( High / Low )"
+    shot: c/layout-flat.png
+    covers: [qcbake.organize]
+    what: >-
+      Sorts every bake object into collections grouped by role.
+    when: >-
+      When it is easier to work with all the sculpts at once: select them, hide
+      them, hand them to another application.
+    result: >-
+      A `Bake Group` collection appears holding `High`, `Low` and `Cage`.
+      Collections left empty by previous layouts are removed and the Outliner
+      tree is collapsed.
+    result_shot: r/layout-flat.png
+
+  layout-per-asset:
+    label: "Per Asset ( Bake_name )"
+    shot: c/layout-per-asset.png
+    covers: [qcbake.organize]
+    what: >-
+      Sorts objects into collections grouped by pair — one collection per asset.
+    when: >-
+      When there are many assets and you need to see which pairs are incomplete.
+      This is the mode to use before handing work off.
+    result: >-
+      Each pair gets its own `Bake_<name>` collection, colour-tagged: **green**
+      means both low and high are present and it is ready to bake, **red** means
+      something is missing. Incomplete pairs are visible without expanding
+      anything.
+    result_shot: r/layout-per-asset.png
+    note: >-
+      Switch between Flat and Per Asset as often as you like — each button
+      rebuilds the tree from scratch.
+
+  convention:
+    label: Convention
+    shot: c/convention.png
+    covers: [naming_preset]
+    what: >-
+      The set of suffixes that mark each role.
+    default: "Substance — `_low`, `_high`, `_cage`."
+    when: >-
+      Match it to the baker the asset is headed for. Substance and Marmoset
+      produce the same result — two names for one set, kept for clarity. xNormal
+      uses the short `_lo` and `_hi`.
+    note: >-
+      The choice affects more than renaming. The Visibility rows and both
+      utilities find their objects by these same suffixes, so switching sets
+      makes the older objects invisible to the add-on.
+
+  custom-suffixes:
+    label: Low / High / Cage
+    shot: c/custom-suffixes.png
+    covers: [custom_low_suffix, custom_high_suffix, custom_cage_suffix]
+    what: >-
+      Three fields for your own suffixes. They appear only when Convention is
+      set to Custom.
+    when: >-
+      When the project has its own naming and none of the presets fit.
+    note: >-
+      Low and High cannot be empty and cannot match each other — Create Namepair
+      refuses and says so. Cage may be left empty, in which case cages play no
+      part in what the add-on does.
+
+  detect-by:
+    label: Detect By
+    shot: c/detect-by.png
+    covers: [hilo_criterion]
+    what: >-
+      Which count decides which of two objects is the high poly.
+    default: Triangles.
+    when: >-
+      Triangles are the safest: the result does not depend on whether the object
+      is built from quads or n-gons. Switch to Faces or Vertices only when the
+      triangle counts came out equal.
+    note: >-
+      The count comes from the evaluated mesh, modifiers included. If the counts
+      match, the add-on refuses to guess and asks you to sort it out by hand.
+
+  opt-random:
+    label: Generate Random Name
+    shot: c/opt-random.png
+    covers: [generate_random_name]
+    what: >-
+      Gives the pair a random six-character name instead of the low poly's name.
+    default: "off"
+    when: >-
+      When the incoming names are junk — `Cube.023` and friends — and will be
+      renamed properly later anyway.
+
+  opt-datablock:
+    label: Also Rename Mesh Data
+    shot: c/opt-datablock.png
+    covers: [also_rename_datablock]
+    what: >-
+      Renames the object's mesh data along with the object.
+    default: "on"
+    when: >-
+      Leave it on. Some pipelines key off the mesh data name rather than the
+      object name when exporting FBX, and the mismatch is hard to trace later.
+
+  opt-cage:
+    label: Detect Cage
+    shot: c/opt-cage.png
+    covers: [detect_cage]
+    what: >-
+      Treats whichever selected object already ends in the cage suffix as the
+      cage and keeps it out of the high/low comparison.
+    default: "on"
+    when: >-
+      If you use cages. The cage has to be named beforehand — `anything_cage`
+      will do. The add-on never guesses a cage from geometry.
+    result: >-
+      That object is renamed `<base>_cage` and takes no part in deciding roles.
+
+  opt-collection:
+    label: Move to Collection
+    shot: c/opt-collection.png
+    covers: [move_to_collection]
+    what: >-
+      Puts the pair into its own `Bake_<name>` collection right after renaming.
+    default: "off"
+    when: >-
+      When pairs are made one at a time and you want the scene to sort itself.
+      Making pairs in a batch, it is easier to sort everything at once with Per
+      Asset.
+    note: >-
+      The object is unlinked from every previous collection.
+
+  opt-hide:
+    label: Hide After Renaming
+    shot: c/opt-hide.png
+    covers: [hide_after_renaming]
+    what: >-
+      Hides the objects as soon as they are renamed.
+    default: "off"
+    when: >-
+      With many pairs in the scene, when each finished one gets in the way of
+      the next.
+
+  opt-collisions:
+    label: Allow Name Collisions
+    shot: c/opt-collisions.png
+    covers: [overwrite_names]
+    what: >-
+      Lets renaming proceed even when the target name already belongs to another
+      object.
+    default: "off"
+    when: >-
+      Almost never. Off is the safety net: the add-on stops and names the object
+      that is in the way so you can deal with it.
+    note: >-
+      With it on, Blender appends `.001`. To a baker `barrel_low.001` is simply
+      a different name, and the pair falls apart. This is exactly how scenes end
+      up with objects that "somehow will not bake".

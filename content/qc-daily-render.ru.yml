@@ -1,0 +1,249 @@
+# Содержание справочника Mutaform Studio Render.
+
+title: Что делает каждая кнопка
+intro: >-
+  Разбор панели QC Render. Пока студия не построена, всё содержимое вкладок
+  серое — сначала Setup, потом настройки.
+
+sections:
+  - title: Верх панели
+    intro: >-
+      Три кнопки, которые видно всегда. До Setup здесь только он один.
+    controls: [actions, restore, tabs]
+
+  - title: Camera Settings — как выглядит кадр
+    intro: >-
+      Всё, что влияет на картинку: материал, объектив, свет, цветокоррекция.
+    controls:
+      [material, camera-fold, fov, lighting, post-fold, tone, post-sliders,
+       sharpen, frame-bg, wireframe]
+
+  - title: Render Settings — техника
+    intro: >-
+      Движок, размер кадра, качество и куда сохранять.
+    controls: [engine, resolution, quality, output]
+
+controls:
+  actions:
+    label: Setup Render Scene / Render / Open Folder
+    shot: c/actions.png
+    covers: [mutaform.studio_setup, mutaform.studio_render, mutaform.open_output]
+    what: >-
+      До построения студии здесь одна кнопка **Setup Render Scene**. После —
+      **Render** и **Open Folder**.
+    when: >-
+      Порядок работы: Setup → ищете ракурс вьюпортом → Render. Камеру ставить не
+      нужно, аддон сам создаёт её по текущему виду и убирает после съёмки.
+    result: >-
+      Setup строит студию: HDRI-свет, единый материал, ловец контактной тени,
+      пост-обработку. Вьюпорт переключается в Rendered и показывает рамку
+      будущего кадра — всё, что за ней, в снимок не попадёт.
+
+      Render сохраняет PNG с прозрачным фоном и автонумерацией; вид во вьюпорте
+      при этом не сдвигается. Open Folder открывает папку с готовыми кадрами.
+    note: >-
+      Setup сам подбирает быструю конфигурацию под машину: лучший доступный
+      бэкенд, только GPU без гибрида с процессором, persistent data. Всё это
+      восстанавливается при выходе.
+
+  restore:
+    label: Restore (exit)
+    shot: c/restore.png
+    covers: [mutaform.studio_restore]
+    what: >-
+      Полностью откатывает сцену и выходит из студийного режима.
+    when: >-
+      Когда кадры сняты. Не бойтесь нажимать: аддон запоминает состояние сцены
+      при Setup и возвращает ровно его.
+    result: >-
+      Удаляется всё созданное, возвращаются материалы объектов, настройки
+      рендера и выбор устройств.
+
+  tabs:
+    label: Camera Settings / Render Settings
+    shot: c/tabs.png
+    covers: [mutaform_tab]
+    what: >-
+      Переключает панель между картинкой и техникой.
+    note: >-
+      Пока студия не построена, содержимое обеих вкладок серое. Это не поломка —
+      настраивать нечего, пока нет сцены.
+
+  material:
+    label: Use Default Material
+    shot: c/material.png
+    covers: [use_default_material, mat_base_color, mat_roughness, mat_metallic]
+    what: >-
+      Рендерить всё одним студийным материалом вместо собственных материалов
+      объектов. Ниже — его цвет, шероховатость и металличность.
+    default: включено
+    when: >-
+      Держите включённым для дейликов: модель читается по форме и силуэту, а не
+      по текстурам, и все ассеты в ленте выглядят единообразно. Выключайте,
+      когда показываете именно текстуры.
+
+  camera-fold:
+    label: Camera Settings (свиток)
+    shot: c/camera-fold.png
+    covers: [show_camera_block]
+    what: >-
+      Раскрывает блок с объективом, светом и пост-обработкой.
+    default: свёрнуто
+    when: >-
+      Для обычного дейлика хватает значений по умолчанию — они подобраны под
+      студийную подачу. Сюда лезут, когда кадр нужно довести.
+
+  fov:
+    label: Field of View
+    shot: c/fov.png
+    covers: [cam_fov]
+    what: >-
+      Вертикальный угол обзора в градусах.
+    default: 15°
+    when: >-
+      Малое значение — это длиннофокусная подача почти без перспективных
+      искажений, именно она делает кадр похожим на студийную съёмку, а не на
+      скриншот вьюпорта. Увеличивать стоит, только если ассет не влезает или
+      нужен нарочито широкоугольный вид.
+
+  lighting:
+    label: HDRI Brightness и HDRI Rotation
+    shot: c/lighting.png
+    covers: [env_strength, env_yaw]
+    what: >-
+      Яркость окружения и его поворот вокруг вертикальной оси.
+    when: >-
+      Поворот — самый быстрый способ поправить кадр: меняются направление света
+      и положение бликов, а модель остаётся на месте. Работает вживую, крутите
+      и смотрите.
+
+  post-fold:
+    label: Post Effect (свиток)
+    shot: c/post-fold.png
+    covers: [show_posteffect]
+    what: >-
+      Раскрывает цветокоррекцию.
+    default: развёрнуто
+
+  tone:
+    label: Tone Mapping и Curves
+    shot: c/tone.png
+    covers: [tone_mapping, mutaform.curves]
+    what: >-
+      Способ свести яркости в отображаемый диапазон и кнопка точных кривых.
+    when: >-
+      Tone Mapping меняют редко. Curves нужны, когда ползунков светов и теней не
+      хватает — например, надо поднять только самые тёмные участки.
+
+  post-sliders:
+    label: Ползунки цветокоррекции
+    shot: c/post-sliders.png
+    covers: [exposure, highlights, midtones, shadows, clarity, contrast,
+             contrast_center, saturation, mutaform.reset_prop, prop]
+    what: >-
+      Экспозиция, света, средние тона, тени, локальный контраст, общий контраст
+      с точкой раскрытия и насыщенность.
+    when: >-
+      Clarity подчёркивает средние детали — на нём модель выглядит «резче», хотя
+      резкость не менялась. Contrast Center задаёт, вокруг какой яркости
+      раскрывается контраст: сдвиньте вниз, если тени уходят в чёрное.
+    note: >-
+      У каждой строки справа кнопка со стрелкой — сброс к значению по умолчанию.
+      Значения по умолчанию здесь не заводские блендеровские, а студийные,
+      поэтому возврат к ним безопасен.
+
+  sharpen:
+    label: Sharpen
+    shot: c/sharpen.png
+    covers: [show_sharpen, sharpen_strength, sharpen_limit]
+    what: >-
+      Резкость с ограничителем.
+    when: >-
+      Strength добавляет резкости, Limit не даёт появиться светлым ореолам по
+      контурам. Если по краям модели полезла белая кайма — уменьшайте Limit, а
+      не Strength.
+
+  frame-bg:
+    label: Frame Guide и Background
+    shot: c/frame-bg.png
+    covers: [show_vignette, vignette_strength, vignette_softness, frame_opacity,
+             background_color]
+    what: >-
+      Слева — насколько затемняется всё за пределами будущего кадра, справа —
+      цвет подложки в превью.
+    when: >-
+      Frame Guide помогает строить композицию прямо во вьюпорте: то, что
+      затемнено, в кадр не войдёт.
+    note: >-
+      Цвет фона виден только в превью. Итоговый PNG сохраняется с прозрачностью,
+      и контактная тень попадает в альфу — кадр композится на любой фон.
+
+      Здесь же находится свёрнутый свиток Vignette с силой и мягкостью
+      затемнения по краям.
+
+  wireframe:
+    label: Wireframe
+    shot: c/wireframe.png
+    covers: [wireframe_on, wireframe_color, wireframe_thickness,
+             wireframe_opacity]
+    what: >-
+      Накладывает сетку модели поверх шейдинга. Ниже — цвет, толщина и
+      непрозрачность линий.
+    default: выключено
+    when: >-
+      Для дейлика, где надо показать топологию. Сетка рисуется по настоящим
+      четырёхугольникам, без диагоналей триангуляции — то есть показывает то,
+      что вы моделировали.
+
+  engine:
+    label: Cycles / EEVEE
+    shot: c/engine.png
+    covers: [preview_engine]
+    what: >-
+      Движок и для превью, и для сохраняемого кадра.
+    default: Cycles
+    when: >-
+      EEVEE — быстрый просмотр, когда надо покрутить ракурс на тяжёлой сцене.
+      Финальный кадр снимайте в Cycles.
+    note: >-
+      В EEVEE нет тени от пола: прозрачный ловец теней — фича Cycles. Модель
+      будет висеть в пустоте, и это не поломка.
+
+  resolution:
+    label: Разрешение
+    shot: c/resolution.png
+    covers: [render_x, render_y, mutaform.res_scale, factor]
+    what: >-
+      Размер кадра и две кнопки-стрелки: уменьшить вдвое и удвоить.
+    default: 3840 × 2160
+    when: >-
+      Стрелки сохраняют пропорции, поэтому рамка кадра во вьюпорте не прыгает.
+      Уменьшите вдвое, пока ищете ракурс, и верните перед финальным снимком.
+
+  quality:
+    label: Samples, Denoiser, Ground Shadow
+    shot: c/quality.png
+    covers: [samples, denoiser, use_shadow_catcher]
+    what: >-
+      Число сэмплов, шумоподавитель и тень от пола.
+    default: 128 сэмплов, OptiX, тень включена.
+    when: >-
+      Сэмплов по умолчанию хватает для дейлика. Поднимать стоит, только если на
+      финальном кадре виден шум в тенях.
+    note: >-
+      Без видеокарты NVIDIA денойзер OptiX сам заменяется на OpenImageDenoise —
+      выбирать ничего не нужно.
+
+  output:
+    label: Output Folder и Name
+    shot: c/output.png
+    covers: [output_dir, output_base]
+    what: >-
+      Куда сохранять кадры и с какой основой имени.
+    default: "имя `shot`; папка пустая."
+    when: >-
+      Если папку не задать, аддон создаст `renders` рядом с файлом и покажет
+      серым реальный путь под полями — так видно, куда всё уедет.
+    note: >-
+      К имени добавляется автонумерация, поэтому предыдущие кадры не
+      затираются.

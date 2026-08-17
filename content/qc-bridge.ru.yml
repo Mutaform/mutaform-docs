@@ -1,0 +1,149 @@
+# Содержание справочника QC Bridge Maya-Blender.
+
+title: Что делает каждая кнопка
+intro: >-
+  Разбор панели моста. Все передачи идут через один файл в общей папке: одна
+  сторона пишет, другая читает. Если что-то не сработало, первым делом смотрите
+  строку отчёта наверху панели.
+
+sections:
+  - title: Передача
+    intro: >-
+      Три кнопки, ради которых мост и нужен. Работают с папкой обмена из
+      настроек внизу панели.
+    controls: [report, import, export]
+
+  - title: Convert Scene — иерархия
+    intro: >-
+      Свиток свёрнут по умолчанию. Нужен потому, что Maya строит иерархию
+      трансформ-нодами, а Blender — коллекциями, и через FBX одно превращается
+      в другое не само.
+    controls: [convert-toggle, creases, convert-blender, convert-maya]
+
+  - title: Settings — папка обмена
+    intro: >-
+      Тоже свёрнуто. Настраивается один раз и потом не трогается.
+    controls: [settings-toggle, exchange]
+
+controls:
+  report:
+    label: Строка отчёта
+    shot: c/report.png
+    covers: [last_report]
+    what: >-
+      Показывает, чем закончилась последняя операция.
+    default: "`Ready.` — пока ничего не делали."
+    when: >-
+      Смотреть сюда первым делом, когда кажется, что ничего не произошло. Сюда
+      же попадают сообщения об ошибках: не найден файл, нечего экспортировать,
+      нет доступа к папке.
+
+  import:
+    label: Import From Maya
+    shot: c/import.png
+    covers: [mutaform_bridge.receive_from_maya, clear_scene]
+    what: >-
+      Загружает в текущую сцену файл, выложенный из Maya.
+    when: >-
+      После того как в Maya нажали кнопку моста на полке. Порядок всегда такой:
+      сначала Maya пишет, потом Blender читает.
+    result: >-
+      Объекты добавляются к тому, что уже есть в сцене. Масштаб и оси
+      пересчитываются: Maya работает в сантиметрах, Blender — в метрах.
+    note: >-
+      Если из Maya приходит сцена целиком и складывать её поверх текущей не
+      нужно, чистите сцену заранее — импорт ничего не удаляет сам.
+
+  export:
+    label: Export Selected и Export Selected Collection
+    shot: c/export.png
+    covers: [mutaform_bridge.send_scene_to_maya,
+             mutaform_bridge.send_selection_to_maya]
+    what: >-
+      Две кнопки выгрузки. Левая отправляет выделенные объекты, правая —
+      выделенную коллекцию целиком, сохраняя её структуру.
+    when: >-
+      Правая нужна, когда важна иерархия: коллекция приедет в Maya группой.
+      Левая — когда надо быстро перекинуть пару объектов.
+    result: >-
+      В папке обмена появляется FBX. Забирается он в Maya кнопкой на полке.
+    note: >-
+      Файл всегда один и тот же, с именем из настроек. Каждая выгрузка
+      перезаписывает предыдущую — если коллега ещё не забрал свою, она
+      потеряется.
+
+  convert-toggle:
+    label: Convert Scene
+    shot: c/convert-toggle.png
+    covers: [show_advanced]
+    what: >-
+      Раскрывает блок преобразования иерархии.
+    default: свёрнуто
+    when: >-
+      Заглядывать сюда стоит сразу после импорта из Maya: пришедшие группы
+      выглядят как пустышки, и работать с ними в Blender неудобно.
+
+  creases:
+    label: Export Creases
+    shot: c/creases.png
+    covers: [export_creases]
+    what: >-
+      Отправлять ли в Maya складки (crease) с рёбер и вершин.
+    default: выключено
+    when: >-
+      Включайте, только если на той стороне складки действительно нужны —
+      например, модель идёт под сабдив в Maya. По умолчанию выключено потому,
+      что чаще складки только мешают: в Maya они приезжают как лишние атрибуты.
+
+  convert-blender:
+    label: Convert In Blender Style
+    shot: c/convert-blender.png
+    covers: [mutaform_bridge.convert_from_maya, unpack_scope, unpack_bake, scope,
+             bake_transforms]
+    what: >-
+      Превращает пришедшую из Maya иерархию пустышек в нормальные коллекции
+      Blender.
+    when: >-
+      Сразу после Import From Maya. **Convert Scope** задаёт, что обрабатывать:
+      всю сцену или только выделенные пустышки.
+    result: >-
+      Пустышки исчезают, вместо них появляются коллекции с той же структурой.
+    note: >-
+      **Bake Transforms** включён по умолчанию, и его стоит таким и оставить: он
+      применяет трансформации, накопленные на пустышках, чтобы меши остались на
+      своих местах. Без него объекты разъедутся, потому что трансформация
+      группы исчезает вместе с самой группой.
+
+  convert-maya:
+    label: Convert In Maya Style
+    shot: c/convert-maya.png
+    covers: [mutaform_bridge.convert_to_maya, pack_scope]
+    what: >-
+      Обратное преобразование: коллекции Blender становятся пустышками, которые
+      Maya прочитает как группы.
+    when: >-
+      Перед выгрузкой, если на той стороне нужна иерархия. **Send Scope**
+      выбирает: вся сцена или активная коллекция.
+
+  settings-toggle:
+    label: Settings
+    shot: c/settings-toggle.png
+    covers: [show_settings]
+    what: >-
+      Раскрывает настройки папки обмена.
+    default: свёрнуто
+
+  exchange:
+    label: Exchange Folder и FBX Name
+    shot: c/exchange.png
+    covers: [exchange_dir, exchange_name]
+    what: >-
+      Папка, через которую идёт обмен, и имя файла в ней.
+    default: "`Documents\\MutaformBridge` и `mutaform_bridge.fbx`."
+    when: >-
+      Настраивается один раз. Единственное требование: в Blender и в Maya
+      указана **одна и та же папка**. Если передача не работает, проверяйте это
+      прежде всего остального.
+    note: >-
+      Расширение `.fbx` дописывается само, если его не указать. Пустое имя
+      вернётся к значению по умолчанию.

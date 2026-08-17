@@ -1,0 +1,44 @@
+# Реестр аддонов, из которых собирается справочник.
+#
+# `source` — путь к папке Python-пакета аддона (той, где лежит
+# blender_manifest.toml), относительно `source_root`.
+#
+# `source_root` задаётся при запуске генератора:
+#   python tools/gen_reference.py --source-root "D:/Mutaform/Mutaform Addons"
+#
+# В CI исходники подтягиваются из публичных репозиториев (см. clone_url),
+# поэтому докам не нужен доступ к локальному диску.
+
+source_root_default: ".."
+
+addons:
+  - slug: qc-bake
+    source: "qc_bake/qc_bake"
+    clone_url: "https://github.com/Mutaform/qc-bake"
+    order: 1
+
+  - slug: qc-validator
+    source: "qc_validator/scene_qc_validator"
+    clone_url: "https://github.com/Mutaform/scene-qc-validator"
+    order: 2
+    # Проверки описаны таблицей данных, а не панелями: без этого блока
+    # справочник потерял бы главное содержимое аддона.
+    registries:
+      - key: checks
+        module: "checks/__init__.py"
+        variable: "CHECK_DEFINITIONS"
+
+  - slug: qc-daily-render
+    source: "qc_daily_render/mutaform_studio_render"
+    clone_url: "https://github.com/Mutaform/qc-daily-render"
+    order: 3
+
+  - slug: qc-maya-viewport
+    source: "qc_maya_viewport/maya_viewport_match"
+    clone_url: "https://github.com/Mutaform/qc-maya-viewport"
+    order: 4
+
+  - slug: qc-bridge
+    source: "qc_mutaform_bridge/mutaform_bridge"
+    clone_url: "https://github.com/Mutaform/qc-bridge-blender-maya"
+    order: 5
