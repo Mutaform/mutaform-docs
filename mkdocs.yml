@@ -1,6 +1,10 @@
 site_name: Mutaform Addons
 site_description: Документация к студийным аддонам Mutaform для Blender
-site_url: https://mutaform.github.io/mutaform-docs/
+# С версионированием mike сайт лежит не в корне, а в /latest/. Переключатель
+# языка строит ссылки из site_url, поэтому без /latest/ кнопка «English» вела
+# бы в 404. Читатели ходят именно по latest; для страниц старых версий
+# переключатель уведёт на актуальную — это лучше, чем битая ссылка.
+site_url: https://mutaform.github.io/mutaform-docs/latest/
 copyright: Mutaform Studio
 
 repo_url: https://github.com/mutaform/mutaform-docs
@@ -124,13 +128,10 @@ nav:
           - Справочник: qc-bridge/reference.md
 
 extra:
-  alternate:
-    - name: Русский
-      link: /mutaform-docs/
-      lang: ru
-    - name: English
-      link: /mutaform-docs/en/
-      lang: en
+  # Ссылки переключателя языка здесь НЕ прописываются. Жёсткий путь вроде
+  # /mutaform-docs/en/ верен только без версионирования: mike кладёт сайт в
+  # /latest/, и такая ссылка ведёт в 404. Плагин mkdocs-static-i18n строит
+  # переключатель сам, относительно текущей страницы, и переживает версии.
   version:
     provider: mike
     default: latest
