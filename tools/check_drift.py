@@ -31,7 +31,7 @@ import yaml
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 
-from extract import extract_addon  # noqa: E402
+from extract import extract_addon, extract_registry  # noqa: E402
 from gen_pages import coverage  # noqa: E402
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -66,6 +66,11 @@ def surface(addon: dict) -> dict[str, str]:
             if prop["identifier"] in shown:
                 items[f"property:{prop['identifier']}"] = prop.get("label") or ""
 
+    # Проверки валидатора описаны реестром, а не панелью. Без них сверка
+    # молчала о новой проверке — ровно тот случай, ради которого она и нужна.
+    for check in (addon.get("registries") or {}).get("checks") or []:
+        items[f"check:{check['id']}"] = check.get("label") or ""
+
     return items
 
 
@@ -94,6 +99,15 @@ def main() -> int:
             continue
 
         addon = extract_addon(package_dir)
+
+        registries = {}
+        for spec in entry.get("registries") or []:
+            registries[spec["key"]] = extract_registry(
+                package_dir, spec["module"], spec["variable"]
+            )
+        if registries:
+            addon["registries"] = registries
+
         findings: list[str] = []
 
         old_addon = previous.get(slug)

@@ -118,6 +118,7 @@ CHECK_LABELS = {
             "UV": "UV",
             "NAMING": "Именование",
             "MATERIAL": "Материалы",
+            "NANITE": "Nanite",
         },
     },
     "en": {
@@ -132,6 +133,7 @@ CHECK_LABELS = {
             "UV": "UV",
             "NAMING": "Naming",
             "MATERIAL": "Material",
+            "NANITE": "Nanite",
         },
     },
 }
@@ -151,7 +153,15 @@ def render_checks(content: dict, registry: list[dict], lang: str) -> list[str]:
         by_category.setdefault(check.get("category", "?"), []).append(check)
 
     texts = block.get("items") or {}
-    for category in ("GEOMETRY", "TRANSFORM", "UV", "NAMING", "MATERIAL"):
+    # Порядок известных категорий задан, но перебираем не его, а то, что
+    # реально есть в реестре: аддон может завести новую категорию, и жёсткий
+    # список молча выкинул бы все её проверки со страницы. Так и случилось с
+    # NANITE в 1.8.7 — проверка исчезла из таблицы, и никто бы не заметил.
+    preferred = ("GEOMETRY", "TRANSFORM", "UV", "NAMING", "MATERIAL")
+    ordered = [c for c in preferred if c in by_category]
+    ordered += [c for c in by_category if c not in preferred]
+
+    for category in ordered:
         group = by_category.get(category)
         if not group:
             continue
@@ -247,6 +257,17 @@ def coverage(content: dict, addon: dict) -> list[str]:
     for identifier in sorted(shown):
         if identifier not in covered:
             problems.append(f"настройка без описания: {identifier}")
+
+    # Проверки живут в реестре, а не в панели, поэтому в `covers` их не
+    # перечисляют — полнота сверяется отдельно. Без этого новая проверка
+    # молча попадала бы в таблицу с английским описанием из кода.
+    registry = (addon.get("registries") or {}).get("checks") or []
+    described = (content.get("checks") or {}).get("items") or {}
+    for check in registry:
+        if check["id"] not in described:
+            problems.append(
+                f"проверка без описания: {check['id']} «{check.get('label')}»"
+            )
 
     for key, control in content["controls"].items():
         shot = control.get("shot")

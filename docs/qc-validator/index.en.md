@@ -169,5 +169,5 @@ material.
 
 ## Next
 
-The full list of 26 checks, with parameters and the destructive-fix flag, is in
+The full list of 27 checks, with parameters and the destructive-fix flag, is in
 the [interface reference](reference.en.md).

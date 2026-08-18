@@ -161,6 +161,11 @@ controls:
       LP_UVs is a special case: only on that stage do the three UV inspection
       tools appear in the panel. On every other stage they simply are not there.
 
+      A stage only toggles the checks it lists; the rest keep whatever state
+      they had. **Nanite Closed Geometry** is not part of the bundled project —
+      it is on from the start and no stage turns it off. If the project is not
+      headed for Unreal, untick it by hand, or it fires on every run.
+
   stage-tools:
     label: The small buttons beside the stages
     shot: c/stage-tools.png
@@ -425,6 +430,11 @@ checks:
       what: "More materials on one mesh than allowed."
     mat_material_name:
       what: "Material names must match the pattern."
+    obj_nanite_closed_geometry:
+      what: >-
+        An open shell must be embedded in neighbouring geometry. Catches
+        panels left hanging in mid-air and ones that only partly reach the
+        surface: in Unreal, Nanite shows a hole there.
 
 examples:
   title: What it looks like on a model
@@ -494,3 +504,17 @@ examples:
         On the right, the islands that lack clearance from their neighbours at
         the chosen texture size. Baked as-is, those islands bleed into one
         another.
+    - title: Nanite Closed Geometry
+      shot: g/nanite.png
+      what: >-
+        On the left the panel is sunk into the wall: its open border ends up
+        inside neighbouring geometry, and nothing is reported. On the right the
+        same piece has been pulled out — the border now hangs in mid-air and the
+        check highlights its edges.
+
+        There are two messages. "Sealed by nothing" means nothing closes the
+        shell at all, as on the right. "Not fully embedded" means the border
+        only partly reaches, and the largest gap is given in millimetres — what
+        you get from a tilted panel with one corner sticking out.
+
+        There is no auto-fix: moving or extending the geometry is a human job.

@@ -98,7 +98,7 @@ The row of buttons under the project line. Each is a saved set: which checks are
 **What happens.** Pressing one applies it immediately: checkboxes move, parameters fill in. The active stage stays depressed.
 
 !!! warning "Worth knowing"
-    LP_UVs is a special case: only on that stage do the three UV inspection tools appear in the panel. On every other stage they simply are not there.
+    LP_UVs is a special case: only on that stage do the three UV inspection tools appear in the panel. On every other stage they simply are not there. A stage only toggles the checks it lists; the rest keep whatever state they had. **Nanite Closed Geometry** is not part of the bundled project — it is on from the start and no stage turns it off. If the project is not headed for Unreal, untick it by hand, or it fires on every run.
 
 ### The small buttons beside the stages
 
@@ -294,6 +294,12 @@ Labels and the auto-fix flag come straight from the add-on, so the table cannot 
 | **Material Count** | More materials on one mesh than allowed. | no |
 | **Material Name** | Material names must match the pattern. | yes |
 
+### Nanite
+
+| Check | What it looks for | Auto-fix |
+| --- | --- | --- |
+| **Nanite Closed Geometry** | An open shell must be embedded in neighbouring geometry. Catches panels left hanging in mid-air and ones that only partly reach the surface: in Unreal, Nanite shows a hole there. | no |
+
 ## What it looks like on a model
 
 On the left, what gets highlighted when you click a result row. On the right, what remains after Fix Me. Every frame comes from a real validator run on deliberately broken geometry.
@@ -370,6 +376,12 @@ On the left the ordinary UV view: the overlap is there but the eye will not catc
 
 On the right, the islands that lack clearance from their neighbours at the chosen texture size. Baked as-is, those islands bleed into one another.
 
+### Nanite Closed Geometry
+
+![Nanite Closed Geometry](img/g/nanite.png){ .screenshot }
+
+On the left the panel is sunk into the wall: its open border ends up inside neighbouring geometry, and nothing is reported. On the right the same piece has been pulled out — the border now hangs in mid-air and the check highlights its edges. There are two messages. "Sealed by nothing" means nothing closes the shell at all, as on the right. "Not fully embedded" means the border only partly reaches, and the largest gap is given in millimetres — what you get from a tilted panel with one corner sticking out. There is no auto-fix: moving or extending the geometry is a human job.
+
 ---
 
-*Assembled from `content/qc-validator.en.yml`. Screenshots taken in **Scene QC Validator by Mutaform Studio 1.8.6**.*
+*Assembled from `content/qc-validator.en.yml`. Screenshots taken in **Scene QC Validator by Mutaform Studio 1.8.7**.*

@@ -1558,6 +1558,11 @@
             "MATERIAL",
             "Material",
             "Material assignment checks"
+          ],
+          [
+            "NANITE",
+            "Nanite",
+            "Unreal Nanite ingestion checks"
           ]
         ],
         "CHECKER_BACKUP_PROP": "_sqc_uv_checker_backup",
@@ -1568,6 +1573,7 @@
         "COINCIDENT_VERTEX_TOLERANCE": 1e-07,
         "COORD_PRECISION": 6,
         "DEFAULT_MATERIAL_PATTERN": "^m_[A-Za-z0-9_]+(?:_\\d{2})?$",
+        "DEFAULT_TOLERANCE_MM": 1.0,
         "DEFAULT_ZERO_AREA_THRESHOLD": 1e-10,
         "DEPRECATED_CHECK_IDS": [
           "geo_triangles_percentage",
@@ -1640,6 +1646,7 @@
         "_BAKE_UDIM_MAX": 1.0,
         "_BAKE_UDIM_MIN": 0.0,
         "_BUILD_DELAY": 0.05,
+        "_CACHE_LIMIT": 64,
         "_COLOR": [
           1.0,
           0.82,
@@ -2244,6 +2251,11 @@
                   "description": "Material assignment checks",
                   "label": "Material",
                   "value": "MATERIAL"
+                },
+                {
+                  "description": "Unreal Nanite ingestion checks",
+                  "label": "Nanite",
+                  "value": "NANITE"
                 }
               ],
               "kind": "enum",
@@ -2430,6 +2442,11 @@
                   "description": "Material assignment checks",
                   "label": "Material",
                   "value": "MATERIAL"
+                },
+                {
+                  "description": "Unreal Nanite ingestion checks",
+                  "label": "Nanite",
+                  "value": "NANITE"
                 }
               ],
               "kind": "enum",
@@ -3083,6 +3100,20 @@
             }
           },
           {
+            "bool_param_1": true,
+            "can_fix": false,
+            "category": "NANITE",
+            "description": "Open shells must be embedded in other geometry so Nanite sees no gaps or holes",
+            "fix": null,
+            "float_param_1": 1.0,
+            "id": "obj_nanite_closed_geometry",
+            "label": "Nanite Closed Geometry",
+            "run": {
+              "ref": "check_nanite_closed_geometry"
+            },
+            "string_param_1": "^(UCX|UBX|USP|UCP)_"
+          },
+          {
             "can_fix": true,
             "category": "NAMING",
             "description": "Object name must match a regex pattern",
@@ -3160,7 +3191,7 @@
           "properties": []
         }
       ],
-      "version": "1.8.6",
+      "version": "1.8.7",
       "website": null
     }
   }
