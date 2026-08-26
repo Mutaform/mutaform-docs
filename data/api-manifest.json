@@ -1411,6 +1411,16 @@
         "FOLDER_MATCH_THRESHOLD": 700.0,
         "HEIGHT": "HEIGHT",
         "IGNORE": "IGNORE",
+        "IMPORTERS": [
+          "import_scene.fbx",
+          "wm.obj_import",
+          "wm.usd_import",
+          "wm.alembic_import",
+          "wm.stl_import",
+          "wm.ply_import",
+          "import_scene.gltf",
+          "wm.collada_import"
+        ],
         "INCH_TO_MM": 25.4,
         "LEGACY_CLASSES": [
           "MVM_OT_apply_standard",
@@ -1446,8 +1456,8 @@
         "SPECULAR": "SPECULAR",
         "VERSION": [
           0,
-          30,
-          4
+          34,
+          1
         ],
         "_DEPTH_BIAS_MAX_SCALE": 64.0,
         "_DEPTH_BIAS_MIN_SCALE": 0.25,
@@ -1603,11 +1613,11 @@
               "source": "operators.py"
             },
             {
-              "default": false,
-              "description": "Fill every material on the object, not just the active one",
+              "default": true,
+              "description": "Fill every material on every selected object in one go, instead of only the active material slot",
               "identifier": "all_slots",
               "kind": "bool",
-              "label": "All Material Slots",
+              "label": "All Selected Objects",
               "owner": "MVM_OT_load_textures",
               "source": "operators.py"
             },
@@ -1794,7 +1804,7 @@
           "properties": []
         }
       ],
-      "version": "0.30.4",
+      "version": "0.34.1",
       "website": null
     },
     "qc-validator": {
