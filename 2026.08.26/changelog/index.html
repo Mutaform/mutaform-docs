@@ -590,6 +590,61 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#0341" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.34.1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#0340" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.34.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#0330" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.33.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#0320" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.32.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#0310" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.31.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#0304" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1538,6 +1593,61 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#0341" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.34.1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#0340" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.34.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#0330" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.33.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#0320" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.32.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#0310" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.31.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#0304" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1760,7 +1870,7 @@
 </tr>
 <tr>
 <td>QC Maya Viewport</td>
-<td><code>0.30.4</code></td>
+<td><code>0.34.1</code></td>
 <td>5.1.0+</td>
 </tr>
 <tr>
@@ -1860,6 +1970,63 @@ notably making Reduce Bake Groups non-destructive.</p>
 <h2 id="mutaform-studio-render">Mutaform Studio Render<a class="headerlink" href="#mutaform-studio-render" title="Permanent link">&para;</a></h2>
 <p><em>История изменений в репозитории аддона пока не ведётся.</em></p>
 <h2 id="qc-maya-viewport">QC Maya Viewport<a class="headerlink" href="#qc-maya-viewport" title="Permanent link">&para;</a></h2>
+<h3 id="0341">0.34.1<a class="headerlink" href="#0341" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Наклон ключевого света возвращён. В 0.34.0 его направили точно по оси взгляда,
+  опираясь на замер по плоскости, — но плоскость не показывает, откуда светят.
+  Показывает шар: у Maya самая яркая точка на нём лежит выше центра на 15 %
+  радиуса, значит свет наклонён. Без наклона затенение читалось так, будто
+  освещение идёт не с той стороны.</li>
+<li>Блик снова 0.30 — столько нужно наклону, чтобы дотянуться до уровня Maya.</li>
+</ul>
+<p>Известное расхождение: у blinn в Maya блик уже и поднимается над окружающей
+поверхностью примерно на 12/255, у здешнего Blinn-Phong — примерно на 5.
+Отличается форма пятна, не уровень.</p>
+<h3 id="0340">0.34.0<a class="headerlink" href="#0340" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Воспроизведена тоновая кривая Maya, поэтому совпадает вся серая шкала, а не
+  одна точка.</strong> В 0.33.0 средний серый подгоняли, занижая рассеянный свет, но
+  Maya прогоняет вьюпорт через тоновую кривую (по умолчанию ACES 1.0
+  SDR-video), и никакой единый множитель за ней не угонится. Кривую сняли с
+  Maya — surfaceShader прогнали по 16 известным значениям и считали с
+  плейбласта — и вложили в шейдер. Худшая ошибка выше чёрного — меньше 1/255.</li>
+<li>С кривой уровни стали такими же, как у Maya: рассеянный 0.4 (цвет blinn 0.5 ×
+  diffuse 0.8) и блик 0.22.</li>
+<li>В <code>Settings</code> добавился переключатель <strong>Maya Tone Curve</strong> рядом с двумя
+  уровнями — для Maya, настроенной на обычный sRGB вместо ACES.</li>
+</ul>
+<h3 id="0330">0.33.0<a class="headerlink" href="#0330" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Серый во вьюпорте приведён к Maya.</strong> Уровни затенения были на глаз, теперь
+  замерены: плоскость, повёрнутая к камере и залитая стандартным blinn (цвет
+  0.5, diffuse 0.8) под стандартным налобным светом, читается в Maya 2025 как
+  146/255, а с бликом — 179/255. QC-вьюпорт рисовал 183 и 187, то есть заметно
+  светлее.</li>
+<li>Оба уровня вынесены в <code>Settings</code> под заголовком <strong>Maya Match</strong>.</li>
+</ul>
+<h3 id="0320">0.32.0<a class="headerlink" href="#0320" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Галочка рядом с <code>Find Textures</code>, по умолчанию включена.</strong> Одно нажатие
+  заполняет все материалы на всех выделенных объектах, так что набор,
+  приехавший двумя десятками односоставных мешей, собирается за один заход, а
+  не за двадцать. Снимите её, чтобы заполнялся только активный слот. Состояние
+  запоминается.</li>
+<li>Починено: файлы, разложенные по плиткам UDIM (<code>bake_1001_ao</code>,
+  <code>bake_1002_ao</code>), сливались в одно тайловое изображение, и каждому материалу
+  доставалась плитка 1001. Теперь, когда номер плитки стоит в имени материала
+  (<code>vzor_1002</code>), файлы считаются разными наборами и каждый материал берёт свой.</li>
+</ul>
+<h3 id="0310">0.31.0<a class="headerlink" href="#0310" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Починено: Find Textures не открывался на папке импортированного меша.</strong>
+  Ошибок было две. Отслеживание импорта читало путь из истории операторов, куда
+  Blender импортёры не кладёт вовсе; теперь путь берётся из свойств, с которыми
+  импортёр вызывался последний раз, — там он есть. И обработчик не был помечен
+  постоянным, поэтому Blender выбрасывал его при открытии любого .blend.</li>
+<li>Если у объекта пути нет, а поиск по имени ничего не нашёл, браузер открывается
+  на папке последнего импорта, а не в пустоте. Это закрывает всё, что было
+  импортировано до этой версии.</li>
+</ul>
 <h3 id="0304">0.30.4<a class="headerlink" href="#0304" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Починено почерневшее в части сцены изображение.</strong> Режим <code>Roughness Only</code>

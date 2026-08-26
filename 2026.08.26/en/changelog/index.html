@@ -590,6 +590,61 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#0341" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.34.1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#0340" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.34.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#0330" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.33.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#0320" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.32.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#0310" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.31.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#0304" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1538,6 +1593,61 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#0341" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.34.1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#0340" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.34.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#0330" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.33.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#0320" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.32.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#0310" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.31.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#0304" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1760,7 +1870,7 @@
 </tr>
 <tr>
 <td>QC Maya Viewport</td>
-<td><code>0.30.4</code></td>
+<td><code>0.34.1</code></td>
 <td>5.1.0+</td>
 </tr>
 <tr>
@@ -1859,6 +1969,63 @@ texture set. Covers the changes since 1.8.7.</p>
 <h2 id="mutaform-studio-render">Mutaform Studio Render<a class="headerlink" href="#mutaform-studio-render" title="Permanent link">&para;</a></h2>
 <p><em>No change history in the add-on repository yet.</em></p>
 <h2 id="qc-maya-viewport">QC Maya Viewport<a class="headerlink" href="#qc-maya-viewport" title="Permanent link">&para;</a></h2>
+<h3 id="0341">0.34.1<a class="headerlink" href="#0341" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Put the key light's upward tilt back. 0.34.0 aimed it straight down the view
+  axis on the strength of a flat-plane reading, but a plane cannot show where a
+  light is. A shaded sphere can: Maya's puts its brightest point 15% of the
+  radius above centre, so the light is tilted. Flattening it made the shading
+  read as if lit from the wrong side.</li>
+<li>Specular back to 0.30, which is what the tilt needs to reach Maya's peak.</li>
+</ul>
+<p>Known difference: Maya's blinn highlight is tighter and peaks about 12/255 above
+its surrounding surface, this shader's Blinn-Phong lobe about 5. The lobe shape
+differs, not the level.</p>
+<h3 id="0340">0.34.0<a class="headerlink" href="#0340" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Maya's view transform is reproduced, so the whole grey ramp matches, not
+  just one point.</strong> 0.33.0 matched the mid grey by lowering the diffuse level,
+  but Maya runs its viewport through a tone curve (ACES 1.0 SDR-video by
+  default) and no single multiplier can follow that. The curve was measured out
+  of Maya — a surfaceShader stepped through 16 known values, read back off a
+  playblast — and fitted into the shader. Worst error is under 1/255 above black.</li>
+<li>With the curve in place the levels are Maya's own again: diffuse 0.4 (blinn
+  colour 0.5 x diffuse 0.8) and a 0.22 highlight.</li>
+<li><code>Settings</code> gained a <strong>Maya Tone Curve</strong> switch beside the two levels, for a
+  Maya set to plain sRGB rather than ACES.</li>
+</ul>
+<h3 id="0330">0.33.0<a class="headerlink" href="#0330" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>The viewport greys now match Maya.</strong> The shading levels were guesses; they
+  are measured now. A flat plane facing the camera, shaded by a default blinn
+  (colour 0.5, diffuse 0.8) under the default headlight, reads 146/255 in Maya
+  2025 and 179/255 with the highlight. The QC viewport was painting 183 and 187
+  — visibly lighter.</li>
+<li>Both levels are exposed in <code>Settings</code> under <strong>Maya Match</strong>.</li>
+</ul>
+<h3 id="0320">0.32.0<a class="headerlink" href="#0320" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Checkbox next to <code>Find Textures</code>, on by default.</strong> One press now fills every
+  material on every selected object, so a set that arrives as twenty
+  one-material meshes takes one press instead of one per material. Untick it to
+  go back to filling only the active slot. The state is remembered.</li>
+<li>Fixed: files named per UDIM tile (<code>bake_1001_ao</code>, <code>bake_1002_ao</code>) were merged
+  into a single tiled image, so every material got tile 1001. When the material
+  name carries the tile number (<code>vzor_1002</code>), the files are treated as separate
+  sets and each material takes its own.</li>
+</ul>
+<h3 id="0310">0.31.0<a class="headerlink" href="#0310" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Fixed: Find Textures did not open on the imported mesh's folder.</strong> Two
+  things were wrong. The import tracker read the path off the operator history,
+  but Blender never puts importers there; it now asks the window manager for the
+  properties each importer was last called with, which does hold the path. And
+  the handler was not marked persistent, so Blender threw it away the moment a
+  .blend was opened.</li>
+<li>When an object carries no recorded path and the name search finds nothing, the
+  browser falls back to the folder of the last import rather than opening
+  nowhere. That covers everything imported before this version.</li>
+</ul>
 <h3 id="0304">0.30.4<a class="headerlink" href="#0304" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Fixed the viewport going black on part of the scene.</strong> <code>Roughness Only</code>

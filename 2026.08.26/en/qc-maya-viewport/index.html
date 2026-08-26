@@ -1403,6 +1403,10 @@ scene is found by name under the <strong>Project Roots</strong> set in Settings.
 <p>Utility maps are deliberately left alone: the <code>_cc</code> tint mask, the <code>_curve</code>,
 <code>_cavity</code>, <code>_thickness</code>, <code>_objid</code>, <code>_matid</code>, <code>_position</code> and <code>_id</code> bakes, and
 object-space normals.</p>
+<p>The checkbox beside the button is <strong>All Selected Objects</strong>, on by default: one
+press fills every material on every selected object. A set that arrives as
+twenty single-material meshes takes one press instead of twenty. Turn it off
+when only the active slot should be touched.</p>
 <div class="admonition tip">
 <p class="admonition-title">If some maps were not picked up</p>
 <p>Naming is the usual reason. Turn off <strong>Match Material Name</strong> and everything
@@ -1415,8 +1419,10 @@ filename counts as which map. It holds 104 built-in rules with a reset button
 beside them. A row can be edited, added, or deleted — a deleted rule really does
 stop matching.</p>
 <p>The table lives in the Blender preferences rather than the scene file, so it
-survives a restart and applies to every scene on the machine. Project Roots are
-set there too.</p>
+survives a restart and applies to every scene on the machine. Project Roots live
+there too, along with a <strong>Maya Match</strong> block — the grey calibration: a tone curve
+plus the measured diffuse and specular levels. The defaults target a Maya running
+ACES 1.0 SDR-video; if yours is set to plain sRGB, switch the curve off.</p>
 <div class="admonition warning">
 <p class="admonition-title">Check that the preferences are being saved</p>
 <p>The dialog says whether the table is being saved. With Auto-Save Preferences
