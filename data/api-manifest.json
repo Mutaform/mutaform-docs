@@ -1398,20 +1398,56 @@
     "qc-maya-viewport": {
       "blender_version_min": "5.1.0",
       "constants": {
+        "AO": "AO",
+        "AO_CHANNEL_TAG": "mvm_ao_channel",
+        "ASSET_ROOT_THRESHOLD": 700.0,
+        "BASE_COLOR": "BASE_COLOR",
         "CALIBRATION_CAMERA": "MVM_Calibration",
+        "DIRECTX_HINTS": [
+          "directx",
+          "dx"
+        ],
+        "EMISSION": "EMISSION",
+        "FOLDER_MATCH_THRESHOLD": 700.0,
+        "HEIGHT": "HEIGHT",
+        "IGNORE": "IGNORE",
         "INCH_TO_MM": 25.4,
         "LEGACY_CLASSES": [
           "MVM_OT_apply_standard",
           "MVM_OT_enable",
           "MVM_OT_toggle_ao_only",
           "MVM_OT_follow_light",
-          "MVM_PT_panel"
+          "MVM_PT_panel",
+          "MVM_MT_custom_shading"
         ],
+        "MAP_TAG": "mvm_map",
+        "MATCH_KEEP_RATIO": 0.6,
+        "MATCH_THRESHOLD": 500.0,
+        "MAX_DEPTH": 4,
+        "MAX_SEARCH_DEPTH": 4,
+        "MAX_TEXTURE_DEPTH": 3,
         "MAYA_TO_BLENDER_SCALE": 0.01,
+        "METALLIC": "METALLIC",
+        "NORMAL": "NORMAL",
+        "NORMAL_ROUGH": "NORMAL_ROUGH",
+        "NORMAL_Z_TAG": "mvm_normal_z",
+        "NRM_GROUP_NAME": "MVM Unpack NRM",
+        "OPACITY": "OPACITY",
+        "OPENGL_HINTS": [
+          "opengl",
+          "ogl",
+          "gl"
+        ],
+        "PACKED": "PACKED",
+        "PACKED_AUTO": "PACKED_AUTO",
+        "ROUGHNESS": "ROUGHNESS",
+        "ROUGH_CHANNEL_TAG": "mvm_rough_channel",
+        "SOURCE_TAG": "mvm_source",
+        "SPECULAR": "SPECULAR",
         "VERSION": [
           0,
-          22,
-          8
+          30,
+          4
         ],
         "_DEPTH_BIAS_MAX_SCALE": 64.0,
         "_DEPTH_BIAS_MIN_SCALE": 0.25,
@@ -1422,8 +1458,10 @@
         "_EDIT_OVERLAY_DIRTY": [],
         "_EDIT_SYNC_SKIP": [],
         "_FACE_DEPTH_BIAS": 2.5e-07,
+        "_HANDLER_KEY": "mvm_draw_handler",
         "_LAST_ERROR": "",
         "_LAST_TRIANGLES": 0,
+        "_OBJECT_COUNT": -1,
         "_VERTEX_DEPTH_BIAS": 7.5e-07
       },
       "id": "maya_viewport_match",
@@ -1474,9 +1512,13 @@
         },
         {
           "base": "Operator",
-          "bl_description": "Switch the global green-channel convention for normal maps",
+          "bl_description": "Switch the green-channel convention for normal maps, both in the QC viewport and on the Normal Map nodes so EEVEE and Cycles agree",
           "bl_idname": "mvm.set_normal_convention",
           "bl_label": "Set Normal Map Convention",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
           "class_name": "MVM_OT_set_normal_convention",
           "docstring": null,
           "has_poll": false,
@@ -1500,6 +1542,166 @@
           "has_poll": false,
           "module": "operators.py",
           "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Pick a folder and hook its textures into the active material, matched by filename suffix and material name",
+          "bl_idname": "mvm.load_textures",
+          "bl_label": "Find Textures",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "MVM_OT_load_textures",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators.py",
+          "properties": [
+            {
+              "identifier": "directory",
+              "kind": "string",
+              "owner": "MVM_OT_load_textures",
+              "source": "operators.py",
+              "subtype": "DIR_PATH"
+            },
+            {
+              "identifier": "filename",
+              "kind": "string",
+              "owner": "MVM_OT_load_textures",
+              "source": "operators.py"
+            },
+            {
+              "default": true,
+              "identifier": "filter_image",
+              "kind": "bool",
+              "owner": "MVM_OT_load_textures",
+              "source": "operators.py"
+            },
+            {
+              "default": true,
+              "identifier": "filter_folder",
+              "kind": "bool",
+              "owner": "MVM_OT_load_textures",
+              "source": "operators.py"
+            },
+            {
+              "default": true,
+              "description": "Also look inside folders below the selected one",
+              "identifier": "recursive",
+              "kind": "bool",
+              "label": "Search Subfolders",
+              "owner": "MVM_OT_load_textures",
+              "source": "operators.py"
+            },
+            {
+              "default": true,
+              "description": "Only use files whose name resembles the material. Turn off to take whatever the folder holds",
+              "identifier": "match_names",
+              "kind": "bool",
+              "label": "Match Material Name",
+              "owner": "MVM_OT_load_textures",
+              "source": "operators.py"
+            },
+            {
+              "default": false,
+              "description": "Fill every material on the object, not just the active one",
+              "identifier": "all_slots",
+              "kind": "bool",
+              "label": "All Material Slots",
+              "owner": "MVM_OT_load_textures",
+              "source": "operators.py"
+            },
+            {
+              "default": true,
+              "description": "Switch the viewport green channel when the normal map filename says OpenGL or DirectX",
+              "identifier": "set_convention",
+              "kind": "bool",
+              "label": "Normal Convention From Name",
+              "owner": "MVM_OT_load_textures",
+              "source": "operators.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Add a folder to search for assets",
+          "bl_idname": "mvm.root_add",
+          "bl_label": "Add Project Root",
+          "bl_options": [
+            "INTERNAL"
+          ],
+          "class_name": "MVM_OT_root_add",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Remove the selected folder",
+          "bl_idname": "mvm.root_remove",
+          "bl_label": "Remove Project Root",
+          "bl_options": [
+            "INTERNAL"
+          ],
+          "class_name": "MVM_OT_root_remove",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Add an empty row to the suffix table",
+          "bl_idname": "mvm.rule_add",
+          "bl_label": "Add Suffix",
+          "bl_options": [
+            "INTERNAL"
+          ],
+          "class_name": "MVM_OT_rule_add",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Remove the selected row",
+          "bl_idname": "mvm.rule_remove",
+          "bl_label": "Remove Suffix",
+          "bl_options": [
+            "INTERNAL"
+          ],
+          "class_name": "MVM_OT_rule_remove",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Throw the table away and rebuild the built-in suffixes",
+          "bl_idname": "mvm.rule_reset",
+          "bl_label": "Reset To Defaults",
+          "bl_options": [
+            "INTERNAL"
+          ],
+          "class_name": "MVM_OT_rule_reset",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Edit the texture suffixes Find Textures recognises",
+          "bl_idname": "mvm.suffix_settings",
+          "bl_label": "Settings",
+          "class_name": "MVM_OT_suffix_settings",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": []
         }
       ],
       "panels": [
@@ -1514,19 +1716,85 @@
           "has_poll": false,
           "module": "ui.py",
           "operators": [
+            "mvm.load_textures",
             "mvm.reimport_textures",
             "mvm.set_normal_convention",
+            "mvm.suffix_settings",
             "mvm.set_custom_mode"
           ],
           "properties": [],
           "settings": []
         }
       ],
-      "property_groups": [],
+      "property_groups": [
+        {
+          "base": "PropertyGroup",
+          "class_name": "MVM_SuffixRule",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": [
+            {
+              "description": "Filename ending, without separators. \"basecolor\" matches _Base_Color, -basecolor and .BaseColor alike",
+              "identifier": "suffix",
+              "kind": "string",
+              "label": "Suffix",
+              "owner": "MVM_SuffixRule",
+              "source": "preferences.py"
+            },
+            {
+              "default": "BASE_COLOR",
+              "description": "Where a file with this suffix is linked",
+              "identifier": "kind",
+              "kind": "enum",
+              "label": "Map",
+              "owner": "MVM_SuffixRule",
+              "source": "preferences.py"
+            }
+          ]
+        },
+        {
+          "base": "PropertyGroup",
+          "class_name": "MVM_ProjectRoot",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": [
+            {
+              "description": "A folder Find Textures may search for the asset an object came from, e.g. the review or projects drive",
+              "identifier": "path",
+              "kind": "string",
+              "label": "Folder",
+              "owner": "MVM_ProjectRoot",
+              "source": "preferences.py",
+              "subtype": "DIR_PATH"
+            }
+          ]
+        }
+      ],
       "tagline": "QC Maya Viewport diagnostic GPU shading for Blender",
       "tags": [],
-      "ui_lists": [],
-      "version": "0.22.8",
+      "ui_lists": [
+        {
+          "base": "UIList",
+          "bl_idname": "MVM_UL_project_roots",
+          "class_name": "MVM_UL_project_roots",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": []
+        },
+        {
+          "base": "UIList",
+          "bl_idname": "MVM_UL_suffix_rules",
+          "class_name": "MVM_UL_suffix_rules",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": []
+        }
+      ],
+      "version": "0.30.4",
       "website": null
     },
     "qc-validator": {
@@ -1582,6 +1850,7 @@
         ],
         "LEGACY_MATERIAL_PATTERN": "^m_[A-Za-z0-9_]+_01$",
         "MAX_FIX_PASSES": 4,
+        "REVIEW_KIND": "MATERIAL_UV",
         "SEVERITY_ITEMS": [
           [
             "FAIL",
@@ -1657,6 +1926,7 @@
         "_DEFAULT_FIX_TEXTURE_SIZE": 4096,
         "_DEFAULT_RECTILINEAR_RATIO": 0.75,
         "_LINE_WIDTH": 4.0,
+        "_MATERIAL_WATCH_INTERVAL": 0.25,
         "_MAX_FIX_AREA_CHANGE": 0.04,
         "_MAX_FIX_LENGTH_CHANGE": 0.04,
         "_MAX_FIX_TEXEL_DISPLACEMENT": 16.0,
@@ -1684,6 +1954,7 @@
         ],
         "_UV_KEY_TOLERANCE": 1e-07,
         "_edge_indices": [],
+        "_material_watch_running": false,
         "_object_name": ""
       },
       "id": "scene_qc_validator",
@@ -1855,7 +2126,25 @@
         },
         {
           "base": "Operator",
-          "bl_description": "Review UDIM 1001 UV overlaps",
+          "bl_description": "Select the scope meshes that use this material and isolate its faces in Edit Mode, so the UV editor shows this material's UVs alone. Click again to restore the previous selection",
+          "bl_idname": "sqc.select_material_users",
+          "bl_label": "Review Material UVs",
+          "class_name": "SQC_OT_select_material_users",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/material_uv_review.py",
+          "properties": [
+            {
+              "identifier": "material_name",
+              "kind": "string",
+              "owner": "SQC_OT_select_material_users",
+              "source": "operators/material_uv_review.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Review UDIM 1001 UV overlaps. On a multi-material mesh it covers the active material slot and follows it when you pick another",
           "bl_idname": "sqc.toggle_overlap_visual",
           "bl_label": "Show Overlaps",
           "class_name": "SQC_OT_toggle_overlap_visual",
@@ -1866,7 +2155,7 @@
         },
         {
           "base": "Operator",
-          "bl_description": "Preview UV-island padding in the UV Editor",
+          "bl_description": "Preview UV-island padding in the UV Editor. On a multi-material mesh it covers the active material slot and follows it when you pick another",
           "bl_idname": "sqc.toggle_padding_visual",
           "bl_label": "Show Padding",
           "class_name": "SQC_OT_TogglePaddingVisual",
@@ -2053,10 +2342,10 @@
         },
         {
           "base": "Operator",
-          "bl_description": "Select all validated-scope mesh objects that use this material",
-          "bl_idname": "sqc.select_material_users",
+          "bl_description": "Select every object in the scene that uses this material, whatever the validation scope is",
+          "bl_idname": "sqc.select_material_objects",
           "bl_label": "Select Material Users",
-          "class_name": "SQC_OT_select_material_users",
+          "class_name": "SQC_OT_select_material_objects",
           "docstring": null,
           "has_poll": false,
           "module": "operators/selection.py",
@@ -2064,14 +2353,14 @@
             {
               "identifier": "material_name",
               "kind": "string",
-              "owner": "SQC_OT_select_material_users",
+              "owner": "SQC_OT_select_material_objects",
               "source": "operators/selection.py"
             }
           ]
         },
         {
           "base": "Operator",
-          "bl_description": "Preview UV scale: green is average, red is smaller and blue is larger",
+          "bl_description": "Preview UV scale: green is average, red is smaller and blue is larger. On a multi-material mesh it covers the active material slot and follows it when you pick another",
           "bl_idname": "sqc.toggle_texel_density_visual",
           "bl_label": "Show Texel Density",
           "class_name": "SQC_OT_ToggleTexelDensityVisual",
@@ -2193,6 +2482,7 @@
           "module": "ui/review_scene_panel.py",
           "operators": [
             "sqc.toggle_uv_checker",
+            "sqc.select_material_objects",
             "sqc.select_material_users"
           ],
           "properties": [],
@@ -3191,7 +3481,7 @@
           "properties": []
         }
       ],
-      "version": "1.8.7",
+      "version": "1.9.2",
       "website": null
     }
   }

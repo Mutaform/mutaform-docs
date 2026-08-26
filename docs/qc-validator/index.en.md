@@ -52,18 +52,26 @@ usually working on one asset anyway.
 
 A stage is a saved set: which checks are on, at what severity, with which
 parameters. Stages are grouped into a project. The add-on ships with the
-`Mutaform_Default` project and five stages, getting stricter as you go:
+`Mutaform_Default` project and five stages. It is not a ladder of strictness:
+each stage asks what belongs to its step of the job and stays quiet about the
+rest.
 
-| Stage | Checks enabled | What it adds |
+| Stage | Checks | What it covers |
 | --- | --- | --- |
-| Blockout | 9 | degenerate geometry, transforms, basic UV and naming requirements |
-| HighPoly | 11 | topology: non-manifold, non-planar and concave faces, duplicates, animation |
-| LP_UVs | 16 | UVs: maps present, hard edges on seams, random sharps |
-| Bake | 22 | UV overlaps, pivot centring, materials and their names |
-| Textures | 23 | plus the fully-hard-edged geometry check |
+| Blockout | 14 | geometry rubbish, transforms, object and UV-set names, material count. The layout itself is not asked for yet |
+| HighPoly | 9 | the loosest of all. A sculpt is asked for names, transforms and duplicate faces: open shells, degenerate and concave faces are normal there |
+| LP_UVs | 25 | the full set: topology, the whole UV layout, materials, Nanite |
+| Bake | 24 | the same, minus Nanite Closed Geometry |
+| Textures | 25 | the same set as LP_UVs |
 
 The stages are the row of buttons under the Project line. Pressing one applies
 it: checks toggle, parameters fill in.
+
+!!! note "A stage clears what it does not need"
+    Every stage of the bundled project lists all 27 checks, so switching does
+    not accumulate whatever the previous step had on: what a stage does not
+    want, it turns off. Your own project need not work that way — a check a
+    stage does not mention stays exactly as it was found.
 
 ## Where the checklist actually is
 
@@ -152,6 +160,19 @@ scale obvious at a glance.
 
 ![The padding preview](img/padding-preview.png){ .screenshot }
 
+!!! tip "One material, one texture set"
+    All three tools look only at the active material's faces. Another
+    material's islands are not drawn beside them, do not count as overlaps, and
+    do not shift the average density Texel Density reads its colours against.
+
+    On a multi-material model there is no other sensible answer: the
+    neighbouring material leaves for its own texture, so measuring it alongside
+    this one is pointless. Switch the active slot and the review re-aims by
+    itself — no need to leave it.
+
+    A review opened by clicking a result row is the exception: it shows the
+    whole mesh, exactly what the check complained about.
+
 !!! tip "Check All Material Users"
     All three tools have this checkbox and it matters more than it looks.
     Without it only the active object is inspected. With it, every visible mesh
@@ -164,8 +185,24 @@ scale obvious at a glance.
 materials are not harmed — pressing it again puts everything back. Checker
 density is adjustable live.
 
-**Select Material Users** selects every visible mesh using the active object's
-material.
+## Walking the materials
+
+The **Review Scene** fold lists the materials in scope: how many objects and
+slots each one has. Every row carries two actions.
+
+**Clicking the material name** selects every object in the scene that uses it —
+not only those inside the Scope. It also makes that material the active slot on
+each of them, which leaves the inspection tools aimed where they should be.
+
+**The button on the right** is Review Material UVs. It opens multi-object Edit
+Mode with only that material's faces selected, so the UV editor shows its layout
+and nothing else. While the review runs, a `Reviewing <material>` line sits in
+both Review Scene and Checklist. Pressing it again restores the selection, the
+mode and UV sync as they were.
+
+That walks an asset atlas by atlas: pick a material, look at overlaps, padding
+and density, move to the next. Hidden and unselectable objects are skipped, and
+the status line says how many.
 
 ## Next
 

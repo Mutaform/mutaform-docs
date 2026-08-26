@@ -93,12 +93,12 @@ The project picker and three buttons: save the current set as a project, load on
 
 The row of buttons under the project line. Each is a saved set: which checks are on, at what severity, with which parameters.
 
-**When you need it.** Switch as the work progresses. Strictness grows left to right: Blockout enables 9 checks, Textures 23. Demanding clean UVs during blockout is pointless; before texturing it is mandatory.
+**When you need it.** Switch as the work progresses. A stage is not a strictness level but a set for one step of the job: Blockout enables 14 checks, HighPoly only 9, LP_UVs 25. HighPoly is deliberately the loosest — on a sculpt, open shells, degenerate faces and concave polygons are normal, and complaining about them is premature. Demanding clean UVs during blockout is just as pointless; before texturing it is mandatory.
 
 **What happens.** Pressing one applies it immediately: checkboxes move, parameters fill in. The active stage stays depressed.
 
 !!! warning "Worth knowing"
-    LP_UVs is a special case: only on that stage do the three UV inspection tools appear in the panel. On every other stage they simply are not there. A stage only toggles the checks it lists; the rest keep whatever state they had. **Nanite Closed Geometry** is not part of the bundled project — it is on from the start and no stage turns it off. If the project is not headed for Unreal, untick it by hand, or it fires on every run.
+    LP_UVs is a special case: only on that stage do the three UV inspection tools appear in the panel. On every other stage they simply are not there. A stage only toggles the checks it lists; the rest keep whatever state they had. The bundled project lists all 27 in every stage, so switching genuinely clears what does not belong and carries nothing over from the previous stage. In your own project, watch this yourself: a check a stage does not mention stays exactly as it was found.
 
 ### The small buttons beside the stages
 
@@ -167,7 +167,7 @@ The box under the list: a description of the selected check and its settings, wh
 
 ## UV inspection tools
 
-Three interactive tools. They report nothing into the results; they show the state directly in the UV editor.
+Three interactive tools. They report nothing into the results; they show the state directly in the UV editor. All three look at one texture set at a time — the faces of the active material — and re-aim as you switch the active slot.
 
 ### Show Overlaps
 
@@ -180,7 +180,7 @@ Highlights UV islands sitting on top of each other in the UV editor.
 ![Show Overlaps — результат](img/g/uv-overlaps-pair.png){ .screenshot }
 
 !!! warning "Worth knowing"
-    The checkbox on the left matters more than it looks. Without it only the active object is inspected; with it, every visible mesh sharing the same material — that is, everything headed for the same atlas. Two objects can each be clean and still overlap each other, and without this checkbox that never surfaces. The UV set field on the right is the set number, counting from one.
+    The checkbox on the left matters more than it looks. Without it only the active object is inspected; with it, every visible mesh sharing the same material — that is, everything headed for the same atlas. Two objects can each be clean and still overlap each other, and without this checkbox that never surfaces. One texture set is inspected at a time: only the active material's faces count, and another material's islands are neither drawn beside them nor treated as overlapping them. Switch the active material slot and the review re-aims on the fly — no need to leave and start again. One exception: a review opened by clicking a result row covers the whole mesh, so what you see matches what the check complained about. That review does not follow the active slot. The UV set field on the right is the set number, counting from one.
 
 ### Show Padding
 
@@ -193,7 +193,7 @@ Shows what the gaps between islands become at a given texture size.
 ![Show Padding — результат](img/g/uv-padding-pair.png){ .screenshot }
 
 !!! warning "Worth knowing"
-    Changing the texture size rescales the padding proportionally — the ratio holds and there is no arithmetic to do in your head.
+    Changing the texture size rescales the padding proportionally — the ratio holds and there is no arithmetic to do in your head. Padding is measured around the active material's footprint, not around the mesh: where its faces meet another material's, an island edge runs. On a multi-material model that is exactly right — the neighbouring material leaves for its own texture and will not crowd this one.
 
 ### Show Texel Density
 
@@ -203,6 +203,9 @@ Colours objects by texel density.
 
 **When you need it.** With several assets in a scene, to confirm they share a UV scale. An object that is out of line shows up immediately by colour — on the texture it would appear as a difference in detail sharpness.
 
+!!! warning "Worth knowing"
+    Colour is read against the average density, and the average is taken over the active material's faces alone. A second material on the same model cannot drag the reference towards itself, so a comparison only means something within one texture set. An even colour across the model means that set holds together.
+
 ## Review Scene — materials and the checker
 
 Collapsed by default. Inside: a breakdown of the materials in the scene, and a checker texture for judging UVs.
@@ -211,12 +214,14 @@ Collapsed by default. Inside: a breakdown of the materials in the scene, and a c
 
 ![The material list](img/c/materials.png){ .control-shot }
 
-Every material in the current scope: how many objects and slots use it, with a selection button on the right.
+Every material in the current scope: how many objects and slots use it. Each row carries two actions — the material name itself, and the UV button on the right.
 
-**When you need it.** Before baking, to see what will end up in one atlas. The button selects every visible mesh using that material.
+**When you need it.** Before baking, to see what will end up in one atlas, and to walk the materials one by one. **Clicking the name** selects the objects using that material across the whole scene — not only those inside the Scope, so a forgotten duplicate off to the side does not slip away. It also makes that material the active slot on every object it selected, which leaves the UV inspection tools already aimed at it. **The button on the right** is Review Material UVs. It opens multi-object Edit Mode with only that material's faces selected, so the UV editor shows its layout and nothing else. Pressing it again ends the review.
+
+**What happens.** While a review runs the button stays depressed and a `Reviewing <material>` line sits under the list. The same line appears in the Checklist panel, so you can see what the overlays are aimed at even when the material list is collapsed. Ending the review restores the selection, the mode and UV sync exactly as they were. Hopping from material to material does not reset that snapshot: to get back to your own work, switch the review off once.
 
 !!! warning "Worth knowing"
-    The list follows the chosen Scope. With Selection it shows only the materials of the selected objects.
+    The list follows the chosen Scope. With Selection it shows only the materials of the selected objects. While a review runs the list deliberately keeps showing the objects that were in scope when it started: otherwise Selection would collapse onto one material's users and there would be nowhere left to hop. Hidden and unselectable objects are skipped, and the status line says how many. A material that sits in a slot but on no face reports that instead and no review starts.
 
 ### Checker Tiling
 
@@ -384,4 +389,4 @@ On the left the panel is sunk into the wall: its open border ends up inside neig
 
 ---
 
-*Assembled from `content/qc-validator.en.yml`. Screenshots taken in **Scene QC Validator by Mutaform Studio 1.8.7**.*
+*Assembled from `content/qc-validator.en.yml`. Screenshots taken in **Scene QC Validator by Mutaform Studio 1.9.2**.*
