@@ -66,7 +66,7 @@ Picks textures out of a folder and wires them into the Principled BSDF, reading 
 **What happens.** The browser opens on that asset's own folder rather than wherever it was last. Blender throws the import path away, so the add-on solves it from both ends: anything imported from now on gets stamped with its path, and whatever is already in the scene is found by name under the **Project Roots** you set in Settings. If the asset turns up inside a `Meshes` subfolder, the add-on climbs out to the folder that really holds the maps. From there the maps go where they belong: data maps get Non-Color, the normal goes through a Normal Map node, height through a Bump node, and packed `_ORM`-style maps are split into channels. Textures already wired up are repointed rather than duplicated, so a second run multiplies nothing.
 
 !!! warning "Worth knowing"
-    Four checkboxes sit on the right of the browser. **Search Subfolders** looks inside folders below the chosen one. **Match Material Name** takes only files whose name resembles the material — turn it off when the folder holds a single set under a different name. **All Material Slots** fills every material on the object, not just the active one. **Normal Convention From Name** switches the convention when the filename spells it out. Utility maps are deliberately left alone: `_cc` (a tint mask), `_curve`, `_cavity`, `_thickness`, `_objid`, `_matid`, `_position`, `_id`, and object-space normal bakes. A full-size file beats its own copy in a subfolder such as `1k`.
+    A checkbox sits beside the button itself: **All Selected Objects** fills every material on every selected object in one go, rather than the active slot alone. It is on by default and remembered, so a set that arrives as twenty single-material meshes takes one press. The same checkbox is repeated in the browser. Three more sit on the right of the browser. **Search Subfolders** looks inside folders below the chosen one. **Match Material Name** takes only files whose name resembles the material — turn it off when the folder holds a single set under a different name. **Normal Convention From Name** switches the convention when the filename spells it out. Utility maps are deliberately left alone: `_cc` (a tint mask), `_curve`, `_cavity`, `_thickness`, `_objid`, `_matid`, `_position`, `_id`, and object-space normal bakes. A full-size file beats its own copy in a subfolder such as `1k`.
 
 ### Reimport Textures
 
@@ -101,11 +101,11 @@ Opens the suffix table: which tail in a filename counts as which map.
 
 **When you need it.** When a project has its own naming and Find Textures does not recognise every map. A row can be edited, added, or deleted — a deleted rule really does stop matching.
 
-**What happens.** The table ships with 104 built-in rules and a button to reset to them. It lives in the Blender preferences rather than the scene file, so it survives a restart and applies to every scene on the machine. **Project Roots** — the folders Find Textures searches an asset by name under — are set here too.
+**What happens.** The table ships with 104 built-in rules and a button to reset to them. It lives in the Blender preferences rather than the scene file, so it survives a restart and applies to every scene on the machine. **Project Roots** — the folders Find Textures searches an asset by name under — are set here too. A separate **Maya Match** block calibrates the greys against Maya. **Maya Tone Curve** reproduces Maya's viewport tone curve (on by default, calibrated for ACES 1.0 SDR-video); **Diffuse Level** and **Specular Level** are the measured lighting levels. Touch them only if your Maya is set to plain sRGB rather than ACES.
 
 !!! warning "Worth knowing"
     The dialog says whether the table is being saved. With Auto-Save Preferences off it also offers a **Save Preferences** button; without it the edit is dropped when Blender exits.
 
 ---
 
-*Assembled from `content/qc-maya-viewport.en.yml`. Screenshots taken in **QC Maya Viewport 0.30.4**.*
+*Assembled from `content/qc-maya-viewport.en.yml`. Screenshots taken in **QC Maya Viewport 0.34.1**.*

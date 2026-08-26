@@ -110,12 +110,17 @@ controls:
       up are repointed rather than duplicated, so a second run multiplies
       nothing.
     note: >-
-      Four checkboxes sit on the right of the browser. **Search Subfolders**
-      looks inside folders below the chosen one. **Match Material Name** takes
-      only files whose name resembles the material — turn it off when the folder
-      holds a single set under a different name. **All Material Slots** fills
-      every material on the object, not just the active one. **Normal Convention
-      From Name** switches the convention when the filename spells it out.
+      A checkbox sits beside the button itself: **All Selected Objects** fills
+      every material on every selected object in one go, rather than the active
+      slot alone. It is on by default and remembered, so a set that arrives as
+      twenty single-material meshes takes one press. The same checkbox is
+      repeated in the browser.
+
+      Three more sit on the right of the browser. **Search Subfolders** looks
+      inside folders below the chosen one. **Match Material Name** takes only
+      files whose name resembles the material — turn it off when the folder
+      holds a single set under a different name. **Normal Convention From Name**
+      switches the convention when the filename spells it out.
 
       Utility maps are deliberately left alone: `_cc` (a tint mask), `_curve`,
       `_cavity`, `_thickness`, `_objid`, `_matid`, `_position`, `_id`, and
@@ -175,6 +180,12 @@ controls:
       survives a restart and applies to every scene on the machine. **Project
       Roots** — the folders Find Textures searches an asset by name under — are
       set here too.
+
+      A separate **Maya Match** block calibrates the greys against Maya.
+      **Maya Tone Curve** reproduces Maya's viewport tone curve (on by default,
+      calibrated for ACES 1.0 SDR-video); **Diffuse Level** and **Specular
+      Level** are the measured lighting levels. Touch them only if your Maya is
+      set to plain sRGB rather than ACES.
     note: >-
       The dialog says whether the table is being saved. With Auto-Save
       Preferences off it also offers a **Save Preferences** button; without it

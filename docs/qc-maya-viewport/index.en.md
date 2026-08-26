@@ -62,6 +62,11 @@ Utility maps are deliberately left alone: the `_cc` tint mask, the `_curve`,
 `_cavity`, `_thickness`, `_objid`, `_matid`, `_position` and `_id` bakes, and
 object-space normals.
 
+The checkbox beside the button is **All Selected Objects**, on by default: one
+press fills every material on every selected object. A set that arrives as
+twenty single-material meshes takes one press instead of twenty. Turn it off
+when only the active slot should be touched.
+
 !!! tip "If some maps were not picked up"
     Naming is the usual reason. Turn off **Match Material Name** and everything
     in the folder is taken, whether or not it resembles the material's name. If
@@ -75,8 +80,10 @@ beside them. A row can be edited, added, or deleted — a deleted rule really do
 stop matching.
 
 The table lives in the Blender preferences rather than the scene file, so it
-survives a restart and applies to every scene on the machine. Project Roots are
-set there too.
+survives a restart and applies to every scene on the machine. Project Roots live
+there too, along with a **Maya Match** block — the grey calibration: a tone curve
+plus the measured diffuse and specular levels. The defaults target a Maya running
+ACES 1.0 SDR-video; if yours is set to plain sRGB, switch the curve off.
 
 !!! warning "Check that the preferences are being saved"
     The dialog says whether the table is being saved. With Auto-Save Preferences
