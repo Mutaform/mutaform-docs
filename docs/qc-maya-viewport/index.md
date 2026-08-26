@@ -33,7 +33,11 @@
 
 Режимы переключаются кнопками в меню; активный вдавлен.
 
-![Режим Normal Only](img/mode-normal.png){ .screenshot }
+Слева режим **Normal Only** в Blender, справа та же модель во вьюпорте Maya.
+Совпадение — это и есть смысл аддона: приёмку можно вести в Blender, не открывая
+Maya ради второго мнения.
+
+![Normal Only в Blender и та же модель в Maya](img/mode-normal.png){ .screenshot }
 
 ## Собрать материал из папки
 

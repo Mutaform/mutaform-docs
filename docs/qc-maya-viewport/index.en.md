@@ -34,7 +34,11 @@ Requires Blender 5.1 or newer.
 
 Modes are buttons in the menu; the active one is depressed.
 
-![Normal Only mode](img/mode-normal.png){ .screenshot }
+On the left, **Normal Only** in Blender; on the right, the same model in Maya's
+viewport. That match is the whole point of the add-on: review can happen in
+Blender without opening Maya for a second opinion.
+
+![Normal Only in Blender and the same model in Maya](img/mode-normal.png){ .screenshot }
 
 ## Assembling a material from a folder
 
