@@ -1,0 +1,114 @@
+/* Оформление поверх темы Material.
+   Токены Material (--md-*) переопределяются только там, где нужно; всё
+   остальное наследуется, поэтому светлая и тёмная схемы работают сами. */
+
+:root {
+  --mf-meta-fg: #6b7280;
+  --mf-meta-bg: rgba(127, 127, 127, 0.08);
+  --mf-frame: rgba(127, 127, 127, 0.28);
+}
+
+[data-md-color-scheme="slate"] {
+  --mf-meta-fg: #9aa1ad;
+  --mf-meta-bg: rgba(255, 255, 255, 0.05);
+  --mf-frame: rgba(255, 255, 255, 0.14);
+}
+
+/* Строка технических фактов под свойством или оператором: идентификатор,
+   тип, значение по умолчанию, диапазон. Держится мелкой и приглушённой,
+   чтобы не спорить с самим описанием. */
+.prop-meta {
+  font-family: var(--md-code-font-family);
+  /* em, а не rem: Material задаёт свой размер шрифта на .md-typeset, и от
+     корневого rem строка получилась бы одного размера с основным текстом —
+     то есть перестала бы читаться как второстепенная. */
+  font-size: 0.72em;
+  line-height: 1.5;
+  color: var(--mf-meta-fg);
+  background: var(--mf-meta-bg);
+  border-left: 2px solid var(--mf-frame);
+  padding: 0.35em 0.7em;
+  margin: -0.4em 0 1em;
+  border-radius: 0 2px 2px 0;
+  overflow-x: auto;
+}
+
+.prop-meta code {
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+/* Заголовок свойства в справочнике: их много подряд, поэтому заголовки
+   четвёртого уровня подтянуты ближе к своему тексту. */
+.md-typeset h4 {
+  margin-bottom: 0.5em;
+}
+
+/* Снимок одного элемента интерфейса в справочнике: он идёт сразу под
+   заголовком и должен читаться как иллюстрация к нему, а не как отдельный
+   блок, поэтому прижат к заголовку плотнее обычной картинки. */
+.control-shot {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--mf-frame);
+  border-radius: 4px;
+  margin: 0.2em 0 1em;
+}
+
+/* Скриншоты и гифки в гайдах. */
+.screenshot {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--mf-frame);
+  border-radius: 3px;
+  margin: 1.2em 0;
+}
+
+/* Таблицы с сообщениями об ошибках: первая колонка — код, ей нужна моноширина
+   и запрет переноса, иначе идентификатор рвётся посередине. */
+.md-typeset table:not([class]) td:first-child code {
+  white-space: nowrap;
+}
+
+/* Дерево коллекций в блоках кода читается лучше с чуть большим интерлиньяжем. */
+.md-typeset pre > code {
+  line-height: 1.55;
+}
+
+/* Карточки аддонов на главной. */
+.addon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+  margin: 1.5em 0;
+}
+
+.addon-card {
+  border: 1px solid var(--mf-frame);
+  border-radius: 4px;
+  padding: 1rem 1.1rem;
+  transition: border-color 120ms;
+}
+
+.addon-card:hover {
+  border-color: var(--md-accent-fg-color);
+}
+
+.addon-card h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1rem;
+}
+
+.addon-card p {
+  margin: 0;
+  font-size: 0.76rem;
+  color: var(--mf-meta-fg);
+}
+
+.addon-card a {
+  text-decoration: none;
+}
