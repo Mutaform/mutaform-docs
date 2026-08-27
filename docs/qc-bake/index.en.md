@@ -48,7 +48,11 @@ Done — the objects are now `<name>_low` and `<name>_high`. The base name comes
 from whichever object the add-on decided was the low poly, with any old suffix
 stripped off.
 
-![Creating a namepair](img/create-namepair.gif){ .screenshot }
+![Creating a namepair and organising collections](img/create-namepair.gif){ .screenshot }
+
+The recording goes past the quick start: after the renaming it presses **Flat**
+and then **Per Asset** — the collection layouts covered further down. Only the
+panel and the outliner are in frame, so that the names stay readable.
 
 ## Which one is the high poly
 

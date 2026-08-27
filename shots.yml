@@ -42,12 +42,12 @@ shots:
       BakeGroup_01, неполная пара осталась отдельно.
 
   - path: qc-bake/img/create-namepair.gif
-    done: manual
+    done: hand
     size: [640, 360]
     caption: >-
-      ГИФКА, снять вручную: выделение двух объектов -> Create Namepair -> имена
-      в аутлайнере меняются на asset_low и asset_high. Записать нечем
-      автоматически — нужна запись экрана (ShareX / ScreenToGif), 10-15 секунд.
+      Запись экрана: семь безымянных кубов -> Create Namepair -> Flat -> Per
+      Asset. Кадр обрезан до панели QC Bake и аутлайнера, чтобы имена читались
+      на ширине колонки: в полном кадре строки ужимались до ~5 px.
 
   # --- Scene QC Validator -------------------------------------------------
   - path: qc-validator/img/panel-main.png
