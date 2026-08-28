@@ -516,6 +516,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#add-ons-for-maya" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Add-ons for Maya
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-maya-half-of-the-bridge" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1187,6 +1198,119 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QC Bake for Maya
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    QC Bake for Maya
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../qc-bake-maya/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../qc-bake-maya/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1287,6 +1411,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#add-ons-for-maya" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Add-ons for Maya
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-maya-half-of-the-bridge" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1323,9 +1458,12 @@
 
 
 <h1 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h1>
-<p>All studio add-ons are Blender Extensions. You can install them one by one from
-a file, but the right way is to add the repository once and let Blender find the
-add-ons and offer updates on its own.</p>
+<p>Almost all studio add-ons are Blender Extensions. You can install them one by one
+from a file, but the right way is to add the repository once and let Blender find
+the add-ons and offer updates on its own.</p>
+<p>The exception is <strong>QC Bake for Maya</strong>: it lives in Maya, installs differently and
+updates itself. The steps are <a href="../qc-bake-maya/">in its overview</a>,
+and in short below.</p>
 <h2 id="add-the-repository">Add the repository<a class="headerlink" href="#add-the-repository" title="Permanent link">&para;</a></h2>
 <p>Done once per machine.</p>
 <ol>
@@ -1423,6 +1561,16 @@ sits in the site header.</p>
 <li>Pick the add-on's zip</li>
 </ol>
 <p>An add-on installed from a file will not update itself.</p>
+<h2 id="add-ons-for-maya">Add-ons for Maya<a class="headerlink" href="#add-ons-for-maya" title="Permanent link">&para;</a></h2>
+<p>Maya has no extension repository, so installation is its own thing.</p>
+<p><strong>QC Bake for Maya</strong> — download
+<a href="https://mutaform.github.io/qc-bake-maya/qc_bake_maya.zip"><code>qc_bake_maya.zip</code></a>,
+unpack it somewhere it will stay, and drag <code>install/install.py</code> into Maya's
+viewport. The installer registers the module, adds a button to the <em>Mutaform</em>
+shelf and opens the panel. Requires Maya 2025.</p>
+<p>The unpacked folder is the installation: the module file points at it. Move or
+delete that folder and the tool falls off. It updates itself from the panel,
+without restarting Maya.</p>
 <h2 id="the-maya-half-of-the-bridge">The Maya half of the bridge<a class="headerlink" href="#the-maya-half-of-the-bridge" title="Permanent link">&para;</a></h2>
 <p>QC Bridge has a second half that lives in Maya and installs separately — copy an
 archive into your <code>scripts</code> folder and run the shelf installer. The steps are in

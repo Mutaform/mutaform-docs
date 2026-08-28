@@ -516,6 +516,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#maya" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Аддоны для Maya
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#maya-" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1187,6 +1198,119 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QC Bake for Maya
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    QC Bake for Maya
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../qc-bake-maya/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Обзор
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../qc-bake-maya/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Справочник
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1287,6 +1411,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#maya" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Аддоны для Maya
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#maya-" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1323,9 +1458,11 @@
 
 
 <h1 id="_1">Установка<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>Все студийные аддоны — это Blender Extensions. Их можно ставить по одному из
-файла, но правильный способ один: добавить репозиторий, после чего Blender сам
-находит аддоны и предлагает обновления.</p>
+<p>Почти все студийные аддоны — это Blender Extensions. Их можно ставить по одному
+из файла, но правильный способ один: добавить репозиторий, после чего Blender
+сам находит аддоны и предлагает обновления.</p>
+<p>Исключение — <strong>QC Bake for Maya</strong>: он живёт в Maya, ставится иначе и обновляет
+себя сам. Порядок — <a href="../qc-bake-maya/">в его обзоре</a>, ниже коротко.</p>
 <h2 id="_2">Добавить репозиторий<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <p>Делается один раз на машину.</p>
 <ol>
@@ -1422,6 +1559,16 @@
 <li>Выбрать zip-архив аддона</li>
 </ol>
 <p>Аддон, поставленный из файла, обновляться сам не будет.</p>
+<h2 id="maya">Аддоны для Maya<a class="headerlink" href="#maya" title="Permanent link">&para;</a></h2>
+<p>В Maya нет репозитория расширений, поэтому установка своя.</p>
+<p><strong>QC Bake for Maya</strong> — скачать
+<a href="https://mutaform.github.io/qc-bake-maya/qc_bake_maya.zip"><code>qc_bake_maya.zip</code></a>,
+распаковать туда, где папка останется, и перетащить <code>install/install.py</code> во
+вьюпорт Maya. Установщик пропишет модуль, добавит кнопку на полку <em>Mutaform</em> и
+откроет панель. Нужна Maya 2025.</p>
+<p>Распакованная папка и есть установка: файл модуля — указатель на неё. Перенесёте
+или удалите папку — инструмент отвалится. Обновляется он сам, из панели, без
+перезапуска Maya.</p>
 <h2 id="maya-">Maya-часть моста<a class="headerlink" href="#maya-" title="Permanent link">&para;</a></h2>
 <p>У QC Bridge есть вторая половина, которая живёт в Maya и ставится отдельно —
 скачиванием архива в папку <code>scripts</code> и запуском установщика полки. Порядок
