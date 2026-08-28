@@ -117,7 +117,7 @@ nav:
       - Scene QC Validator:
           - Обзор: qc-validator/index.md
           - Справочник: qc-validator/reference.md
-      - Mutaform Studio Render:
+      - QC Daily Render:
           - Обзор: qc-daily-render/index.md
           - Справочник: qc-daily-render/reference.md
       - QC Maya Viewport:

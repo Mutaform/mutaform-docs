@@ -26,7 +26,7 @@ A checklist of scene and mesh checks before export. _Reference only for now._
 </div>
 
 <div class="addon-card" markdown>
-### [Mutaform Studio Render](qc-daily-render/reference.en.md)
+### [QC Daily Render](qc-daily-render/reference.en.md)
 One-click Marmoset-style studio render. _Reference only for now._
 </div>
 

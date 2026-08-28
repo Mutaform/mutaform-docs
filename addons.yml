@@ -13,12 +13,12 @@ source_root_default: ".."
 
 addons:
   - slug: qc-bake
-    source: "qc_bake/qc_bake"
+    source: "qc_bake/Git/qc_bake"
     clone_url: "https://github.com/Mutaform/qc-bake"
     order: 1
 
   - slug: qc-validator
-    source: "qc_validator/scene_qc_validator"
+    source: "qc_validator/Git/scene_qc_validator"
     clone_url: "https://github.com/Mutaform/scene-qc-validator"
     order: 2
     # Проверки описаны таблицей данных, а не панелями: без этого блока
@@ -29,16 +29,16 @@ addons:
         variable: "CHECK_DEFINITIONS"
 
   - slug: qc-daily-render
-    source: "qc_daily_render/mutaform_studio_render"
+    source: "qc_daily_render/Git/qc_daily_render"
     clone_url: "https://github.com/Mutaform/qc-daily-render"
     order: 3
 
   - slug: qc-maya-viewport
-    source: "qc_maya_viewport/maya_viewport_match"
+    source: "qc_maya_viewport/Git/maya_viewport_match"
     clone_url: "https://github.com/Mutaform/qc-maya-viewport"
     order: 4
 
   - slug: qc-bridge
-    source: "qc_mutaform_bridge/mutaform_bridge"
+    source: "qc_mutaform_bridge/Git/mutaform_bridge"
     clone_url: "https://github.com/Mutaform/qc-bridge-blender-maya"
     order: 5

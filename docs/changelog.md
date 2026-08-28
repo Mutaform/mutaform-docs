@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | QC Bake | `2.0.0` | 5.0.0+ |
 | Scene QC Validator by Mutaform Studio | `1.9.2` | 4.5.0+ |
-| Mutaform Studio Render | `1.5.10` | 5.2.0+ |
+| QC Daily Render | `1.5.10` | 5.2.0+ |
 | QC Maya Viewport | `0.34.1` | 5.1.0+ |
 | QC Bridge Maya-Blender by Mutaform | `1.1.8` | 4.2.0+ |
 
@@ -104,7 +104,7 @@ notably making Reduce Bake Groups non-destructive.
 - Added UV checker assets and controls.
 - Added FBX export workflow with Mutaform preset.
 
-## Mutaform Studio Render
+## QC Daily Render
 
 _История изменений в репозитории аддона пока не ведётся._
 

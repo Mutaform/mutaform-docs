@@ -28,7 +28,7 @@
 | QC Bridge Maya ↔ Blender | `https://mutaform.github.io/qc-bridge-blender-maya/index.json` |
 
 !!! note "Studio Render"
-    Mutaform Studio Render пока ставится из файла — репозитория у него нет.
+    QC Daily Render пока ставится из файла — репозитория у него нет.
     Возьмите свежий `mutaform_studio_render_vX.Y.Z_extension.zip` и поставьте
     через `Install from Disk…`.
 
@@ -42,7 +42,7 @@
 | Scene QC Validator | 4.5 |
 | QC Bake | 5.0 |
 | QC Maya Viewport | 5.1 |
-| Mutaform Studio Render | 5.2 |
+| QC Daily Render | 5.2 |
 
 Blender не даст установить расширение в версию ниже минимальной — если аддон не
 находится в списке, начните с проверки версии самого Blender.

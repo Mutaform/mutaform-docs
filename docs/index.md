@@ -26,7 +26,7 @@ hide:
 </div>
 
 <div class="addon-card" markdown>
-### [Mutaform Studio Render](qc-daily-render/index.md)
+### [QC Daily Render](qc-daily-render/index.md)
 Студийный рендер в стиле Marmoset в одну кнопку.
 </div>
 

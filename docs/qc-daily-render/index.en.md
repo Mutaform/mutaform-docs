@@ -1,4 +1,4 @@
-# Mutaform Studio Render
+# QC Daily Render
 
 A one-button studio render of your model — for dailies, previews and portfolio
 shots. The add-on builds a Marmoset-style studio around whatever is in the

@@ -6,7 +6,7 @@ The versions these docs were built from. The number in the add-on's panel header
 | --- | --- | --- |
 | QC Bake | `2.0.0` | 5.0.0+ |
 | Scene QC Validator by Mutaform Studio | `1.9.2` | 4.5.0+ |
-| Mutaform Studio Render | `1.5.10` | 5.2.0+ |
+| QC Daily Render | `1.5.10` | 5.2.0+ |
 | QC Maya Viewport | `0.34.1` | 5.1.0+ |
 | QC Bridge Maya-Blender by Mutaform | `1.1.8` | 4.2.0+ |
 
@@ -103,7 +103,7 @@ texture set. Covers the changes since 1.8.7.
 - Added UV checker assets and controls.
 - Added FBX export workflow with Mutaform preset.
 
-## Mutaform Studio Render
+## QC Daily Render
 
 _No change history in the add-on repository yet._
 

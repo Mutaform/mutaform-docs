@@ -28,7 +28,7 @@ A new source appears in the extension list. Find the add-on by name and press
 | QC Bridge Maya ↔ Blender | `https://mutaform.github.io/qc-bridge-blender-maya/index.json` |
 
 !!! note "Studio Render"
-    Mutaform Studio Render is file-install only for now — it has no repository.
+    QC Daily Render is file-install only for now — it has no repository.
     Grab the latest `mutaform_studio_render_vX.Y.Z_extension.zip` and use
     `Install from Disk…`.
 
@@ -42,7 +42,7 @@ The minimums differ because the add-ons lean on different parts of the API.
 | Scene QC Validator | 4.5 |
 | QC Bake | 5.0 |
 | QC Maya Viewport | 5.1 |
-| Mutaform Studio Render | 5.2 |
+| QC Daily Render | 5.2 |
 
 Blender refuses to install an extension into a version below its minimum — if an
 add-on does not show up in the list, check the Blender version first.
