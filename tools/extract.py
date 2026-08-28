@@ -27,6 +27,27 @@ import re
 import tomllib
 from typing import Any
 
+def resolve_package_dir(source_root: pathlib.Path, source: str) -> pathlib.Path:
+    """Найти папку пакета аддона под ``source_root``.
+
+    ``source`` в ``addons.yml`` записан так, как устроен сам репозиторий
+    аддона — ``<репозиторий>/<пакет>``. Именно это видит CI: он клонирует
+    каждый репозиторий в ``sources/<имя>``.
+
+    На студийном диске репозиторий лежит на уровень глубже, в подпапке
+    ``Git/`` своего проекта (рядом с ``AI memory/``, ``Dev/`` и
+    ``Zip Addon/``), поэтому вторым вариантом пробуется такое написание.
+    Возвращается первый существующий путь, иначе — прямой, чтобы вызывающий
+    сам решил, что делать с отсутствующими исходниками.
+    """
+    direct = source_root / source
+    if direct.is_dir():
+        return direct
+    repo, _, rest = source.partition("/")
+    nested = source_root / repo / "Git" / rest
+    return nested if nested.is_dir() else direct
+
+
 # Классы Blender, которые нас интересуют, по имени базового класса.
 BASE_PANEL = "Panel"
 BASE_OPERATOR = "Operator"

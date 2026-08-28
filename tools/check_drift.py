@@ -31,7 +31,11 @@ import yaml
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 
-from extract import extract_addon, extract_registry  # noqa: E402
+from extract import (  # noqa: E402
+    extract_addon,
+    extract_registry,
+    resolve_package_dir,
+)
 from gen_pages import coverage  # noqa: E402
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -94,8 +98,13 @@ def main() -> int:
 
     for entry in sorted(registry["addons"], key=lambda e: e.get("order", 99)):
         slug = entry["slug"]
-        package_dir = source_root / entry["source"]
+        package_dir = resolve_package_dir(source_root, entry["source"])
         if not package_dir.is_dir():
+            report.append(f"\n### {slug}")
+            report.append(
+                f"- нет исходников: {entry['source']} не найден под {source_root}"
+            )
+            total += 1
             continue
 
         addon = extract_addon(package_dir)

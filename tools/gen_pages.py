@@ -23,7 +23,11 @@ import yaml
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 
-from extract import extract_addon, extract_registry  # noqa: E402
+from extract import (  # noqa: E402
+    extract_addon,
+    extract_registry,
+    resolve_package_dir,
+)
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 DOCS_DIR = REPO_ROOT / "docs"
@@ -297,8 +301,13 @@ def main() -> int:
         if args.only and args.only != slug:
             continue
 
-        package_dir = source_root / entry["source"]
+        package_dir = resolve_package_dir(source_root, entry["source"])
         if not package_dir.is_dir():
+            # Пропустить молча нельзя: справочник собрался бы без этого
+            # аддона, а слепок api-manifest.json потерял бы его данные —
+            # и то и другое выглядело бы как успешная сборка.
+            print(f"  ! {slug}: нет исходников, {entry['source']} не найден под {source_root}")
+            failures += 1
             continue
         addon = extract_addon(package_dir)
 
