@@ -1,3 +1,3498 @@
 {
-  "addons": {}
+  "addons": {
+    "qc-bake": {
+      "blender_version_min": "5.0.0",
+      "constants": {
+        "BAKEGROUP_TAG_OK": "COLOR_04",
+        "BAKEGROUP_TAG_WARN": "COLOR_01",
+        "FLAT_SUBS": [
+          "High",
+          "Low",
+          "Cage"
+        ],
+        "HEAD_NAME": "Bake Group",
+        "HILO_CRITERION_ITEMS": [
+          [
+            "TRIS",
+            "Triangles",
+            "Compare triangle counts (most reliable)"
+          ],
+          [
+            "FACES",
+            "Faces",
+            "Compare face (polygon) counts"
+          ],
+          [
+            "VERTS",
+            "Vertices",
+            "Compare vertex counts"
+          ]
+        ],
+        "ICON_ALL": "OUTLINER_COLLECTION",
+        "ICON_BRAND": "SHADERFX",
+        "ICON_CAGE": "MOD_MESHDEFORM",
+        "ICON_COLLECTION": "OUTLINER_COLLECTION",
+        "ICON_CREATE": "OUTLINER_OB_MESH",
+        "ICON_DATABLOCK": "MESH_DATA",
+        "ICON_DETECT": "MOD_REMESH",
+        "ICON_DETECT_CAGE": "MOD_MESHDEFORM",
+        "ICON_HIDE": "HIDE_ON",
+        "ICON_HIDE_AFTER": "RESTRICT_VIEW_ON",
+        "ICON_HIGH": "MOD_SUBSURF",
+        "ICON_LOW": "MESH_CUBE",
+        "ICON_NAMING": "SORTALPHA",
+        "ICON_OPTIONS": "PREFERENCES",
+        "ICON_OVERWRITE": "ERROR",
+        "ICON_RANDOM": "FILE_REFRESH",
+        "ICON_SHOW": "HIDE_OFF",
+        "ICON_SWAP": "ARROW_LEFTRIGHT",
+        "ICON_UTIL_FLAT": "MENU_PANEL",
+        "ICON_UTIL_ORGANIZE": "OUTLINER_COLLECTION",
+        "ICON_UTIL_PERASSET": "PACKAGE",
+        "ICON_UTIL_REDUCE": "MOD_BUILD",
+        "ICON_UTIL_RESTORE": "LOOP_BACK",
+        "ICON_VISIBILITY": "HIDE_OFF",
+        "PANEL_TITLE": "QC Bake by Mutaform Studio",
+        "PRESET_ITEMS": [
+          [
+            "SUBSTANCE",
+            "Substance ( _low / _high )",
+            "Suffixes used by Substance Painter / Designer"
+          ],
+          [
+            "MARMOSET",
+            "Marmoset ( _low / _high )",
+            "Suffixes used by Marmoset Toolbag"
+          ],
+          [
+            "XNORMAL",
+            "xNormal ( _lo / _hi )",
+            "Short suffixes used by xNormal"
+          ],
+          [
+            "CUSTOM",
+            "Custom",
+            "Define your own suffixes below"
+          ]
+        ],
+        "REDUCE_PREV_DATA_NAME_KEY": "qcbake_reduce_prev_data_name",
+        "REDUCE_PREV_NAME_KEY": "qcbake_reduce_prev_name",
+        "TAB_CATEGORY": "QC Bake"
+      },
+      "id": "qc_bake",
+      "license": [
+        "SPDX:GPL-2.0-or-later"
+      ],
+      "menus": [],
+      "name": "QC Bake",
+      "operators": [
+        {
+          "base": "Operator",
+          "bl_idname": "qcbake.create_namepair",
+          "bl_label": "Create Namepair",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "QCBAKE_OT_create_namepair",
+          "docstring": "Rename selected objects into a high/low baking namepair",
+          "has_poll": true,
+          "module": "operators/create.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_idname": "qcbake.organize",
+          "bl_label": "Organize Bake Collections",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "QCBAKE_OT_organize",
+          "docstring": "Reorganise named bake objects into a collection layout",
+          "has_poll": false,
+          "module": "operators/organize.py",
+          "properties": [
+            {
+              "default": "FLAT",
+              "identifier": "layout_mode",
+              "items": [
+                {
+                  "description": "Bake Group with High, Low and Cage sub-collections",
+                  "label": "Flat (High / Low)",
+                  "value": "FLAT"
+                },
+                {
+                  "description": "Bake Group with one Bake_<name> collection per namepair",
+                  "label": "Per Asset",
+                  "value": "PER_ASSET"
+                }
+              ],
+              "kind": "enum",
+              "owner": "QCBAKE_OT_organize",
+              "source": "operators/organize.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_idname": "qcbake.reduce_groups",
+          "bl_label": "Reduce Bake Groups",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "QCBAKE_OT_reduce_groups",
+          "docstring": "Merge distant bake namepairs into fewer baking groups",
+          "has_poll": false,
+          "module": "operators/reduce.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_idname": "qcbake.restore_reduce_groups",
+          "bl_label": "Restore Bake Groups",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "QCBAKE_OT_restore_reduce_groups",
+          "docstring": "Undo the most recent Reduce Bake Groups pass, restoring prior names",
+          "has_poll": true,
+          "module": "operators/reduce.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_idname": "qcbake.swap",
+          "bl_label": "Swap High / Low",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "QCBAKE_OT_swap",
+          "docstring": "Swap the low and high roles of two selected objects",
+          "has_poll": true,
+          "module": "operators/swap.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_idname": "qcbake.toggle_visibility",
+          "bl_label": "Toggle Renamed Objects",
+          "bl_options": [
+            "INTERNAL",
+            "UNDO"
+          ],
+          "class_name": "QCBAKE_OT_toggle_visibility",
+          "docstring": "Show or hide all renamed high/low/cage objects",
+          "has_poll": false,
+          "module": "operators/visibility.py",
+          "properties": [
+            {
+              "default": "HIGH",
+              "identifier": "group",
+              "items": [
+                {
+                  "description": "High",
+                  "label": "High polys",
+                  "value": "HIGH"
+                },
+                {
+                  "description": "Low",
+                  "label": "Low polys",
+                  "value": "LOW"
+                },
+                {
+                  "description": "Cage",
+                  "label": "Cages",
+                  "value": "CAGE"
+                },
+                {
+                  "description": "All",
+                  "label": "All renamed",
+                  "value": "ALL"
+                }
+              ],
+              "kind": "enum",
+              "owner": "QCBAKE_OT_toggle_visibility",
+              "source": "operators/visibility.py"
+            },
+            {
+              "default": "SHOW",
+              "identifier": "action",
+              "items": [
+                {
+                  "description": "Show",
+                  "label": "Show",
+                  "value": "SHOW"
+                },
+                {
+                  "description": "Hide",
+                  "label": "Hide",
+                  "value": "HIDE"
+                }
+              ],
+              "kind": "enum",
+              "owner": "QCBAKE_OT_toggle_visibility",
+              "source": "operators/visibility.py"
+            }
+          ]
+        }
+      ],
+      "panels": [
+        {
+          "base": "Panel",
+          "bl_category": "QC Bake",
+          "bl_idname": "QCBAKE_PT_main",
+          "bl_label": "QC Bake by Mutaform Studio",
+          "bl_region_type": "UI",
+          "bl_space_type": "VIEW_3D",
+          "class_name": "QCBAKE_PT_main",
+          "docstring": null,
+          "has_poll": false,
+          "module": "ui/panel.py",
+          "operators": [
+            "qcbake.create_namepair",
+            "qcbake.swap"
+          ],
+          "properties": [],
+          "settings": []
+        },
+        {
+          "base": "Panel",
+          "bl_category": "QC Bake",
+          "bl_idname": "QCBAKE_PT_naming",
+          "bl_label": "Naming",
+          "bl_order": 3,
+          "bl_parent_id": "QCBAKE_PT_main",
+          "bl_region_type": "UI",
+          "bl_space_type": "VIEW_3D",
+          "class_name": "QCBAKE_PT_naming",
+          "docstring": null,
+          "has_poll": false,
+          "module": "ui/panel.py",
+          "operators": [],
+          "properties": [],
+          "settings": [
+            "naming_preset",
+            "hilo_criterion",
+            "custom_low_suffix",
+            "custom_high_suffix",
+            "custom_cage_suffix"
+          ]
+        },
+        {
+          "base": "Panel",
+          "bl_category": "QC Bake",
+          "bl_idname": "QCBAKE_PT_options",
+          "bl_label": "Options",
+          "bl_options": [
+            "DEFAULT_CLOSED"
+          ],
+          "bl_order": 4,
+          "bl_parent_id": "QCBAKE_PT_main",
+          "bl_region_type": "UI",
+          "bl_space_type": "VIEW_3D",
+          "class_name": "QCBAKE_PT_options",
+          "docstring": null,
+          "has_poll": false,
+          "module": "ui/panel.py",
+          "operators": [],
+          "properties": [],
+          "settings": [
+            "generate_random_name",
+            "also_rename_datablock",
+            "detect_cage",
+            "move_to_collection",
+            "hide_after_renaming",
+            "overwrite_names"
+          ]
+        },
+        {
+          "base": "Panel",
+          "bl_category": "QC Bake",
+          "bl_idname": "QCBAKE_PT_visibility",
+          "bl_label": "Visibility",
+          "bl_options": [
+            "DEFAULT_CLOSED"
+          ],
+          "bl_order": 1,
+          "bl_parent_id": "QCBAKE_PT_main",
+          "bl_region_type": "UI",
+          "bl_space_type": "VIEW_3D",
+          "class_name": "QCBAKE_PT_visibility",
+          "docstring": null,
+          "has_poll": false,
+          "module": "ui/panel.py",
+          "operators": [
+            "qcbake.toggle_visibility"
+          ],
+          "properties": [],
+          "settings": []
+        },
+        {
+          "base": "Panel",
+          "bl_category": "QC Bake",
+          "bl_idname": "QCBAKE_PT_utilities",
+          "bl_label": "Utilities",
+          "bl_options": [
+            "DEFAULT_CLOSED"
+          ],
+          "bl_order": 2,
+          "bl_parent_id": "QCBAKE_PT_main",
+          "bl_region_type": "UI",
+          "bl_space_type": "VIEW_3D",
+          "class_name": "QCBAKE_PT_utilities",
+          "docstring": null,
+          "has_poll": false,
+          "module": "ui/utilities.py",
+          "operators": [
+            "qcbake.reduce_groups",
+            "qcbake.restore_reduce_groups",
+            "qcbake.organize"
+          ],
+          "properties": [],
+          "settings": [
+            "reduce_group_prefix",
+            "reduce_min_gap"
+          ]
+        }
+      ],
+      "property_groups": [
+        {
+          "base": "PropertyGroup",
+          "class_name": "QCBakeSettings",
+          "docstring": null,
+          "has_poll": false,
+          "module": "properties.py",
+          "properties": [
+            {
+              "default": "SUBSTANCE",
+              "identifier": "naming_preset",
+              "items": [
+                {
+                  "description": "Suffixes used by Substance Painter / Designer",
+                  "label": "Substance ( _low / _high )",
+                  "value": "SUBSTANCE"
+                },
+                {
+                  "description": "Suffixes used by Marmoset Toolbag",
+                  "label": "Marmoset ( _low / _high )",
+                  "value": "MARMOSET"
+                },
+                {
+                  "description": "Short suffixes used by xNormal",
+                  "label": "xNormal ( _lo / _hi )",
+                  "value": "XNORMAL"
+                },
+                {
+                  "description": "Define your own suffixes below",
+                  "label": "Custom",
+                  "value": "CUSTOM"
+                }
+              ],
+              "kind": "enum",
+              "label": "Naming Convention",
+              "owner": "QCBakeSettings",
+              "source": "properties.py"
+            },
+            {
+              "default": "_low",
+              "identifier": "custom_low_suffix",
+              "kind": "string",
+              "label": "Low Suffix",
+              "owner": "QCBakeSettings",
+              "source": "properties.py"
+            },
+            {
+              "default": "_high",
+              "identifier": "custom_high_suffix",
+              "kind": "string",
+              "label": "High Suffix",
+              "owner": "QCBakeSettings",
+              "source": "properties.py"
+            },
+            {
+              "default": "_cage",
+              "identifier": "custom_cage_suffix",
+              "kind": "string",
+              "label": "Cage Suffix",
+              "owner": "QCBakeSettings",
+              "source": "properties.py"
+            },
+            {
+              "default": "TRIS",
+              "identifier": "hilo_criterion",
+              "items": [
+                {
+                  "description": "Compare triangle counts (most reliable)",
+                  "label": "Triangles",
+                  "value": "TRIS"
+                },
+                {
+                  "description": "Compare face (polygon) counts",
+                  "label": "Faces",
+                  "value": "FACES"
+                },
+                {
+                  "description": "Compare vertex counts",
+                  "label": "Vertices",
+                  "value": "VERTS"
+                }
+              ],
+              "kind": "enum",
+              "label": "Detect By",
+              "owner": "QCBakeSettings",
+              "source": "properties.py"
+            },
+            {
+              "default": false,
+              "description": "Use a random base name instead of the low poly's name",
+              "identifier": "generate_random_name",
+              "kind": "bool",
+              "label": "Generate Random Name",
+              "owner": "QCBakeSettings",
+              "source": "properties.py"
+            },
+            {
+              "default": false,
+              "description": "Hide the objects once they have been renamed",
+              "identifier": "hide_after_renaming",
+              "kind": "bool",
+              "label": "Hide After Renaming",
+              "owner": "QCBakeSettings",
+              "source": "properties.py"
+            },
+            {
+              "default": true,
+              "description": "Rename the object's mesh datablock to match",
+              "identifier": "also_rename_datablock",
+              "kind": "bool",
+              "label": "Also Rename Mesh Data",
+              "owner": "QCBakeSettings",
+              "source": "properties.py"
+            },
+            {
+              "default": true,
+              "description": "Treat a selected object ending in the cage suffix as the cage",
+              "identifier": "detect_cage",
+              "kind": "bool",
+              "label": "Detect Cage",
+              "owner": "QCBakeSettings",
+              "source": "properties.py"
+            },
+            {
+              "default": false,
+              "description": "Move the namepair into a 'Bake_<name>' collection",
+              "identifier": "move_to_collection",
+              "kind": "bool",
+              "label": "Move to Collection",
+              "owner": "QCBakeSettings",
+              "source": "properties.py"
+            },
+            {
+              "default": false,
+              "description": "Let Blender auto-suffix (.001) instead of aborting on clashes",
+              "identifier": "overwrite_names",
+              "kind": "bool",
+              "label": "Allow Name Collisions",
+              "owner": "QCBakeSettings",
+              "source": "properties.py"
+            },
+            {
+              "default": "BakeGroup",
+              "description": "Base name used when reducing existing bake pairs into fewer groups",
+              "identifier": "reduce_group_prefix",
+              "kind": "string",
+              "label": "Group Prefix",
+              "owner": "QCBakeSettings",
+              "source": "properties.py"
+            },
+            {
+              "default": 0.05,
+              "description": "Minimum world-space distance required between asset bounds before they can share one bake group",
+              "identifier": "reduce_min_gap",
+              "kind": "float",
+              "label": "Minimum Gap",
+              "minimum": 0.0,
+              "owner": "QCBakeSettings",
+              "soft_maximum": 10.0,
+              "source": "properties.py",
+              "unit": "LENGTH"
+            }
+          ]
+        }
+      ],
+      "tagline": "Rename high/low poly pairs for texture baking workflows",
+      "tags": [
+        "Object",
+        "Mesh",
+        "Pipeline"
+      ],
+      "ui_lists": [],
+      "version": "2.0.0",
+      "website": "https://mutaform.studio/"
+    },
+    "qc-bridge": {
+      "blender_version_min": "4.2.0",
+      "constants": {
+        "BRIDGE_VERSION": "1.1.8",
+        "MAYA_TO_BLENDER_UNIT_SCALE": 0.01,
+        "PIVOT_ATTRS": [
+          "mbr_pivot_world_x",
+          "mbr_pivot_world_y",
+          "mbr_pivot_world_z"
+        ],
+        "QC_MATRIX_KEY": "qc_maya_matrix_local",
+        "TOOL_MODULES": [
+          "maya_bridge"
+        ]
+      },
+      "id": "mutaform_bridge",
+      "license": [
+        "SPDX:GPL-3.0-or-later"
+      ],
+      "menus": [],
+      "name": "QC Bridge Maya-Blender by Mutaform",
+      "operators": [
+        {
+          "base": "Operator",
+          "bl_description": "Convert imported Maya empty hierarchy into Blender collections",
+          "bl_idname": "mutaform_bridge.convert_from_maya",
+          "bl_label": "Convert Maya Empties to Collections",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "MUTAFORMBRIDGE_OT_convert_from_maya",
+          "docstring": null,
+          "has_poll": false,
+          "module": "tools/maya_bridge.py",
+          "properties": [
+            {
+              "default": "SCENE",
+              "identifier": "scope",
+              "items": [
+                {
+                  "description": "Process every root Empty",
+                  "label": "Whole Scene",
+                  "value": "SCENE"
+                },
+                {
+                  "description": "Process selected Empties only",
+                  "label": "Selected",
+                  "value": "SELECTED"
+                }
+              ],
+              "kind": "enum",
+              "label": "Scope",
+              "owner": "MUTAFORMBRIDGE_OT_convert_from_maya",
+              "source": "tools/maya_bridge.py"
+            },
+            {
+              "default": true,
+              "description": "Keep child meshes visually in place when removing empties",
+              "identifier": "bake_transforms",
+              "kind": "bool",
+              "label": "Bake Transforms",
+              "owner": "MUTAFORMBRIDGE_OT_convert_from_maya",
+              "source": "tools/maya_bridge.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Convert Blender collections into Maya-style empties",
+          "bl_idname": "mutaform_bridge.convert_to_maya",
+          "bl_label": "Convert Collections to Maya Empties",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "MUTAFORMBRIDGE_OT_convert_to_maya",
+          "docstring": null,
+          "has_poll": false,
+          "module": "tools/maya_bridge.py",
+          "properties": [
+            {
+              "default": "SCENE",
+              "identifier": "scope",
+              "items": [
+                {
+                  "description": "Process every top-level collection",
+                  "label": "Whole Scene",
+                  "value": "SCENE"
+                },
+                {
+                  "description": "Process only the active collection",
+                  "label": "Active Collection",
+                  "value": "ACTIVE"
+                }
+              ],
+              "kind": "enum",
+              "label": "Scope",
+              "owner": "MUTAFORMBRIDGE_OT_convert_to_maya",
+              "source": "tools/maya_bridge.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Import exchange FBX and convert Maya empties to Blender collections",
+          "bl_idname": "mutaform_bridge.receive_from_maya",
+          "bl_label": "Import From Maya",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "MUTAFORMBRIDGE_OT_receive_from_maya",
+          "docstring": null,
+          "has_poll": false,
+          "module": "tools/maya_bridge.py",
+          "properties": [
+            {
+              "default": false,
+              "description": "Legacy option: remove existing Blender scene objects and collections before importing",
+              "identifier": "clear_scene",
+              "kind": "bool",
+              "label": "Clear Scene First",
+              "owner": "MUTAFORMBRIDGE_OT_receive_from_maya",
+              "source": "tools/maya_bridge.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Export selected Blender objects to the exchange FBX",
+          "bl_idname": "mutaform_bridge.send_scene_to_maya",
+          "bl_label": "Export Selected To Maya",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "MUTAFORMBRIDGE_OT_send_scene_to_maya",
+          "docstring": null,
+          "has_poll": false,
+          "module": "tools/maya_bridge.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Export the active Blender collection to the exchange FBX",
+          "bl_idname": "mutaform_bridge.send_selection_to_maya",
+          "bl_label": "Export Selected Collection To Maya",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "MUTAFORMBRIDGE_OT_send_selection_to_maya",
+          "docstring": null,
+          "has_poll": false,
+          "module": "tools/maya_bridge.py",
+          "properties": []
+        }
+      ],
+      "panels": [
+        {
+          "base": "Panel",
+          "bl_category": "QC Maya Bridge",
+          "bl_idname": "MUTAFORMBRIDGE_PT_panel",
+          "bl_label": "QC Bridge Maya-Blender by Mutaform",
+          "bl_region_type": "UI",
+          "bl_space_type": "VIEW_3D",
+          "class_name": "MUTAFORMBRIDGE_PT_panel",
+          "docstring": null,
+          "has_poll": false,
+          "module": "__init__.py",
+          "operators": [],
+          "properties": [],
+          "settings": []
+        }
+      ],
+      "property_groups": [],
+      "tagline": "Studio bridge for Blender and Maya FBX exchange",
+      "tags": [
+        "Pipeline",
+        "Import-Export",
+        "Scene"
+      ],
+      "ui_lists": [],
+      "version": "1.1.8",
+      "website": "https://mutaform.studio"
+    },
+    "qc-daily-render": {
+      "blender_version_min": "5.2.0",
+      "constants": {
+        "ACTIVE_KEY": "mutaform_studio_active",
+        "BACKUP_KEY": "mutaform_studio_backup",
+        "CATEGORY": "QC Render",
+        "CYCLES_ATTRS": [
+          "samples",
+          "preview_samples",
+          "device",
+          "use_denoising",
+          "denoiser",
+          "denoising_input_passes",
+          "denoising_prefilter",
+          "denoising_use_gpu",
+          "use_preview_denoising",
+          "preview_denoiser",
+          "preview_denoising_input_passes",
+          "preview_denoising_start_sample",
+          "preview_denoising_prefilter",
+          "use_adaptive_sampling",
+          "adaptive_threshold",
+          "use_preview_adaptive_sampling",
+          "preview_adaptive_threshold",
+          "max_bounces"
+        ],
+        "DEFAULT_ENV_STRENGTH": 2.8,
+        "PREFIX": "MUTAFORM_",
+        "TAB_ITEMS": [
+          [
+            "CAMERA",
+            "Camera Settings",
+            "Image: lighting, colour, material, frame guide, background",
+            "IMAGE",
+            0
+          ],
+          [
+            "RENDER",
+            "Render Settings",
+            "Technical: engine, resolution, samples, denoiser, output",
+            "OUTPUT",
+            1
+          ]
+        ],
+        "VERSION": [
+          1,
+          6,
+          0
+        ],
+        "__all__": [
+          "MutaformCameraProps",
+          "enable_overlay",
+          "disable_overlay",
+          "frame_rect",
+          "MUTAFORM_OT_render",
+          "match_camera_to_view",
+          "MUTAFORM_OT_curves",
+          "MUTAFORM_OT_reset_prop",
+          "classes"
+        ],
+        "_syncing_transforms": false
+      },
+      "id": "qc_daily_render",
+      "license": [
+        "SPDX:GPL-3.0-or-later"
+      ],
+      "menus": [],
+      "name": "QC Daily Render",
+      "operators": [
+        {
+          "base": "Operator",
+          "bl_description": "Place a camera on the current viewport view, render exactly what you framed, save it, then remove the camera - the view is untouched",
+          "bl_idname": "mutaform.studio_render",
+          "bl_label": "Render",
+          "bl_options": [
+            "REGISTER"
+          ],
+          "class_name": "MUTAFORM_OT_render",
+          "docstring": null,
+          "has_poll": false,
+          "module": "camera/capture.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Toggle the tone curve (edit it in Render Properties > Color Management)",
+          "bl_idname": "mutaform.curves",
+          "bl_label": "Curves",
+          "class_name": "MUTAFORM_OT_curves",
+          "docstring": null,
+          "has_poll": false,
+          "module": "camera/ops.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Reset this value to its default",
+          "bl_idname": "mutaform.reset_prop",
+          "bl_label": "Reset to Default",
+          "bl_options": [
+            "INTERNAL",
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "MUTAFORM_OT_reset_prop",
+          "docstring": null,
+          "has_poll": false,
+          "module": "camera/ops.py",
+          "properties": [
+            {
+              "identifier": "prop",
+              "kind": "string",
+              "owner": "MUTAFORM_OT_reset_prop",
+              "source": "camera/ops.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Snapshot the scene, then apply the studio render setup (non-destructive)",
+          "bl_idname": "mutaform.studio_setup",
+          "bl_label": "Setup Render Scene",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "MUTAFORM_OT_setup",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Revert everything to the pre-setup state and remove all added objects",
+          "bl_idname": "mutaform.studio_restore",
+          "bl_label": "Restore",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "MUTAFORM_OT_restore",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Halve or double the render resolution",
+          "bl_idname": "mutaform.res_scale",
+          "bl_label": "Scale Resolution",
+          "bl_options": [
+            "INTERNAL",
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "MUTAFORM_OT_res_scale",
+          "docstring": null,
+          "has_poll": false,
+          "module": "render.py",
+          "properties": [
+            {
+              "default": 2.0,
+              "identifier": "factor",
+              "kind": "float",
+              "owner": "MUTAFORM_OT_res_scale",
+              "source": "render.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Open the render output folder in the system file browser",
+          "bl_idname": "mutaform.open_output",
+          "bl_label": "Open Folder",
+          "bl_options": [
+            "INTERNAL",
+            "REGISTER"
+          ],
+          "class_name": "MUTAFORM_OT_open_output",
+          "docstring": null,
+          "has_poll": false,
+          "module": "render.py",
+          "properties": []
+        }
+      ],
+      "panels": [
+        {
+          "base": "Panel",
+          "bl_category": "QC Render",
+          "bl_idname": "MUTAFORM_PT_main",
+          "bl_label": "Daily Render by Mutaform",
+          "bl_region_type": "UI",
+          "bl_space_type": "VIEW_3D",
+          "class_name": "MUTAFORM_PT_main",
+          "docstring": null,
+          "has_poll": false,
+          "module": "ui.py",
+          "operators": [
+            "mutaform.studio_setup",
+            "mutaform.studio_render",
+            "mutaform.open_output",
+            "mutaform.studio_restore"
+          ],
+          "properties": [],
+          "settings": [
+            "show_camera_block"
+          ]
+        }
+      ],
+      "property_groups": [
+        {
+          "base": "PropertyGroup",
+          "class_name": "MutaformCameraProps",
+          "docstring": null,
+          "has_poll": false,
+          "module": "camera/props.py",
+          "properties": [
+            {
+              "default": 2.8,
+              "description": "World lighting strength",
+              "identifier": "env_strength",
+              "kind": "float",
+              "label": "HDRI Brightness",
+              "minimum": 0.0,
+              "owner": "MutaformCameraProps",
+              "soft_maximum": 20.0,
+              "source": "camera/props.py"
+            },
+            {
+              "description": "Environment rotation (live-synced to the world node)",
+              "identifier": "env_yaw",
+              "kind": "float",
+              "label": "HDRI Rotation",
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py",
+              "subtype": "ANGLE"
+            },
+            {
+              "default": true,
+              "description": "On: render every mesh with one unified studio material. Off: render each mesh with the material(s) already in the scene",
+              "identifier": "use_default_material",
+              "kind": "bool",
+              "label": "Use Default Material",
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": [
+                0.148784,
+                0.148784,
+                0.148784
+              ],
+              "identifier": "mat_base_color",
+              "kind": "float[]",
+              "label": "Base Color",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py",
+              "subtype": "COLOR"
+            },
+            {
+              "default": 0.3,
+              "identifier": "mat_roughness",
+              "kind": "float",
+              "label": "Roughness",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": 0.4,
+              "identifier": "mat_metallic",
+              "kind": "float",
+              "label": "Metallic",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": "Linear",
+              "identifier": "tone_mapping",
+              "items": [
+                {
+                  "description": "Plain sRGB (Marmoset Linear)",
+                  "label": "Linear",
+                  "value": "Linear"
+                },
+                {
+                  "description": "Filmic",
+                  "label": "Filmic",
+                  "value": "Filmic"
+                },
+                {
+                  "description": "AgX wide-gamut",
+                  "label": "AgX",
+                  "value": "AgX"
+                },
+                {
+                  "description": "Khronos PBR Neutral",
+                  "label": "PBR Neutral",
+                  "value": "PBR"
+                }
+              ],
+              "kind": "enum",
+              "label": "Tone Mapping",
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": 1.0,
+              "description": "Exposure multiplier",
+              "identifier": "exposure",
+              "kind": "float",
+              "label": "Exposure",
+              "minimum": 0.0,
+              "owner": "MutaformCameraProps",
+              "soft_maximum": 8.0,
+              "source": "camera/props.py"
+            },
+            {
+              "default": 0.5,
+              "identifier": "highlights",
+              "kind": "float",
+              "label": "Highlights",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": 0.0,
+              "identifier": "midtones",
+              "kind": "float",
+              "label": "Midtones",
+              "maximum": 1.0,
+              "minimum": -1.0,
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": 0.0,
+              "identifier": "shadows",
+              "kind": "float",
+              "label": "Shadows",
+              "maximum": 1.0,
+              "minimum": -1.0,
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": 0.096774,
+              "identifier": "clarity",
+              "kind": "float",
+              "label": "Clarity",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": 1.0,
+              "identifier": "contrast",
+              "kind": "float",
+              "label": "Contrast",
+              "minimum": 0.0,
+              "owner": "MutaformCameraProps",
+              "soft_maximum": 2.0,
+              "source": "camera/props.py"
+            },
+            {
+              "default": 0.5,
+              "identifier": "contrast_center",
+              "kind": "float",
+              "label": "Contrast Center",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": 1.146628,
+              "identifier": "saturation",
+              "kind": "float",
+              "label": "Saturation",
+              "maximum": 2.0,
+              "minimum": 0.0,
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": 2.0,
+              "identifier": "sharpen_strength",
+              "kind": "float",
+              "label": "Strength",
+              "minimum": 0.0,
+              "owner": "MutaformCameraProps",
+              "soft_maximum": 5.0,
+              "source": "camera/props.py"
+            },
+            {
+              "default": 0.15,
+              "identifier": "sharpen_limit",
+              "kind": "float",
+              "label": "Limit",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": 0.0,
+              "identifier": "vignette_strength",
+              "kind": "float",
+              "label": "Strength",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": 0.0,
+              "identifier": "vignette_softness",
+              "kind": "float",
+              "label": "Softness",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": 15.0,
+              "description": "Vertical field of view (degrees)",
+              "identifier": "cam_fov",
+              "kind": "float",
+              "label": "Field of View",
+              "maximum": 170.0,
+              "minimum": 1.0,
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": false,
+              "description": "Overlay a wireframe of the model's topology (clean quads)",
+              "identifier": "wireframe_on",
+              "kind": "bool",
+              "label": "Wireframe",
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": [
+                1.0,
+                0.574079,
+                0.002715
+              ],
+              "description": "Wireframe colour",
+              "identifier": "wireframe_color",
+              "kind": "float[]",
+              "label": "Color",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py",
+              "subtype": "COLOR"
+            },
+            {
+              "default": 1.0,
+              "description": "Wireframe line thickness",
+              "identifier": "wireframe_thickness",
+              "kind": "float",
+              "label": "Thickness",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": 1.0,
+              "description": "Wireframe opacity over the shaded model",
+              "identifier": "wireframe_opacity",
+              "kind": "float",
+              "label": "Opacity",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": false,
+              "identifier": "show_camera_block",
+              "kind": "bool",
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": true,
+              "identifier": "show_posteffect",
+              "kind": "bool",
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": true,
+              "identifier": "show_sharpen",
+              "kind": "bool",
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": false,
+              "identifier": "show_vignette",
+              "kind": "bool",
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            },
+            {
+              "default": [
+                0.009134,
+                0.01096,
+                0.01033
+              ],
+              "description": "Solid background shown behind the model in the preview (the saved render stays transparent)",
+              "identifier": "background_color",
+              "kind": "float[]",
+              "label": "Background",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py",
+              "subtype": "COLOR"
+            },
+            {
+              "default": 0.75,
+              "description": "Darken everything outside the render frame",
+              "identifier": "frame_opacity",
+              "kind": "float",
+              "label": "Frame Opacity",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "owner": "MutaformCameraProps",
+              "source": "camera/props.py"
+            }
+          ]
+        },
+        {
+          "base": "PropertyGroup",
+          "class_name": "MutaformRenderProps",
+          "docstring": null,
+          "has_poll": false,
+          "module": "render.py",
+          "properties": [
+            {
+              "default": "CYCLES",
+              "description": "Render engine for both the live preview and the saved render",
+              "identifier": "preview_engine",
+              "items": [
+                {
+                  "description": "Ray-traced: ground shadow, best quality",
+                  "label": "Cycles",
+                  "value": "CYCLES"
+                },
+                {
+                  "description": "Fast real-time (no ground shadow)",
+                  "label": "EEVEE",
+                  "value": "BLENDER_EEVEE"
+                }
+              ],
+              "kind": "enum",
+              "label": "Engine",
+              "owner": "MutaformRenderProps",
+              "source": "render.py"
+            },
+            {
+              "default": 3840,
+              "description": "Render width (also sets aspect ratio)",
+              "identifier": "render_x",
+              "kind": "int",
+              "label": "X",
+              "maximum": 16384,
+              "minimum": 16,
+              "owner": "MutaformRenderProps",
+              "source": "render.py"
+            },
+            {
+              "default": 2160,
+              "description": "Render height (also sets aspect ratio)",
+              "identifier": "render_y",
+              "kind": "int",
+              "label": "Y",
+              "maximum": 16384,
+              "minimum": 16,
+              "owner": "MutaformRenderProps",
+              "source": "render.py"
+            },
+            {
+              "default": 128,
+              "description": "Cycles render samples",
+              "identifier": "samples",
+              "kind": "int",
+              "label": "Samples",
+              "minimum": 1,
+              "owner": "MutaformRenderProps",
+              "soft_maximum": 1024,
+              "source": "render.py"
+            },
+            {
+              "default": "OPTIX",
+              "identifier": "denoiser",
+              "items": [
+                {
+                  "description": "NVIDIA OptiX AI denoiser (GPU)",
+                  "label": "OptiX",
+                  "value": "OPTIX"
+                },
+                {
+                  "description": "Intel OIDN (CPU/GPU)",
+                  "label": "OpenImageDenoise",
+                  "value": "OPENIMAGEDENOISE"
+                },
+                {
+                  "description": "No denoising",
+                  "label": "None",
+                  "value": "NONE"
+                }
+              ],
+              "kind": "enum",
+              "label": "Denoiser",
+              "owner": "MutaformRenderProps",
+              "source": "render.py"
+            },
+            {
+              "default": true,
+              "description": "Transparent shadow catcher: the contact shadow composites onto any background (green screen, transparent PNG)",
+              "identifier": "use_shadow_catcher",
+              "kind": "bool",
+              "label": "Ground Shadow",
+              "owner": "MutaformRenderProps",
+              "source": "render.py"
+            },
+            {
+              "description": "Where renders are saved (empty = a 'renders' folder next to the .blend)",
+              "identifier": "output_dir",
+              "kind": "string",
+              "label": "Output Folder",
+              "owner": "MutaformRenderProps",
+              "source": "render.py",
+              "subtype": "DIR_PATH"
+            },
+            {
+              "default": "shot",
+              "description": "Base name for saved renders (auto-numbered)",
+              "identifier": "output_base",
+              "kind": "string",
+              "label": "Name",
+              "owner": "MutaformRenderProps",
+              "source": "render.py"
+            }
+          ]
+        }
+      ],
+      "tagline": "One-click non-destructive Marmoset-style studio render",
+      "tags": [
+        "Render",
+        "Lighting"
+      ],
+      "ui_lists": [],
+      "version": "1.6.0",
+      "website": "https://mutaform.com"
+    },
+    "qc-maya-viewport": {
+      "blender_version_min": "5.1.0",
+      "constants": {
+        "AO": "AO",
+        "AO_CHANNEL_TAG": "mvm_ao_channel",
+        "ASSET_ROOT_THRESHOLD": 700.0,
+        "BASE_COLOR": "BASE_COLOR",
+        "CALIBRATION_CAMERA": "MVM_Calibration",
+        "DIRECTX_HINTS": [
+          "directx",
+          "dx"
+        ],
+        "EMISSION": "EMISSION",
+        "FOLDER_MATCH_THRESHOLD": 700.0,
+        "HEIGHT": "HEIGHT",
+        "IGNORE": "IGNORE",
+        "IMPORTERS": [
+          "import_scene.fbx",
+          "wm.obj_import",
+          "wm.usd_import",
+          "wm.alembic_import",
+          "wm.stl_import",
+          "wm.ply_import",
+          "import_scene.gltf",
+          "wm.collada_import"
+        ],
+        "INCH_TO_MM": 25.4,
+        "LEGACY_CLASSES": [
+          "MVM_OT_apply_standard",
+          "MVM_OT_enable",
+          "MVM_OT_toggle_ao_only",
+          "MVM_OT_follow_light",
+          "MVM_PT_panel",
+          "MVM_MT_custom_shading"
+        ],
+        "MAP_TAG": "mvm_map",
+        "MATCH_KEEP_RATIO": 0.6,
+        "MATCH_THRESHOLD": 500.0,
+        "MAX_DEPTH": 4,
+        "MAX_SEARCH_DEPTH": 4,
+        "MAX_TEXTURE_DEPTH": 3,
+        "MAYA_TO_BLENDER_SCALE": 0.01,
+        "METALLIC": "METALLIC",
+        "NORMAL": "NORMAL",
+        "NORMAL_ROUGH": "NORMAL_ROUGH",
+        "NORMAL_Z_TAG": "mvm_normal_z",
+        "NRM_GROUP_NAME": "MVM Unpack NRM",
+        "OPACITY": "OPACITY",
+        "OPENGL_HINTS": [
+          "opengl",
+          "ogl",
+          "gl"
+        ],
+        "PACKED": "PACKED",
+        "PACKED_AUTO": "PACKED_AUTO",
+        "ROUGHNESS": "ROUGHNESS",
+        "ROUGH_CHANNEL_TAG": "mvm_rough_channel",
+        "SOURCE_TAG": "mvm_source",
+        "SPECULAR": "SPECULAR",
+        "VERSION": [
+          0,
+          34,
+          1
+        ],
+        "_DEPTH_BIAS_MAX_SCALE": 64.0,
+        "_DEPTH_BIAS_MIN_SCALE": 0.25,
+        "_DEPTH_BIAS_REFERENCE_DISTANCE": 4.0,
+        "_DRAW_COUNT": 0,
+        "_EDGE_DEPTH_BIAS": 5e-07,
+        "_EDIT_DIRTY": [],
+        "_EDIT_OVERLAY_DIRTY": [],
+        "_EDIT_SYNC_SKIP": [],
+        "_FACE_DEPTH_BIAS": 2.5e-07,
+        "_HANDLER_KEY": "mvm_draw_handler",
+        "_LAST_ERROR": "",
+        "_LAST_TRIANGLES": 0,
+        "_OBJECT_COUNT": -1,
+        "_VERTEX_DEPTH_BIAS": 7.5e-07
+      },
+      "id": "maya_viewport_match",
+      "license": [
+        "SPDX:GPL-3.0-or-later"
+      ],
+      "menus": [],
+      "name": "QC Maya Viewport",
+      "operators": [
+        {
+          "base": "Operator",
+          "bl_idname": "mvm.disable_viewer",
+          "bl_label": "Disable QC Maya Viewport",
+          "class_name": "MVM_OT_disable_viewer",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Toggle the QC Maya Viewport GPU renderer",
+          "bl_idname": "mvm.apply_custom",
+          "bl_label": "QC Maya Viewport",
+          "class_name": "MVM_OT_apply_custom",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Select a QC Maya Viewport diagnostic shading mode",
+          "bl_idname": "mvm.set_custom_mode",
+          "bl_label": "Set QC Maya Viewport Mode",
+          "class_name": "MVM_OT_set_custom_mode",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators.py",
+          "properties": [
+            {
+              "identifier": "mode",
+              "kind": "string",
+              "owner": "MVM_OT_set_custom_mode",
+              "source": "operators.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Switch the green-channel convention for normal maps, both in the QC viewport and on the Normal Map nodes so EEVEE and Cycles agree",
+          "bl_idname": "mvm.set_normal_convention",
+          "bl_label": "Set Normal Map Convention",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "MVM_OT_set_normal_convention",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators.py",
+          "properties": [
+            {
+              "identifier": "convention",
+              "kind": "string",
+              "owner": "MVM_OT_set_normal_convention",
+              "source": "operators.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Reload all file textures used by materials in this scene",
+          "bl_idname": "mvm.reimport_textures",
+          "bl_label": "Reimport Textures",
+          "class_name": "MVM_OT_reimport_textures",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Pick a folder and hook its textures into the active material, matched by filename suffix and material name",
+          "bl_idname": "mvm.load_textures",
+          "bl_label": "Find Textures",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "MVM_OT_load_textures",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators.py",
+          "properties": [
+            {
+              "identifier": "directory",
+              "kind": "string",
+              "owner": "MVM_OT_load_textures",
+              "source": "operators.py",
+              "subtype": "DIR_PATH"
+            },
+            {
+              "identifier": "filename",
+              "kind": "string",
+              "owner": "MVM_OT_load_textures",
+              "source": "operators.py"
+            },
+            {
+              "default": true,
+              "identifier": "filter_image",
+              "kind": "bool",
+              "owner": "MVM_OT_load_textures",
+              "source": "operators.py"
+            },
+            {
+              "default": true,
+              "identifier": "filter_folder",
+              "kind": "bool",
+              "owner": "MVM_OT_load_textures",
+              "source": "operators.py"
+            },
+            {
+              "default": true,
+              "description": "Also look inside folders below the selected one",
+              "identifier": "recursive",
+              "kind": "bool",
+              "label": "Search Subfolders",
+              "owner": "MVM_OT_load_textures",
+              "source": "operators.py"
+            },
+            {
+              "default": true,
+              "description": "Only use files whose name resembles the material. Turn off to take whatever the folder holds",
+              "identifier": "match_names",
+              "kind": "bool",
+              "label": "Match Material Name",
+              "owner": "MVM_OT_load_textures",
+              "source": "operators.py"
+            },
+            {
+              "default": true,
+              "description": "Fill every material on every selected object in one go, instead of only the active material slot",
+              "identifier": "all_slots",
+              "kind": "bool",
+              "label": "All Selected Objects",
+              "owner": "MVM_OT_load_textures",
+              "source": "operators.py"
+            },
+            {
+              "default": true,
+              "description": "Switch the viewport green channel when the normal map filename says OpenGL or DirectX",
+              "identifier": "set_convention",
+              "kind": "bool",
+              "label": "Normal Convention From Name",
+              "owner": "MVM_OT_load_textures",
+              "source": "operators.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Add a folder to search for assets",
+          "bl_idname": "mvm.root_add",
+          "bl_label": "Add Project Root",
+          "bl_options": [
+            "INTERNAL"
+          ],
+          "class_name": "MVM_OT_root_add",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Remove the selected folder",
+          "bl_idname": "mvm.root_remove",
+          "bl_label": "Remove Project Root",
+          "bl_options": [
+            "INTERNAL"
+          ],
+          "class_name": "MVM_OT_root_remove",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Add an empty row to the suffix table",
+          "bl_idname": "mvm.rule_add",
+          "bl_label": "Add Suffix",
+          "bl_options": [
+            "INTERNAL"
+          ],
+          "class_name": "MVM_OT_rule_add",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Remove the selected row",
+          "bl_idname": "mvm.rule_remove",
+          "bl_label": "Remove Suffix",
+          "bl_options": [
+            "INTERNAL"
+          ],
+          "class_name": "MVM_OT_rule_remove",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Throw the table away and rebuild the built-in suffixes",
+          "bl_idname": "mvm.rule_reset",
+          "bl_label": "Reset To Defaults",
+          "bl_options": [
+            "INTERNAL"
+          ],
+          "class_name": "MVM_OT_rule_reset",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Edit the texture suffixes Find Textures recognises",
+          "bl_idname": "mvm.suffix_settings",
+          "bl_label": "Settings",
+          "class_name": "MVM_OT_suffix_settings",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": []
+        }
+      ],
+      "panels": [
+        {
+          "base": "Panel",
+          "bl_idname": "MVM_PT_custom_shading",
+          "bl_label": "QC Maya Viewport",
+          "bl_region_type": "HEADER",
+          "bl_space_type": "VIEW_3D",
+          "class_name": "MVM_PT_custom_shading",
+          "docstring": null,
+          "has_poll": false,
+          "module": "ui.py",
+          "operators": [
+            "mvm.load_textures",
+            "mvm.reimport_textures",
+            "mvm.set_normal_convention",
+            "mvm.suffix_settings",
+            "mvm.set_custom_mode"
+          ],
+          "properties": [],
+          "settings": []
+        }
+      ],
+      "property_groups": [
+        {
+          "base": "PropertyGroup",
+          "class_name": "MVM_SuffixRule",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": [
+            {
+              "description": "Filename ending, without separators. \"basecolor\" matches _Base_Color, -basecolor and .BaseColor alike",
+              "identifier": "suffix",
+              "kind": "string",
+              "label": "Suffix",
+              "owner": "MVM_SuffixRule",
+              "source": "preferences.py"
+            },
+            {
+              "default": "BASE_COLOR",
+              "description": "Where a file with this suffix is linked",
+              "identifier": "kind",
+              "kind": "enum",
+              "label": "Map",
+              "owner": "MVM_SuffixRule",
+              "source": "preferences.py"
+            }
+          ]
+        },
+        {
+          "base": "PropertyGroup",
+          "class_name": "MVM_ProjectRoot",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": [
+            {
+              "description": "A folder Find Textures may search for the asset an object came from, e.g. the review or projects drive",
+              "identifier": "path",
+              "kind": "string",
+              "label": "Folder",
+              "owner": "MVM_ProjectRoot",
+              "source": "preferences.py",
+              "subtype": "DIR_PATH"
+            }
+          ]
+        }
+      ],
+      "tagline": "QC Maya Viewport diagnostic GPU shading for Blender",
+      "tags": [],
+      "ui_lists": [
+        {
+          "base": "UIList",
+          "bl_idname": "MVM_UL_project_roots",
+          "class_name": "MVM_UL_project_roots",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": []
+        },
+        {
+          "base": "UIList",
+          "bl_idname": "MVM_UL_suffix_rules",
+          "class_name": "MVM_UL_suffix_rules",
+          "docstring": null,
+          "has_poll": false,
+          "module": "preferences.py",
+          "properties": []
+        }
+      ],
+      "version": "0.34.1",
+      "website": null
+    },
+    "qc-validator": {
+      "blender_version_min": "4.5.0",
+      "constants": {
+        "BACKUP_PROP": "_sqc_uv_checker_backup",
+        "CATEGORY_ITEMS": [
+          [
+            "GEOMETRY",
+            "Geometry",
+            "Mesh topology checks"
+          ],
+          [
+            "TRANSFORM",
+            "Transform",
+            "Object transform checks"
+          ],
+          [
+            "UV",
+            "UV",
+            "UV mapping checks"
+          ],
+          [
+            "NAMING",
+            "Naming",
+            "Object / material naming checks"
+          ],
+          [
+            "MATERIAL",
+            "Material",
+            "Material assignment checks"
+          ],
+          [
+            "NANITE",
+            "Nanite",
+            "Unreal Nanite ingestion checks"
+          ]
+        ],
+        "CHECKER_BACKUP_PROP": "_sqc_uv_checker_backup",
+        "CHECKER_UV_NAME": "SQC_UV_Checker_Tiling",
+        "CHECKLIST_HIDDEN_IDS": [
+          "uv_padding"
+        ],
+        "COINCIDENT_VERTEX_TOLERANCE": 1e-07,
+        "COORD_PRECISION": 6,
+        "DEFAULT_MATERIAL_PATTERN": "^m_[A-Za-z0-9_]+(?:_\\d{2})?$",
+        "DEFAULT_TOLERANCE_MM": 1.0,
+        "DEFAULT_ZERO_AREA_THRESHOLD": 1e-10,
+        "DEPRECATED_CHECK_IDS": [
+          "geo_triangles_percentage",
+          "nm_material_pattern",
+          "uv_flipped"
+        ],
+        "LEGACY_MATERIAL_PATTERN": "^m_[A-Za-z0-9_]+_01$",
+        "MAX_FIX_PASSES": 4,
+        "REVIEW_KIND": "MATERIAL_UV",
+        "SEVERITY_ITEMS": [
+          [
+            "FAIL",
+            "Fail",
+            "Reported as a blocking validation issue"
+          ],
+          [
+            "INFO",
+            "Info",
+            "Reported as a non-blocking validation note"
+          ]
+        ],
+        "TAB_ITEMS": [
+          [
+            "MESH",
+            "Mesh",
+            "Geometry and topology checks",
+            "MESH_DATA",
+            0
+          ],
+          [
+            "OBJECTS",
+            "Objects",
+            "Transform and naming checks",
+            "OBJECT_DATA",
+            1
+          ],
+          [
+            "MAPPING",
+            "Mapping",
+            "UV checks",
+            "UV",
+            2
+          ],
+          [
+            "MATERIAL",
+            "Material",
+            "Material checks",
+            "MATERIAL",
+            3
+          ]
+        ],
+        "VALIDATION_SCOPE_ITEMS": [
+          [
+            "SELECTION",
+            "Selection",
+            "Validate only selected mesh objects"
+          ],
+          [
+            "VISIBLE_SCENE",
+            "Visible Scene",
+            "Validate every visible mesh object in the active scene"
+          ],
+          [
+            "ENTIRE_SCENE",
+            "Entire Scene",
+            "Validate every mesh object in the active scene"
+          ]
+        ],
+        "_AXIS_CANDIDATE_ANGLE": 5.0,
+        "_BAKE_UDIM_AREA_EPSILON": 1e-12,
+        "_BAKE_UDIM_MAX": 1.0,
+        "_BAKE_UDIM_MIN": 0.0,
+        "_BUILD_DELAY": 0.05,
+        "_CACHE_LIMIT": 64,
+        "_COLOR": [
+          1.0,
+          0.82,
+          0.05,
+          1.0
+        ],
+        "_DEFAULT_ANGLE_TOLERANCE": 0.1,
+        "_DEFAULT_FIX_TEXTURE_SIZE": 4096,
+        "_DEFAULT_RECTILINEAR_RATIO": 0.75,
+        "_LINE_WIDTH": 4.0,
+        "_MATERIAL_WATCH_INTERVAL": 0.25,
+        "_MAX_FIX_AREA_CHANGE": 0.04,
+        "_MAX_FIX_LENGTH_CHANGE": 0.04,
+        "_MAX_FIX_TEXEL_DISPLACEMENT": 16.0,
+        "_MITER_LIMIT": 4.0,
+        "_MODAL_RETRY_DELAY": 0.05,
+        "_OVERLAP_VISUAL_BUILD_DELAY": 0.08,
+        "_OVERLAP_VISUAL_MODAL_RETRY_DELAY": 0.05,
+        "_PADDING_COLOR": [
+          0.392157,
+          0.392157,
+          0.392157,
+          1.0
+        ],
+        "_SELECTED_COLOR": [
+          0.0,
+          1.0,
+          0.0,
+          0.32
+        ],
+        "_SELECTED_ELEMENT_COLOR": [
+          1.0,
+          0.35,
+          0.0,
+          1.0
+        ],
+        "_UV_KEY_TOLERANCE": 1e-07,
+        "_edge_indices": [],
+        "_material_watch_running": false,
+        "_object_name": ""
+      },
+      "id": "scene_qc_validator",
+      "license": [
+        "SPDX:GPL-3.0-or-later"
+      ],
+      "menus": [
+        {
+          "base": "Menu",
+          "bl_idname": "SQC_MT_presets",
+          "bl_label": "Projects",
+          "class_name": "SQC_MT_presets",
+          "docstring": null,
+          "has_poll": false,
+          "module": "ui/presets_menu.py",
+          "properties": []
+        }
+      ],
+      "name": "Scene QC Validator by Mutaform Studio",
+      "operators": [
+        {
+          "base": "Operator",
+          "bl_idname": "sqc.step_padding_value",
+          "bl_label": "Change Padding Preview Value",
+          "class_name": "SQC_OT_StepPaddingValue",
+          "docstring": null,
+          "has_poll": false,
+          "module": "checks/mapping/padding.py",
+          "properties": [
+            {
+              "default": "TEXTURE",
+              "identifier": "target",
+              "items": [
+                {
+                  "label": "Texture Size",
+                  "value": "TEXTURE"
+                },
+                {
+                  "label": "Padding",
+                  "value": "PADDING"
+                }
+              ],
+              "kind": "enum",
+              "owner": "SQC_OT_StepPaddingValue",
+              "source": "checks/mapping/padding.py"
+            },
+            {
+              "default": 1,
+              "identifier": "direction",
+              "kind": "int",
+              "owner": "SQC_OT_StepPaddingValue",
+              "source": "checks/mapping/padding.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Toggle a temporary UV checker material on selected mesh objects",
+          "bl_idname": "sqc.toggle_uv_checker",
+          "bl_label": "Toggle UV Checker",
+          "class_name": "SQC_OT_toggle_uv_checker",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/checker.py",
+          "properties": [
+            {
+              "default": "SQUARE",
+              "identifier": "checker_type",
+              "items": [
+                {
+                  "label": "Square Checker",
+                  "value": "SQUARE"
+                },
+                {
+                  "label": "Line Checker",
+                  "value": "LINE"
+                }
+              ],
+              "kind": "enum",
+              "owner": "SQC_OT_toggle_uv_checker",
+              "source": "operators/checker.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_idname": "sqc.init_checks",
+          "bl_label": "Initialize Checklist",
+          "class_name": "SQC_OT_init_checks",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/checklist.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_idname": "sqc.select_all_checks",
+          "bl_label": "Select All",
+          "class_name": "SQC_OT_select_all_checks",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/checklist.py",
+          "properties": [
+            {
+              "default": true,
+              "identifier": "enable",
+              "kind": "bool",
+              "owner": "SQC_OT_select_all_checks",
+              "source": "operators/checklist.py"
+            },
+            {
+              "default": true,
+              "identifier": "current_tab_only",
+              "kind": "bool",
+              "owner": "SQC_OT_select_all_checks",
+              "source": "operators/checklist.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Run enabled checks against the configured validation scope",
+          "bl_idname": "sqc.run_validate",
+          "bl_label": "Validate",
+          "class_name": "SQC_OT_run_validate",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/checklist.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_idname": "sqc.fix_result",
+          "bl_label": "Fix Me",
+          "class_name": "SQC_OT_fix_result",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/fix.py",
+          "properties": [
+            {
+              "default": -1,
+              "identifier": "result_index",
+              "kind": "int",
+              "owner": "SQC_OT_fix_result",
+              "source": "operators/fix.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Apply all available automatic fixes, re-validating until no fixable issues remain",
+          "bl_idname": "sqc.fix_all",
+          "bl_label": "Fix All",
+          "class_name": "SQC_OT_fix_all",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/fix.py",
+          "properties": [
+            {
+              "default": 8,
+              "identifier": "max_passes",
+              "kind": "int",
+              "maximum": 25,
+              "minimum": 1,
+              "owner": "SQC_OT_fix_all",
+              "source": "operators/fix.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Select the scope meshes that use this material and isolate its faces in Edit Mode, so the UV editor shows this material's UVs alone. Click again to restore the previous selection",
+          "bl_idname": "sqc.select_material_users",
+          "bl_label": "Review Material UVs",
+          "class_name": "SQC_OT_select_material_users",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/material_uv_review.py",
+          "properties": [
+            {
+              "identifier": "material_name",
+              "kind": "string",
+              "owner": "SQC_OT_select_material_users",
+              "source": "operators/material_uv_review.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Review UDIM 1001 UV overlaps. On a multi-material mesh it covers the active material slot and follows it when you pick another",
+          "bl_idname": "sqc.toggle_overlap_visual",
+          "bl_label": "Show Overlaps",
+          "class_name": "SQC_OT_toggle_overlap_visual",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/overlap_visual.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Preview UV-island padding in the UV Editor. On a multi-material mesh it covers the active material slot and follows it when you pick another",
+          "bl_idname": "sqc.toggle_padding_visual",
+          "bl_label": "Show Padding",
+          "class_name": "SQC_OT_TogglePaddingVisual",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/padding_visual.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_idname": "sqc.load_project",
+          "bl_label": "Load Project",
+          "class_name": "SQC_OT_load_preset",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/preset_files.py",
+          "properties": [
+            {
+              "identifier": "project_name",
+              "kind": "string",
+              "owner": "SQC_OT_load_preset",
+              "source": "operators/preset_files.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_idname": "sqc.load_stage",
+          "bl_label": "Load Stage",
+          "class_name": "SQC_OT_load_stage",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/preset_files.py",
+          "properties": [
+            {
+              "identifier": "project_name",
+              "kind": "string",
+              "owner": "SQC_OT_load_stage",
+              "source": "operators/preset_files.py"
+            },
+            {
+              "identifier": "stage_name",
+              "kind": "string",
+              "owner": "SQC_OT_load_stage",
+              "source": "operators/preset_files.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Save the current checklist as a stage in a project",
+          "bl_idname": "sqc.save_project",
+          "bl_label": "Save Project",
+          "bl_options": [
+            "REGISTER"
+          ],
+          "class_name": "SQC_OT_save_preset",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/preset_files.py",
+          "properties": [
+            {
+              "default": "My Project",
+              "identifier": "project_name",
+              "kind": "string",
+              "label": "Project",
+              "owner": "SQC_OT_save_preset",
+              "source": "operators/preset_files.py"
+            },
+            {
+              "default": "New Stage",
+              "identifier": "stage_name",
+              "kind": "string",
+              "label": "Stage",
+              "owner": "SQC_OT_save_preset",
+              "source": "operators/preset_files.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Save the current checklist into the active project stage",
+          "bl_idname": "sqc.save_stage",
+          "bl_label": "Save Stage",
+          "class_name": "SQC_OT_save_stage",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/preset_files.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_idname": "sqc.delete_project",
+          "bl_label": "Delete Project",
+          "class_name": "SQC_OT_delete_preset",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/preset_files.py",
+          "properties": [
+            {
+              "identifier": "project_name",
+              "kind": "string",
+              "owner": "SQC_OT_delete_preset",
+              "source": "operators/preset_files.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_idname": "sqc.delete_stage",
+          "bl_label": "Delete Stage",
+          "class_name": "SQC_OT_delete_stage",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/preset_files.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Export the active project configuration to a shareable JSON file",
+          "bl_idname": "sqc.export_project_file",
+          "bl_label": "Export Project",
+          "class_name": "SQC_OT_export_preset_file",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/preset_files.py",
+          "properties": [
+            {
+              "default": "*.json",
+              "identifier": "filter_glob",
+              "kind": "string",
+              "owner": "SQC_OT_export_preset_file",
+              "source": "operators/preset_files.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Import a project checklist JSON file",
+          "bl_idname": "sqc.import_project_file",
+          "bl_label": "Import Project",
+          "class_name": "SQC_OT_import_preset_file",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/preset_files.py",
+          "properties": [
+            {
+              "default": "*.json",
+              "identifier": "filter_glob",
+              "kind": "string",
+              "owner": "SQC_OT_import_preset_file",
+              "source": "operators/preset_files.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Ignore or restore this issue for this object",
+          "bl_idname": "sqc.toggle_result_mute",
+          "bl_label": "Ignore Issue",
+          "class_name": "SQC_OT_toggle_result_mute",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/results.py",
+          "properties": [
+            {
+              "default": -1,
+              "identifier": "result_index",
+              "kind": "int",
+              "owner": "SQC_OT_toggle_result_mute",
+              "source": "operators/results.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_idname": "sqc.select_result",
+          "bl_label": "Select",
+          "class_name": "SQC_OT_select_result",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/selection.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Select every object in the scene that uses this material, whatever the validation scope is",
+          "bl_idname": "sqc.select_material_objects",
+          "bl_label": "Select Material Users",
+          "class_name": "SQC_OT_select_material_objects",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/selection.py",
+          "properties": [
+            {
+              "identifier": "material_name",
+              "kind": "string",
+              "owner": "SQC_OT_select_material_objects",
+              "source": "operators/selection.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Preview UV scale: green is average, red is smaller and blue is larger. On a multi-material mesh it covers the active material slot and follows it when you pick another",
+          "bl_idname": "sqc.toggle_texel_density_visual",
+          "bl_label": "Show Texel Density",
+          "class_name": "SQC_OT_ToggleTexelDensityVisual",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/texel_density_visual.py",
+          "properties": []
+        }
+      ],
+      "panels": [
+        {
+          "base": "Panel",
+          "bl_category": "QC Validator",
+          "bl_idname": "SQC_PT_checklist",
+          "bl_label": "Checklist",
+          "bl_options": [],
+          "bl_order": 20,
+          "bl_parent_id": "SQC_PT_main",
+          "bl_region_type": "UI",
+          "bl_space_type": "VIEW_3D",
+          "class_name": "SQC_PT_checklist",
+          "docstring": "Sub-panel: preset management + the full checklist configuration.",
+          "has_poll": true,
+          "module": "ui/checklist_panel.py",
+          "operators": [
+            "sqc.save_project",
+            "sqc.import_project_file",
+            "sqc.export_project_file",
+            "sqc.save_stage",
+            "sqc.toggle_overlap_visual",
+            "sqc.toggle_padding_visual",
+            "sqc.toggle_texel_density_visual",
+            "sqc.select_all_checks",
+            "sqc.load_stage",
+            "sqc.delete_stage",
+            "sqc.step_padding_value"
+          ],
+          "properties": [],
+          "settings": [
+            "show_check_settings",
+            "checklist_tab",
+            "checks",
+            "active_check_index",
+            "overlap_visual_use_material_scope",
+            "overlap_visual_uv_set_number",
+            "padding_visual_use_material_scope",
+            "texel_density_visual_use_material_scope",
+            "float_param_1",
+            "padding_texture_input",
+            "padding_value_input",
+            "string_param_1",
+            "int_param_1",
+            "float_param_2",
+            "bool_param_1"
+          ]
+        },
+        {
+          "base": "Panel",
+          "bl_category": "QC Validator",
+          "bl_idname": "SQC_PT_main",
+          "bl_label": "Validator by Mutaform Studio",
+          "bl_region_type": "UI",
+          "bl_space_type": "VIEW_3D",
+          "class_name": "SQC_PT_main",
+          "docstring": "Top-level panel: always-visible essentials - status and Validate.",
+          "has_poll": false,
+          "module": "ui/main_panel.py",
+          "operators": [
+            "sqc.run_validate",
+            "sqc.init_checks"
+          ],
+          "properties": [],
+          "settings": [
+            "validation_scope"
+          ]
+        },
+        {
+          "base": "Panel",
+          "bl_category": "QC Validator",
+          "bl_idname": "SQC_PT_results",
+          "bl_label": "Results",
+          "bl_options": [],
+          "bl_order": 30,
+          "bl_parent_id": "SQC_PT_main",
+          "bl_region_type": "UI",
+          "bl_space_type": "VIEW_3D",
+          "class_name": "SQC_PT_results",
+          "docstring": "Sub-panel: validation results list and per-issue actions.",
+          "has_poll": true,
+          "module": "ui/results_panel.py",
+          "operators": [
+            "sqc.fix_all",
+            "sqc.toggle_result_mute",
+            "sqc.select_result",
+            "sqc.fix_result"
+          ],
+          "properties": [],
+          "settings": [
+            "result_filter",
+            "results",
+            "active_result_index"
+          ]
+        },
+        {
+          "base": "Panel",
+          "bl_category": "QC Validator",
+          "bl_idname": "SQC_PT_scene_review",
+          "bl_label": "Review Scene",
+          "bl_options": [
+            "DEFAULT_CLOSED"
+          ],
+          "bl_order": 10,
+          "bl_parent_id": "SQC_PT_main",
+          "bl_region_type": "UI",
+          "bl_space_type": "VIEW_3D",
+          "class_name": "SQC_PT_scene_review",
+          "docstring": null,
+          "has_poll": true,
+          "module": "ui/review_scene_panel.py",
+          "operators": [
+            "sqc.toggle_uv_checker",
+            "sqc.select_material_objects",
+            "sqc.select_material_users"
+          ],
+          "properties": [],
+          "settings": [
+            "uv_checker_tiling"
+          ]
+        }
+      ],
+      "property_groups": [
+        {
+          "base": "PropertyGroup",
+          "class_name": "SQC_CheckItem",
+          "docstring": "A single toggleable check with its parameters, stored on the Scene\nso it is (de)serialized together with presets.",
+          "has_poll": false,
+          "module": "properties.py",
+          "properties": [
+            {
+              "identifier": "check_id",
+              "kind": "string",
+              "label": "Check ID",
+              "owner": "SQC_CheckItem",
+              "source": "properties.py"
+            },
+            {
+              "identifier": "label",
+              "kind": "string",
+              "label": "Label",
+              "owner": "SQC_CheckItem",
+              "source": "properties.py"
+            },
+            {
+              "default": "GEOMETRY",
+              "identifier": "category",
+              "items": [
+                {
+                  "description": "Mesh topology checks",
+                  "label": "Geometry",
+                  "value": "GEOMETRY"
+                },
+                {
+                  "description": "Object transform checks",
+                  "label": "Transform",
+                  "value": "TRANSFORM"
+                },
+                {
+                  "description": "UV mapping checks",
+                  "label": "UV",
+                  "value": "UV"
+                },
+                {
+                  "description": "Object / material naming checks",
+                  "label": "Naming",
+                  "value": "NAMING"
+                },
+                {
+                  "description": "Material assignment checks",
+                  "label": "Material",
+                  "value": "MATERIAL"
+                },
+                {
+                  "description": "Unreal Nanite ingestion checks",
+                  "label": "Nanite",
+                  "value": "NANITE"
+                }
+              ],
+              "kind": "enum",
+              "label": "Category",
+              "owner": "SQC_CheckItem",
+              "source": "properties.py"
+            },
+            {
+              "identifier": "description",
+              "kind": "string",
+              "label": "Description",
+              "owner": "SQC_CheckItem",
+              "source": "properties.py"
+            },
+            {
+              "default": true,
+              "identifier": "enabled",
+              "kind": "bool",
+              "label": "Enabled",
+              "owner": "SQC_CheckItem",
+              "source": "properties.py"
+            },
+            {
+              "default": "FAIL",
+              "identifier": "severity",
+              "items": [
+                {
+                  "description": "Reported as a blocking validation issue",
+                  "label": "Fail",
+                  "value": "FAIL"
+                },
+                {
+                  "description": "Reported as a non-blocking validation note",
+                  "label": "Info",
+                  "value": "INFO"
+                }
+              ],
+              "kind": "enum",
+              "label": "Severity",
+              "owner": "SQC_CheckItem",
+              "source": "properties.py"
+            },
+            {
+              "default": false,
+              "identifier": "can_fix",
+              "kind": "bool",
+              "label": "Auto-fixable",
+              "owner": "SQC_CheckItem",
+              "source": "properties.py"
+            },
+            {
+              "default": false,
+              "description": "Fix changes topology/data rather than just selecting it",
+              "identifier": "fix_is_destructive",
+              "kind": "bool",
+              "label": "Destructive Fix",
+              "owner": "SQC_CheckItem",
+              "source": "properties.py"
+            },
+            {
+              "default": 0.0,
+              "identifier": "float_param_1",
+              "kind": "float",
+              "label": "Param 1",
+              "owner": "SQC_CheckItem",
+              "source": "properties.py"
+            },
+            {
+              "default": 0.0,
+              "identifier": "float_param_2",
+              "kind": "float",
+              "label": "Param 2",
+              "owner": "SQC_CheckItem",
+              "source": "properties.py"
+            },
+            {
+              "default": 0,
+              "identifier": "int_param_1",
+              "kind": "int",
+              "label": "Param 1",
+              "owner": "SQC_CheckItem",
+              "source": "properties.py"
+            },
+            {
+              "default": 0,
+              "identifier": "int_param_2",
+              "kind": "int",
+              "label": "Param 2",
+              "owner": "SQC_CheckItem",
+              "source": "properties.py"
+            },
+            {
+              "default": 4096,
+              "identifier": "padding_last_texture_size",
+              "kind": "int",
+              "owner": "SQC_CheckItem",
+              "source": "properties.py"
+            },
+            {
+              "default": "4096",
+              "identifier": "padding_texture_input",
+              "kind": "string",
+              "label": "Texture Size",
+              "owner": "SQC_CheckItem",
+              "source": "properties.py"
+            },
+            {
+              "default": "16",
+              "identifier": "padding_value_input",
+              "kind": "string",
+              "label": "Padding",
+              "owner": "SQC_CheckItem",
+              "source": "properties.py"
+            },
+            {
+              "default": false,
+              "identifier": "padding_input_syncing",
+              "kind": "bool",
+              "owner": "SQC_CheckItem",
+              "source": "properties.py"
+            },
+            {
+              "description": "Comma separated list of allowed prefixes/suffixes, or a regex pattern",
+              "identifier": "string_param_1",
+              "kind": "string",
+              "label": "Param 1",
+              "owner": "SQC_CheckItem",
+              "source": "properties.py"
+            },
+            {
+              "default": true,
+              "identifier": "bool_param_1",
+              "kind": "bool",
+              "label": "Param 1",
+              "owner": "SQC_CheckItem",
+              "source": "properties.py"
+            }
+          ]
+        },
+        {
+          "base": "PropertyGroup",
+          "class_name": "SQC_ResultItem",
+          "docstring": "One reported issue after running Validate.",
+          "has_poll": false,
+          "module": "properties.py",
+          "properties": [
+            {
+              "identifier": "check_id",
+              "kind": "string",
+              "owner": "SQC_ResultItem",
+              "source": "properties.py"
+            },
+            {
+              "identifier": "check_label",
+              "kind": "string",
+              "owner": "SQC_ResultItem",
+              "source": "properties.py"
+            },
+            {
+              "default": "GEOMETRY",
+              "identifier": "category",
+              "items": [
+                {
+                  "description": "Mesh topology checks",
+                  "label": "Geometry",
+                  "value": "GEOMETRY"
+                },
+                {
+                  "description": "Object transform checks",
+                  "label": "Transform",
+                  "value": "TRANSFORM"
+                },
+                {
+                  "description": "UV mapping checks",
+                  "label": "UV",
+                  "value": "UV"
+                },
+                {
+                  "description": "Object / material naming checks",
+                  "label": "Naming",
+                  "value": "NAMING"
+                },
+                {
+                  "description": "Material assignment checks",
+                  "label": "Material",
+                  "value": "MATERIAL"
+                },
+                {
+                  "description": "Unreal Nanite ingestion checks",
+                  "label": "Nanite",
+                  "value": "NANITE"
+                }
+              ],
+              "kind": "enum",
+              "owner": "SQC_ResultItem",
+              "source": "properties.py"
+            },
+            {
+              "default": "FAIL",
+              "identifier": "severity",
+              "items": [
+                {
+                  "description": "Reported as a blocking validation issue",
+                  "label": "Fail",
+                  "value": "FAIL"
+                },
+                {
+                  "description": "Reported as a non-blocking validation note",
+                  "label": "Info",
+                  "value": "INFO"
+                }
+              ],
+              "kind": "enum",
+              "owner": "SQC_ResultItem",
+              "source": "properties.py"
+            },
+            {
+              "identifier": "object_name",
+              "kind": "string",
+              "owner": "SQC_ResultItem",
+              "source": "properties.py"
+            },
+            {
+              "identifier": "message",
+              "kind": "string",
+              "owner": "SQC_ResultItem",
+              "source": "properties.py"
+            },
+            {
+              "default": false,
+              "identifier": "can_fix",
+              "kind": "bool",
+              "owner": "SQC_ResultItem",
+              "source": "properties.py"
+            },
+            {
+              "default": false,
+              "identifier": "fix_is_destructive",
+              "kind": "bool",
+              "owner": "SQC_ResultItem",
+              "source": "properties.py"
+            },
+            {
+              "default": false,
+              "description": "Ignore this issue for this object",
+              "identifier": "muted",
+              "kind": "bool",
+              "label": "Ignore",
+              "owner": "SQC_ResultItem",
+              "source": "properties.py"
+            },
+            {
+              "identifier": "element_ref",
+              "kind": "string",
+              "owner": "SQC_ResultItem",
+              "source": "properties.py"
+            }
+          ]
+        },
+        {
+          "base": "PropertyGroup",
+          "class_name": "SQC_MutedItem",
+          "docstring": "A persistent record of a muted (object, check) pair so mutes survive\nre-validation, which rebuilds the results collection from scratch.",
+          "has_poll": false,
+          "module": "properties.py",
+          "properties": [
+            {
+              "identifier": "object_name",
+              "kind": "string",
+              "owner": "SQC_MutedItem",
+              "source": "properties.py"
+            },
+            {
+              "identifier": "check_id",
+              "kind": "string",
+              "owner": "SQC_MutedItem",
+              "source": "properties.py"
+            }
+          ]
+        },
+        {
+          "base": "PropertyGroup",
+          "class_name": "SQC_Settings",
+          "docstring": null,
+          "has_poll": false,
+          "module": "properties.py",
+          "properties": [
+            {
+              "identifier": "checks",
+              "kind": "collection",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "identifier": "results",
+              "kind": "collection",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "identifier": "muted",
+              "kind": "collection",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": 0,
+              "identifier": "active_check_index",
+              "kind": "int",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": 0,
+              "identifier": "active_result_index",
+              "kind": "int",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": "ALL",
+              "identifier": "result_filter",
+              "items": [
+                {
+                  "label": "All Results",
+                  "value": "ALL"
+                },
+                {
+                  "label": "Fail Only",
+                  "value": "FAIL"
+                },
+                {
+                  "label": "Fail and Info",
+                  "value": "FAIL_INFO"
+                },
+                {
+                  "label": "Fixable Only",
+                  "value": "FIXABLE"
+                }
+              ],
+              "kind": "enum",
+              "label": "Show",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": "SELECTION",
+              "description": "Objects that Validate will process",
+              "identifier": "validation_scope",
+              "items": [
+                {
+                  "description": "Validate only selected mesh objects",
+                  "label": "Selection",
+                  "value": "SELECTION"
+                },
+                {
+                  "description": "Validate every visible mesh object in the active scene",
+                  "label": "Visible Scene",
+                  "value": "VISIBLE_SCENE"
+                },
+                {
+                  "description": "Validate every mesh object in the active scene",
+                  "label": "Entire Scene",
+                  "value": "ENTIRE_SCENE"
+                }
+              ],
+              "kind": "enum",
+              "label": "Validation Scope",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": "Mutaform_Default",
+              "identifier": "active_project_name",
+              "kind": "string",
+              "label": "Active Project",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": "01_Blockout",
+              "identifier": "active_stage_name",
+              "kind": "string",
+              "label": "Active Stage",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "identifier": "applied_stage_key",
+              "kind": "string",
+              "label": "Applied Stage Key",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": "Mutaform_Default",
+              "identifier": "active_preset_name",
+              "kind": "string",
+              "label": "Active Preset",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": "My Preset",
+              "identifier": "new_preset_name",
+              "kind": "string",
+              "label": "New Preset Name",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": "My Project",
+              "identifier": "new_project_name",
+              "kind": "string",
+              "label": "New Project Name",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": "New Stage",
+              "identifier": "new_stage_name",
+              "kind": "string",
+              "label": "New Stage Name",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": "MESH",
+              "identifier": "checklist_tab",
+              "kind": "enum",
+              "label": "Checklist Tab",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": false,
+              "identifier": "last_validation_passed",
+              "kind": "bool",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": false,
+              "identifier": "has_run_validation",
+              "kind": "bool",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": false,
+              "identifier": "fix_in_progress",
+              "kind": "bool",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": 0.0,
+              "identifier": "fix_progress",
+              "kind": "float",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "owner": "SQC_Settings",
+              "source": "properties.py",
+              "subtype": "FACTOR"
+            },
+            {
+              "identifier": "fix_progress_text",
+              "kind": "string",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": false,
+              "identifier": "show_check_settings",
+              "kind": "bool",
+              "label": "Check Settings",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": false,
+              "description": "When enabled, Show Overlaps includes every visible mesh using the active object's material. When disabled, it reviews only the active object",
+              "identifier": "overlap_visual_use_material_scope",
+              "kind": "bool",
+              "label": "Check All Material Users",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": false,
+              "description": "When enabled, Show Padding includes every visible mesh using the active object's material. When disabled, it reviews only the active object",
+              "identifier": "padding_visual_use_material_scope",
+              "kind": "bool",
+              "label": "Check All Material Users",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": false,
+              "description": "When enabled, Show Texel Density includes every visible mesh using the active object's material",
+              "identifier": "texel_density_visual_use_material_scope",
+              "kind": "bool",
+              "label": "Check All Material Users",
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": 1,
+              "description": "One-based UV set number used by Show Overlaps",
+              "identifier": "overlap_visual_uv_set_number",
+              "kind": "int",
+              "label": "UV Set",
+              "maximum": 64,
+              "minimum": 1,
+              "owner": "SQC_Settings",
+              "source": "properties.py"
+            },
+            {
+              "default": 0.25,
+              "description": "UV checker texture repeat amount",
+              "identifier": "uv_checker_tiling",
+              "kind": "float",
+              "label": "Checker Tiling",
+              "maximum": 50.0,
+              "minimum": 0.25,
+              "owner": "SQC_Settings",
+              "soft_maximum": 20.0,
+              "soft_minimum": 0.25,
+              "source": "properties.py"
+            }
+          ]
+        }
+      ],
+      "registries": {
+        "checks": [
+          {
+            "can_fix": true,
+            "category": "GEOMETRY",
+            "description": "Mesh should not have every edge marked hard/sharp",
+            "fix": {
+              "ref": "fix_has_soft_edges"
+            },
+            "fix_is_destructive": false,
+            "id": "geo_has_soft_edges",
+            "label": "Too Much Hard Edge",
+            "run": {
+              "ref": "check_has_soft_edges"
+            }
+          },
+          {
+            "can_fix": true,
+            "category": "GEOMETRY",
+            "description": "Faces with more than 4 vertices",
+            "fix": {
+              "ref": "fix_ngons"
+            },
+            "fix_is_destructive": true,
+            "id": "geo_ngons",
+            "label": "N-Gons",
+            "run": {
+              "ref": "check_ngons"
+            }
+          },
+          {
+            "can_fix": true,
+            "category": "GEOMETRY",
+            "description": "Fixes invalid topology by splitting face fans, then welding only within each topological island",
+            "fix": {
+              "ref": "fix_non_manifold"
+            },
+            "fix_is_destructive": false,
+            "id": "geo_non_manifold",
+            "label": "Non-Manifold Geometry",
+            "run": {
+              "ref": "check_non_manifold"
+            }
+          },
+          {
+            "can_fix": true,
+            "category": "GEOMETRY",
+            "description": "Faces with area below tolerance",
+            "fix": {
+              "ref": "fix_zero_area_faces"
+            },
+            "fix_is_destructive": true,
+            "float_param_1": 1e-10,
+            "id": "geo_zero_area",
+            "label": "Zero Area Faces",
+            "run": {
+              "ref": "check_zero_area_faces"
+            }
+          },
+          {
+            "can_fix": true,
+            "category": "GEOMETRY",
+            "description": "Edges shorter than tolerance",
+            "fix": {
+              "ref": "fix_zero_length_edges"
+            },
+            "fix_is_destructive": true,
+            "float_param_1": 0.0001,
+            "id": "geo_zero_length",
+            "label": "Zero Length Edges",
+            "run": {
+              "ref": "check_zero_length_edges"
+            }
+          },
+          {
+            "can_fix": true,
+            "category": "GEOMETRY",
+            "description": "Faces whose vertices do not lie on one plane",
+            "fix": {
+              "ref": "fix_non_planar_faces"
+            },
+            "fix_is_destructive": true,
+            "float_param_1": 1e-05,
+            "id": "geo_non_planar",
+            "label": "Non-Planar Faces",
+            "run": {
+              "ref": "check_non_planar_faces"
+            }
+          },
+          {
+            "can_fix": true,
+            "category": "GEOMETRY",
+            "description": "Faces with concave corners",
+            "fix": {
+              "ref": "fix_concave_faces"
+            },
+            "fix_is_destructive": true,
+            "id": "geo_concave_faces",
+            "label": "Concave Faces",
+            "run": {
+              "ref": "check_concave_faces"
+            }
+          },
+          {
+            "can_fix": true,
+            "category": "GEOMETRY",
+            "description": "Faces sharing the same vertex set",
+            "fix": {
+              "ref": "fix_duplicate_faces"
+            },
+            "fix_is_destructive": true,
+            "id": "geo_duplicate_faces",
+            "label": "Duplicate Faces",
+            "run": {
+              "ref": "check_duplicate_faces"
+            }
+          },
+          {
+            "can_fix": true,
+            "category": "GEOMETRY",
+            "description": "Vertices or edges not part of any face",
+            "fix": {
+              "ref": "fix_loose_geometry"
+            },
+            "fix_is_destructive": true,
+            "id": "geo_loose",
+            "label": "Loose Geometry",
+            "run": {
+              "ref": "check_loose_geometry"
+            }
+          },
+          {
+            "can_fix": true,
+            "category": "GEOMETRY",
+            "description": "Mesh object, mesh data, or shape keys have animation data",
+            "fix": {
+              "ref": "fix_animation_keys"
+            },
+            "fix_is_destructive": false,
+            "id": "geo_animation_keys",
+            "label": "Animation Keys",
+            "run": {
+              "ref": "check_animation_keys"
+            }
+          },
+          {
+            "can_fix": true,
+            "category": "TRANSFORM",
+            "description": "Object has non-default location/rotation/scale",
+            "fix": {
+              "ref": "fix_unapplied_transform"
+            },
+            "fix_is_destructive": true,
+            "id": "tr_unapplied",
+            "label": "Unapplied Transform",
+            "run": {
+              "ref": "check_unapplied_transform"
+            },
+            "string_param_1": "loc,rot,scale"
+          },
+          {
+            "can_fix": true,
+            "category": "TRANSFORM",
+            "description": "Object origin should be at world 0,0,0",
+            "fix": {
+              "ref": "fix_pivot_world_origin"
+            },
+            "fix_is_destructive": false,
+            "float_param_1": 0.001,
+            "id": "tr_world_origin",
+            "label": "Pivot Not At World Origin",
+            "run": {
+              "ref": "check_pivot_world_origin"
+            }
+          },
+          {
+            "can_fix": false,
+            "category": "TRANSFORM",
+            "description": "Object origin should be centered on its geometry bounds",
+            "fix": null,
+            "id": "tr_pivot_center",
+            "label": "Pivot Not Centered",
+            "run": {
+              "ref": "check_pivot_center"
+            }
+          },
+          {
+            "can_fix": false,
+            "category": "UV",
+            "description": "Mesh has no UV map",
+            "fix": null,
+            "id": "uv_missing",
+            "label": "Missing UV Map",
+            "run": {
+              "ref": "check_missing_uv"
+            }
+          },
+          {
+            "can_fix": false,
+            "category": "UV",
+            "description": "Too many UV maps on one mesh",
+            "fix": null,
+            "id": "uv_set_count",
+            "int_param_1": 1,
+            "label": "UV Sets Count",
+            "run": {
+              "ref": "check_uv_set_count"
+            }
+          },
+          {
+            "can_fix": false,
+            "category": "UV",
+            "description": "Every UV set must keep all UV shells inside the first 0-1 UDIM square",
+            "fix": null,
+            "float_param_1": 0.001,
+            "id": "uv_single_tile",
+            "label": "Shells Outside 0-1 Square",
+            "run": {
+              "ref": "check_single_uv_tile"
+            }
+          },
+          {
+            "can_fix": true,
+            "category": "UV",
+            "description": "Replace Blender default UVMap names with map1, map2, ...",
+            "fix": {
+              "ref": "fix_uv_set_names"
+            },
+            "fix_is_destructive": false,
+            "id": "uv_set_names",
+            "label": "UV Set Names",
+            "run": {
+              "ref": "check_uv_set_names"
+            }
+          },
+          {
+            "bool_param_1": true,
+            "can_fix": true,
+            "category": "UV",
+            "description": "Finds overlapping UVs in UDIM 1001 and expands hits to complete UV islands",
+            "fix": {
+              "ref": "fix_uv_overlap"
+            },
+            "float_param_1": 1e-10,
+            "id": "uv_overlap",
+            "int_param_1": 250000,
+            "label": "Overlapped UV",
+            "run": {
+              "ref": "check_uv_overlap"
+            },
+            "string_param_1": ".+"
+          },
+          {
+            "can_fix": false,
+            "category": "UV",
+            "description": "Interactive UV-island padding preview in the UV Editor",
+            "fix": null,
+            "id": "uv_padding",
+            "int_param_1": 16,
+            "int_param_2": 4096,
+            "label": "Padding",
+            "run": {
+              "ref": "check_padding"
+            }
+          },
+          {
+            "can_fix": true,
+            "category": "UV",
+            "description": "Every UV-shell border edge must be marked sharp",
+            "fix": {
+              "ref": "fix_no_hard_edge_on_uv_borders"
+            },
+            "fix_is_destructive": false,
+            "id": "uv_no_hard_edge_on_uv_borders",
+            "label": "No Hard Edge On UV Borders",
+            "run": {
+              "ref": "check_no_hard_edge_on_uv_borders"
+            }
+          },
+          {
+            "can_fix": true,
+            "category": "UV",
+            "description": "Sharp edges should match UV border edges",
+            "fix": {
+              "ref": "fix_random_sharp"
+            },
+            "fix_is_destructive": false,
+            "float_param_1": 0.001,
+            "id": "uv_random_sharp",
+            "label": "Random Sharp",
+            "run": {
+              "ref": "check_random_sharp"
+            }
+          },
+          {
+            "can_fix": true,
+            "category": "UV",
+            "description": "Find slightly off-axis borders on predominantly rectilinear UV shells",
+            "fix": {
+              "ref": "fix_unaligned_uv_edges"
+            },
+            "fix_is_destructive": false,
+            "float_param_1": 0.1,
+            "float_param_2": 0.75,
+            "id": "uv_unaligned_edges",
+            "label": "Unaligned UV Edges",
+            "run": {
+              "ref": "check_unaligned_uv_edges"
+            }
+          },
+          {
+            "bool_param_1": true,
+            "can_fix": false,
+            "category": "NANITE",
+            "description": "Open shells must be embedded in other geometry so Nanite sees no gaps or holes",
+            "fix": null,
+            "float_param_1": 1.0,
+            "id": "obj_nanite_closed_geometry",
+            "label": "Nanite Closed Geometry",
+            "run": {
+              "ref": "check_nanite_closed_geometry"
+            },
+            "string_param_1": "^(UCX|UBX|USP|UCP)_"
+          },
+          {
+            "can_fix": true,
+            "category": "NAMING",
+            "description": "Object name must match a regex pattern",
+            "fix": {
+              "ref": "fix_object_name_pattern"
+            },
+            "fix_is_destructive": false,
+            "id": "nm_object_pattern",
+            "label": "Object Name Pattern",
+            "run": {
+              "ref": "check_object_name_pattern"
+            },
+            "string_param_1": "^(SM|SK)_[A-Za-z0-9_]+$"
+          },
+          {
+            "can_fix": false,
+            "category": "MATERIAL",
+            "description": "Faces or object without an assigned material",
+            "fix": null,
+            "id": "mat_missing",
+            "label": "Missing Material",
+            "run": {
+              "ref": "check_missing_material"
+            }
+          },
+          {
+            "can_fix": false,
+            "category": "MATERIAL",
+            "description": "Too many materials assigned to one mesh",
+            "fix": null,
+            "id": "mat_material_count",
+            "int_param_1": 1,
+            "label": "Material Count",
+            "run": {
+              "ref": "check_material_count"
+            }
+          },
+          {
+            "can_fix": true,
+            "category": "MATERIAL",
+            "description": "Material names must match the allowed pattern, for example m_body or m_body_01",
+            "fix": {
+              "ref": "fix_material_name"
+            },
+            "fix_is_destructive": false,
+            "id": "mat_material_name",
+            "label": "Material Name",
+            "run": {
+              "ref": "check_material_name"
+            },
+            "string_param_1": "^m_[A-Za-z0-9_]+(?:_\\d{2})?$"
+          }
+        ]
+      },
+      "tagline": "Production scene and mesh validation checklist by Mutaform Studio",
+      "tags": [
+        "Mesh",
+        "Pipeline"
+      ],
+      "ui_lists": [
+        {
+          "base": "UIList",
+          "class_name": "SQC_UL_checklist",
+          "docstring": null,
+          "has_poll": false,
+          "module": "ui/lists.py",
+          "properties": []
+        },
+        {
+          "base": "UIList",
+          "class_name": "SQC_UL_results",
+          "docstring": null,
+          "has_poll": false,
+          "module": "ui/lists.py",
+          "properties": []
+        }
+      ],
+      "version": "1.9.2",
+      "website": null
+    }
+  }
 }
