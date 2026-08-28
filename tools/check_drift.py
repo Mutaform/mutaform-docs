@@ -33,6 +33,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).parent))
 
 from extract import (  # noqa: E402
     extract_addon,
+    extract_maya_addon,
     extract_registry,
     resolve_package_dir,
 )
@@ -107,7 +108,10 @@ def main() -> int:
             total += 1
             continue
 
-        addon = extract_addon(package_dir)
+        if entry.get("kind") == "maya":
+            addon = extract_maya_addon(package_dir, entry)
+        else:
+            addon = extract_addon(package_dir)
 
         registries = {}
         for spec in entry.get("registries") or []:

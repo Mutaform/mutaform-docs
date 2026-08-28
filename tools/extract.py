@@ -326,6 +326,53 @@ def read_manifest(package_dir: pathlib.Path) -> dict:
         return tomllib.load(handle)
 
 
+def extract_maya_addon(package_dir: pathlib.Path, entry: dict) -> dict:
+    """Слепок аддона Maya: версия из кода, остальное — из реестра.
+
+    Разбирать интерфейс, как у Blender, здесь нечего: панель Maya собирается
+    императивным кодом Qt, кнопки создаются по месту, и достоверного списка
+    элементов из исходника не построить. Поэтому слепок намеренно пустой —
+    состав интерфейса описывается руками в ``content/``, а отсюда берётся
+    только то, что обязано совпадать с кодом: номер версии.
+
+    Версия лежит в ``__init__.py`` пакета как ``VERSION = (1, 2, 4)``.
+    """
+    init = package_dir / "__init__.py"
+    if not init.is_file():
+        raise FileNotFoundError(f"нет __init__.py в {package_dir}")
+
+    tree = ast.parse(init.read_text(encoding="utf-8"))
+    constants = _collect_constants(tree)
+
+    version = constants.get("VERSION_STRING")
+    if not version:
+        raw = constants.get("VERSION")
+        if isinstance(raw, (list, tuple)):
+            version = ".".join(str(part) for part in raw)
+    if not version:
+        raise ValueError(f"в {init} не нашлась VERSION")
+
+    return {
+        "constants": {
+            name: value for name, value in constants.items()
+            if isinstance(value, (str, int, float, bool))
+        },
+        "kind": "maya",
+        "id": entry.get("id") or package_dir.name,
+        "name": entry.get("name") or package_dir.name,
+        "tagline": entry.get("tagline"),
+        "version": version,
+        "host": entry.get("host"),
+        "host_version_min": entry.get("host_version_min"),
+        "website": entry.get("website"),
+        "tags": [],
+        "license": [],
+        "panels": [],
+        "operators": [],
+        "property_groups": [],
+    }
+
+
 def extract_addon(package_dir: pathlib.Path) -> dict:
     """Собрать полное описание UI-поверхности одного аддона."""
     package_dir = package_dir.resolve()

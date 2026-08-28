@@ -534,6 +534,24 @@
       "version": "2.0.0",
       "website": "https://mutaform.studio/"
     },
+    "qc-bake-maya": {
+      "constants": {
+        "PORTED_FROM": "2.0.0"
+      },
+      "host": "Maya",
+      "host_version_min": "2025",
+      "id": "qc_bake_maya",
+      "kind": "maya",
+      "license": [],
+      "name": "QC Bake for Maya",
+      "operators": [],
+      "panels": [],
+      "property_groups": [],
+      "tagline": null,
+      "tags": [],
+      "version": "1.2.4",
+      "website": "https://mutaform.github.io/qc-bake-maya/"
+    },
     "qc-bridge": {
       "blender_version_min": "4.2.0",
       "constants": {

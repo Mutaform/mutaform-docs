@@ -1,8 +1,12 @@
 # Installation
 
-All studio add-ons are Blender Extensions. You can install them one by one from
-a file, but the right way is to add the repository once and let Blender find the
-add-ons and offer updates on its own.
+Almost all studio add-ons are Blender Extensions. You can install them one by one
+from a file, but the right way is to add the repository once and let Blender find
+the add-ons and offer updates on its own.
+
+The exception is **QC Bake for Maya**: it lives in Maya, installs differently and
+updates itself. The steps are [in its overview](qc-bake-maya/index.en.md),
+and in short below.
 
 ## Add the repository
 
@@ -71,6 +75,20 @@ Useful when you need a specific version, or have no network access.
 3. Pick the add-on's zip
 
 An add-on installed from a file will not update itself.
+
+## Add-ons for Maya
+
+Maya has no extension repository, so installation is its own thing.
+
+**QC Bake for Maya** — download
+[`qc_bake_maya.zip`](https://mutaform.github.io/qc-bake-maya/qc_bake_maya.zip),
+unpack it somewhere it will stay, and drag `install/install.py` into Maya's
+viewport. The installer registers the module, adds a button to the *Mutaform*
+shelf and opens the panel. Requires Maya 2025.
+
+The unpacked folder is the installation: the module file points at it. Move or
+delete that folder and the tool falls off. It updates itself from the panel,
+without restarting Maya.
 
 ## The Maya half of the bridge
 

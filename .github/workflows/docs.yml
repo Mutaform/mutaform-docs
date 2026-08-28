@@ -47,6 +47,7 @@ jobs:
           qc_daily_render https://github.com/Mutaform/qc-daily-render
           qc_maya_viewport https://github.com/Mutaform/qc-maya-viewport
           qc_mutaform_bridge https://github.com/Mutaform/qc-bridge-blender-maya
+          qc_bake-maya https://github.com/Mutaform/qc-bake-maya
           REPOS
 
       - uses: actions/setup-python@v5

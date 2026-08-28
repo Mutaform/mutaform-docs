@@ -25,6 +25,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).parent))
 
 from extract import (  # noqa: E402
     extract_addon,
+    extract_maya_addon,
     extract_registry,
     resolve_package_dir,
 )
@@ -309,7 +310,10 @@ def main() -> int:
             print(f"  ! {slug}: нет исходников, {entry['source']} не найден под {source_root}")
             failures += 1
             continue
-        addon = extract_addon(package_dir)
+        if entry.get("kind") == "maya":
+            addon = extract_maya_addon(package_dir, entry)
+        else:
+            addon = extract_addon(package_dir)
 
         registries = {}
         for spec in entry.get("registries") or []:
@@ -333,9 +337,15 @@ def main() -> int:
             )
 
             if lang == "ru":
-                problems = coverage(content, addon)
                 count = len(content["controls"])
-                print(f"  {slug}: {count} элементов описано")
+                # У аддона Maya сверять описание не с чем: слепок пустой, а
+                # пустой слепок в coverage() выглядел бы как «всё описано».
+                if addon.get("kind") == "maya":
+                    print(f"  {slug}: {count} элементов описано (Maya, полнота не сверяется)")
+                    problems = []
+                else:
+                    problems = coverage(content, addon)
+                    print(f"  {slug}: {count} элементов описано")
                 for problem in problems:
                     print(f"    ! {problem}")
                 failures += len(problems)

@@ -126,6 +126,9 @@ nav:
       - QC Bridge Maya ↔ Blender:
           - Обзор: qc-bridge/index.md
           - Справочник: qc-bridge/reference.md
+      - QC Bake for Maya:
+          - Обзор: qc-bake-maya/index.md
+          - Справочник: qc-bake-maya/reference.md
 
 extra:
   # Ссылки переключателя языка здесь НЕ прописываются. Жёсткий путь вроде

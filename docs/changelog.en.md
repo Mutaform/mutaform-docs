@@ -2,13 +2,14 @@
 
 The versions these docs were built from. The number in the add-on's panel header should match the one here — if it is lower, switch the docs version in the site header.
 
-| Add-on | Version | Blender |
+| Add-on | Version | Requires |
 | --- | --- | --- |
-| QC Bake | `2.0.0` | 5.0.0+ |
-| Scene QC Validator by Mutaform Studio | `1.9.2` | 4.5.0+ |
-| QC Daily Render | `1.5.10` | 5.2.0+ |
-| QC Maya Viewport | `0.34.1` | 5.1.0+ |
-| QC Bridge Maya-Blender by Mutaform | `1.1.8` | 4.2.0+ |
+| QC Bake | `2.0.0` | Blender 5.0+ |
+| Scene QC Validator by Mutaform Studio | `1.9.2` | Blender 4.5+ |
+| QC Daily Render | `1.6.0` | Blender 5.2+ |
+| QC Maya Viewport | `0.34.1` | Blender 5.1+ |
+| QC Bridge Maya-Blender by Mutaform | `1.1.8` | Blender 4.2+ |
+| QC Bake for Maya | `1.2.4` | Maya 2025 |
 
 Each add-on's change history lives in its own repository; it is copied here by hand when the docs are updated.
 
@@ -106,6 +107,51 @@ texture set. Covers the changes since 1.8.7.
 ## QC Daily Render
 
 _No change history in the add-on repository yet._
+
+## QC Bake for Maya
+
+### 1.2.4
+
+The shelf icon is built from a real vector, `icons_src/qc_bake.svg`, so every
+size is drawn from the source rather than resampled from a bitmap.
+
+It still ships as PNG, and here is why. Maya does accept an `.svg` for a shelf
+button, but draws it through Qt, which implements SVG Tiny — no `<mask>`. The
+element is ignored and the mask's own contents are painted as artwork, which on
+this file floods green across the lettering and leaves a white rectangle behind
+it. Measured on a real shelf button: 29% green, 11% white. So the PNGs are
+rendered by a browser, which implements the whole spec.
+
+### 1.2.2
+
+**Opening the panel now always checks for updates.** No timestamp, no interval —
+only the "Check on Open" switch itself.
+
+1.2.1 tried to be clever: remember when the last check happened and skip recent
+ones. Twice on a real install it produced the only outcome that matters — a tool
+that knew it was out of date and said nothing. Opening the panel from the shelf
+is a deliberate act and the best moment to hear about an update.
+
+### 1.2.0
+
+Its own icon on the *Mutaform* shelf, in place of the default one.
+
+### 1.1.0 — 1.1.4
+
+Self-updating: the panel asks a manifest on GitHub Pages, downloads the archive,
+verifies the checksum and swaps the folder without restarting Maya. The previous
+version is kept until the new one has loaded.
+
+### 1.0.0
+
+First release: full parity with the QC Bake extension for Blender 2.0.0 —
+namepair creation, Swap High / Low, visibility by role, Reduce Bake Groups with a
+reversible restore, and both outliner layouts.
+
+Beyond the Blender version, what Maya demanded: **Count Smooth Preview**
+(`polyEvaluate` does not see smooth mesh preview), **Track Selection Order**
+(Maya has no active object), recognition of Maya's own auto-numbering, and
+namespaces preserved through renaming.
 
 ## QC Maya Viewport
 

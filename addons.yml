@@ -48,3 +48,20 @@ addons:
     source: "qc_mutaform_bridge/mutaform_bridge"
     clone_url: "https://github.com/Mutaform/qc-bridge-blender-maya"
     order: 5
+
+  # Первый аддон не для Blender. `kind: maya` отключает разбор кода: панель
+  # там собирается императивным кодом Qt, достоверного списка элементов из
+  # исходника не построить. Состав интерфейса описывается руками в content/,
+  # из кода берётся только версия — она обязана совпадать с тем, что видит
+  # художник. Имя и версия хоста живут здесь, потому что манифеста, откуда их
+  # можно было бы прочитать, у аддона Maya нет.
+  - slug: qc-bake-maya
+    source: "qc_bake-maya/qc_bake_maya"
+    clone_url: "https://github.com/Mutaform/qc-bake-maya"
+    order: 6
+    kind: maya
+    id: qc_bake_maya
+    name: "QC Bake for Maya"
+    host: Maya
+    host_version_min: "2025"
+    website: "https://mutaform.github.io/qc-bake-maya/"

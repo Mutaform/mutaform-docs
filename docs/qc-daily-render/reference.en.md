@@ -191,4 +191,4 @@ Where frames are saved and the base of their file name.
 
 ---
 
-*Assembled from `content/qc-daily-render.en.yml`. Screenshots taken in **QC Daily Render 1.5.10**.*
+*Assembled from `content/qc-daily-render.en.yml`. Screenshots taken in **QC Daily Render 1.6.0**.*

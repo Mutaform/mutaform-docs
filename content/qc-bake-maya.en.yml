@@ -1,0 +1,344 @@
+# English content for the QC Bake for Maya reference.
+#
+# Not a Blender add-on, so the generator does not parse its code and does not
+# check the description for completeness: the panel is built by imperative Qt
+# code and no reliable list of elements can be derived from the source. Keeping
+# a new button from slipping through is a manual job.
+
+title: What every button does
+intro: >-
+  The panel opens from the **QC Bake** button on the *Mutaform* shelf. It is
+  dockable: leave it floating, or dock it to Maya's side panel.
+
+  The order of sections here follows the panel from top to bottom.
+
+sections:
+  - title: The main buttons
+    intro: >-
+      Two buttons, and a line under them that says in advance what will happen.
+    controls: [create-namepair, swap, selection-hint]
+
+  - title: Visibility — show and hide
+    intro: >-
+      Shows and hides objects by role, across the whole scene at once. Built on
+      Maya's display layers.
+    controls: [visibility-row, visibility-all, clear-layers]
+
+  - title: Utilities — the scene as a whole
+    intro: >-
+      Merging widely separated pairs into shared bake groups, and organising the
+      outliner.
+    controls: [prefix, minimum-gap, reduce, flat, per-asset]
+
+  - title: Naming — which suffixes to use
+    controls: [convention, detect-by, count-smooth]
+
+  - title: Options — behaviour while renaming
+    controls:
+      [generate-random, rename-shape, detect-cage, move-to-group,
+       hide-after, allow-collisions, track-order]
+
+  - title: Updates
+    intro: >-
+      Maya has no add-on repository, so the update check is built into the tool
+      itself.
+    controls: [check-on-open, check-now, status]
+
+controls:
+  create-namepair:
+    label: Create Namepair
+    shot: c/create-namepair.png
+    what: >-
+      Renames the selected meshes into a pair: `<name>_low` and `<name>_high`.
+    when: >-
+      The main action. Select the meshes of an asset and press it — selection
+      order does not matter, the roles are worked out for you.
+    result: >-
+      With two meshes the denser one becomes the high. With three or more, one
+      is the low and the rest are numbered: `asset_high_01`, `asset_high_02`.
+      Which one ends up as the low depends on **Track Selection Order**: with it,
+      the one selected last; without it, the lightest mesh.
+
+      The name comes from the low, with any old suffix cut off. Namespaces are
+      preserved: an object from `chair:parts` stays there.
+    disabled: >-
+      Fewer than two meshes are selected. Only meshes count: curves, locators and
+      cameras are ignored.
+    note: >-
+      Renaming is all the button does. It never touches geometry.
+
+  swap:
+    label: Swap High / Low
+    shot: c/swap.png
+    what: >-
+      Swaps the roles of a pair.
+    when: >-
+      When the automatic choice was wrong. That happens with a dense low against
+      a rough blockout: by triangle count the low weighs more, though by intent
+      it is still the low.
+    result: >-
+      Faster than renaming by hand: the names swap along with their suffixes.
+    disabled: >-
+      The selection holds no complete pair: no object with the low suffix and one
+      with the high suffix.
+
+  selection-hint:
+    label: The line under the buttons
+    shot: c/selection-hint.png
+    what: >-
+      Says what pressing will do, before you press.
+    when: >-
+      Worth reading every time: it shows in advance which mesh is taken for the
+      high. If that disagrees with your intent, **Swap High / Low** or the
+      **Track Selection Order** option will fix it.
+    result: >-
+      With nothing selected it reads "Nothing selected". With two meshes it says
+      how many are selected and that the denser one becomes the high.
+
+  visibility-row:
+    label: A role row (High, Low, Cage)
+    shot: c/visibility-row.png
+    what: >-
+      Shows and hides every object of that role across the whole scene,
+      regardless of the selection.
+    when: >-
+      To look at the low without the high looming over it, and back again.
+    result: >-
+      The pressed button lights up. A role with nothing in the scene stays
+      unavailable: in an empty scene the cage row is greyed out.
+    disabled: >-
+      The scene holds no objects with that suffix. Right after Create Namepair
+      the High and Low rows come alive; Cage only if a cage really exists.
+    note: >-
+      It is built on display layers, and that matters more than it sounds: the
+      add-on **does not overwrite visibility you set by hand**. Turning a role
+      back on restores what was there, not what the tool assumed.
+
+  visibility-all:
+    label: The All row
+    shot: c/visibility-all.png
+    what: >-
+      The same, for every role at once.
+    when: >-
+      To put the scene back quickly after half of it has been hidden.
+
+  clear-layers:
+    label: Clear QC Bake Layers
+    shot: c/clear-layers.png
+    what: >-
+      Removes the display layers the add-on created for switching visibility.
+    when: >-
+      Before handing the scene off, so no housekeeping layers travel with it.
+      Objects and their names are untouched — only the layers go.
+
+  prefix:
+    label: Prefix
+    shot: c/prefix.png
+    what: >-
+      The start of the name that merged bake groups will get.
+    default: BakeGroup
+    when: >-
+      Change it if the project has its own naming rules. Names like
+      `BakeGroup_01_low` are built from it.
+
+  minimum-gap:
+    label: Minimum Gap
+    shot: c/minimum-gap.png
+    what: >-
+      The smallest distance between bounding boxes at which two pairs may be
+      merged into one group.
+    default: "0.050"
+    when: >-
+      The larger the value, the more cautious the merge and the more groups
+      remain.
+    note: >-
+      The point is that rays from one asset must not land on another's high.
+      Pairs standing close together cannot be merged — someone else's geometry
+      would bake in.
+
+  reduce:
+    label: Reduce Bake Groups
+    shot: c/reduce.png
+    what: >-
+      Merges pairs that sit far apart in space into fewer bake groups. The arrow
+      on the right restores the previous names.
+    when: >-
+      When a scene holds a dozen small assets and baking each in its own pass is
+      wasteful. Assets far enough apart do not project into one another, so they
+      can share a pass.
+    result: >-
+      Objects take a shared group name: `BakeGroup_01_low`,
+      `BakeGroup_01_high_01` and so on. Incomplete pairs are skipped, and the
+      add-on reports how many.
+    note: >-
+      Every rename is written into the scene, so **Restore still works tomorrow**,
+      long after Maya's undo stack is empty. It restores the last run; run Reduce
+      twice and the first set of names is gone.
+
+  flat:
+    label: Flat ( High / Low )
+    shot: c/flat.png
+    what: >-
+      Organises the outliner by role: `High`, `Low` and `Cage` groups under a
+      shared `Bake_Group`.
+    when: >-
+      When it is easier to see everything low-poly together.
+    note: >-
+      Membership is decided **by name suffix only**, so props and helper meshes
+      are left alone. Grouping does not move any geometry.
+
+  per-asset:
+    label: Per Asset ( Bake_name )
+    shot: c/per-asset.png
+    what: >-
+      Organises the outliner by pair: each asset gets its own `Bake_<name>` group.
+    when: >-
+      When there are many assets and it matters which pair is incomplete.
+    result: >-
+      The group is colour-tagged: green when the pair is complete and ready to
+      bake, red when a member is missing or a stranger sits inside. Visible in
+      the outliner at a glance, without expanding anything.
+
+  convention:
+    label: Convention
+    shot: c/convention.png
+    what: >-
+      The set of suffixes that mark the roles.
+    default: Substance ( _low / _high )
+    when: >-
+      Pick whatever your baker expects. The choice affects more than renaming:
+      the same suffixes are how the add-on finds objects for Visibility and for
+      both utilities, so after switching presets the old objects stop existing
+      as far as it is concerned.
+
+  detect-by:
+    label: Detect By
+    shot: c/detect-by.png
+    what: >-
+      The measure used to compare mesh density.
+    default: Triangles
+    when: >-
+      Change it when triangles give the wrong answer. Faces and vertices are the
+      alternatives.
+
+  count-smooth:
+    label: Count Smooth Preview
+    shot: c/count-smooth.png
+    what: >-
+      Whether to count the smoothed mesh instead of the base one.
+    default: "off"
+    when: >-
+      Turn it on when you work with smooth preview enabled — the "3" key.
+    note: >-
+      The Blender version has no such option; Maya forced it. `polyEvaluate`
+      does not see smooth mesh preview, so without the tick a high you are
+      viewing smoothed is counted by its base cage — and easily comes out
+      "lighter" than the low.
+
+  generate-random:
+    label: Generate Random Name
+    shot: c/generate-random.png
+    what: >-
+      Gives the pair a random name instead of the source object's name.
+    default: "off"
+    when: >-
+      When the source names are rubbish like `pCube12` and there is no time to
+      invent something better.
+
+  rename-shape:
+    label: Also Rename Shape Node
+    shot: c/rename-shape.png
+    what: >-
+      Renames the shape node along with its transform.
+    default: "on"
+    when: >-
+      Leave it on. Otherwise the scene keeps a `barrel_low` with a
+      `pCubeShape1` inside, and that shows up in the exported FBX.
+
+  detect-cage:
+    label: Detect Cage
+    shot: c/detect-cage.png
+    what: >-
+      Excludes from the comparison any object whose name already ends with the
+      cage suffix.
+    default: "on"
+    when: >-
+      The cage has to be named beforehand — `anything_cage` will do. The add-on
+      does not try to guess a cage from geometry.
+
+  move-to-group:
+    label: Move to Group
+    shot: c/move-to-group.png
+    what: >-
+      Puts the pair into a group right after renaming.
+    default: "off"
+
+  hide-after:
+    label: Hide After Renaming
+    shot: c/hide-after.png
+    what: >-
+      Hides the high as soon as the pair is made.
+    default: "off"
+    when: >-
+      Handy when the high is only there for baking and gets in the way of looking
+      at the low.
+
+  allow-collisions:
+    label: Allow Name Collisions
+    shot: c/allow-collisions.png
+    what: >-
+      Allows renaming when the wanted name is already taken.
+    default: "off"
+    note: >-
+      This is exactly how a `barrel_low1` appears in a scene. To a baker that is
+      a different name, and the pair falls apart. Only worth enabling when you
+      know why the name is taken.
+
+  track-order:
+    label: Track Selection Order
+    shot: c/track-order.png
+    what: >-
+      Respect the selection order: the mesh selected last is taken as the low.
+    default: "off"
+    when: >-
+      Turn it on when you want to set the roles yourself rather than leave them
+      to a triangle count.
+    note: >-
+      Another difference from Blender: there is an active object there, and Maya
+      has none. The tick switches on Maya's own selection-order tracking, and
+      until then the order simply is not recorded.
+
+  check-on-open:
+    label: Check on Open
+    shot: c/check-on-open.png
+    what: >-
+      Check for a newer version every time the panel opens.
+    default: "on"
+    result: >-
+      The check runs on a background thread and stays quiet if it fails. When a
+      newer version is found, a bar with an **Install** button appears at the top
+      of the panel. It installs nothing by itself.
+
+  check-now:
+    label: Check for Updates Now
+    shot: c/check-now.png
+    what: >-
+      Check for updates immediately.
+    when: >-
+      When the automatic check is off, or you want to be sure right now. Unlike
+      the background one, this check also reports failure.
+    note: >-
+      Pressing **Install** downloads the archive, verifies it against the
+      checksum, unpacks it and swaps the folder — **without restarting Maya**.
+      The previous version is kept until the new one has loaded, so a broken
+      release rolls itself back.
+
+  status:
+    label: The status line
+    shot: c/status.png
+    what: >-
+      The outcome of the last action, at the bottom of the panel.
+    when: >-
+      The first place to look when it seems nothing happened: both
+      "Namepair 'barrel' created: 1 low, 1 high" and the reason for a refusal
+      land here.
