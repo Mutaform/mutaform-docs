@@ -276,7 +276,10 @@ def coverage(content: dict, addon: dict) -> list[str]:
 
     for key, control in content["controls"].items():
         shot = control.get("shot")
-        if not shot:
+        if not shot and not control.get("no_shot"):
+            # `no_shot` — объявленное исключение с причиной: элемент, который
+            # нечем снять. Так бывает у оператора, не выведенного в интерфейс.
+            # Молча ослаблять проверку нельзя, а объяснённое исключение — можно.
             problems.append(f"без снимка: {key}")
         for field in ("shot", "result_shot"):
             value = control.get(field)

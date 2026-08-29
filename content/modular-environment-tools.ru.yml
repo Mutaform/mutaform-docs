@@ -448,6 +448,7 @@ controls:
 
   export-report:
     label: Export report
+    no_shot: кнопки в панели нет — снимать нечего
     covers: [object.met_export_report]
     what: >-
       Записывает отчёт в JSON.
