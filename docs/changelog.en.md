@@ -10,6 +10,7 @@ The versions these docs were built from. The number in the add-on's panel header
 | QC Maya Viewport | `0.34.1` | Blender 5.1+ |
 | QC Bridge Maya-Blender by Mutaform | `1.1.8` | Blender 4.2+ |
 | QC Bake for Maya | `1.2.4` | Maya 2025 |
+| Modular Environment Tools | `2.15.0` | Blender 4.2+ |
 
 Each add-on's change history lives in its own repository; it is copied here by hand when the docs are updated.
 
@@ -107,6 +108,64 @@ texture set. Covers the changes since 1.8.7.
 ## QC Daily Render
 
 _No change history in the add-on repository yet._
+
+## Modular Environment Tools
+
+A third-party add-on by Kirill Kharichev. Below is the studio branch the
+documentation is built from; the author's `master` stays at 1.0.0.
+
+### 2.15.0
+
+- **Import from file** and **Send to file** at the bottom of the preset menu. A
+  shared folder is the tidy way to pass a preset around; a file is the way that
+  always works.
+
+### 2.14.0
+
+- Presets are shareable: plain JSON in a folder named in the preferences. Point
+  it at a share or at the project and everyone sees the same presets. Before
+  this they went through Blender's own preset system, as Python inside the
+  artist's profile, where nobody else could reach them.
+- The scene remembers which preset it was set from, and the menu button says so.
+- A preset written by another version is used as far as it is understood instead
+  of being refused whole.
+
+### 2.13.0 — 2.12.0
+
+- The panel shows in advance what the active object's name will become: reading
+  two controls and guessing is work, showing the outcome is not.
+- Collisions are skipped when sizes are written: their name follows the module.
+
+### 2.9.0 — 2.11.0
+
+- FBX export: folder, one file per module, axes and scale.
+- The validation report filters by severity, a row selects its object, and
+  **All alike** selects every object with the same finding.
+
+### 2.0.0
+
+A rework of the whole add-on around three things it did not have: one place for
+names, marks on what it generates, and checks that produce a report.
+
+- Sidebar tab **Modular** in the 3D view. The panel had no category before, so
+  no tab ever appeared and the README asked the artist to bind it by hand.
+- Add-on preferences with an editable **Ctrl + Shift + M** shortcut.
+- **Add selected to library**: the one tool allowed to create the library
+  collection.
+- **Rebuild collisions**, the **Generated / Outdated / Orphans** selections,
+  **Show / hide**, **Delete orphans** — all of it possible because generated
+  objects are now marked with their source and a fingerprint of it.
+- **Validate scene**: a report with severities, a list in the panel, selection
+  from a line.
+- Settings for what used to be constants: library collection, both prefixes,
+  collision material and its colour, dissolve angle, shrink.
+- Collisions are numbered: `UCX_Wall_01`, `UCX_Wall_02`.
+- A test suite run by Blender itself.
+
+### 1.0.0
+
+The author's first version: a module library, draft collisions, `UCX`/`UBX`
+renaming, sizes in names, batch transform apply and unwrapping.
 
 ## QC Bake for Maya
 

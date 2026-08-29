@@ -99,7 +99,9 @@ def main() -> int:
 
     for entry in sorted(registry["addons"], key=lambda e: e.get("order", 99)):
         slug = entry["slug"]
-        package_dir = resolve_package_dir(source_root, entry["source"])
+        package_dir = resolve_package_dir(
+            source_root, entry["source"], entry.get("source_local")
+        )
         if not package_dir.is_dir():
             report.append(f"\n### {slug}")
             report.append(

@@ -1,5 +1,1545 @@
 {
   "addons": {
+    "modular-environment-tools": {
+      "blender_version_min": "4.2.0",
+      "constants": {
+        "ASSET_FILENAME": "ModularEnvironmentTools.blend",
+        "AXIS_ORDER_ITEMS": [
+          [
+            "XZY",
+            "X Z Y",
+            "Width, height, depth - the order this add-on has always written"
+          ],
+          [
+            "XYZ",
+            "X Y Z",
+            "Blender's own axis order"
+          ]
+        ],
+        "BOX_PRECISION": 2,
+        "BOX_SHAPED": "BOX_SHAPED",
+        "COLLISION_PREFIXES": [
+          "UCX",
+          "UBX",
+          "USP",
+          "UCP"
+        ],
+        "DATA_VERSION": 2,
+        "DUPLICATE_SUFFIX": "DUPLICATE_SUFFIX",
+        "EMPTY_MESH": "EMPTY_MESH",
+        "EXTENSION": ".json",
+        "FAILED": [],
+        "FLAT": "FLAT",
+        "FLAT_EPSILON": 0.01,
+        "GENERATED_KEY": "met_generated",
+        "ISOLATED_KEY": "met_hidden_by_isolate",
+        "KEYMAP_NAME": "3D View",
+        "KEYMAP_SPACE_TYPE": "VIEW_3D",
+        "KIND_COLLISION": "collision",
+        "MAX_SIZE_TOKENS": 3,
+        "MIRRORED": "MIRRORED",
+        "MISPLACED": "MISPLACED",
+        "MODULES_COLLECTION_NAME": "Modules",
+        "NAME_MISMATCH": "NAME_MISMATCH",
+        "NODE_GROUP_NAME": "IslandConvexHull",
+        "NON_MANIFOLD": "NON_MANIFOLD",
+        "NO_COLLISION": "NO_COLLISION",
+        "NO_UV": "NO_UV",
+        "ORPHAN": "ORPHAN",
+        "OUTDATED": "OUTDATED",
+        "PANEL_ID": "VIEW3D_PT_modular_environment_tools_popup",
+        "PASSED": [],
+        "PRESET_FIELDS": [
+          [
+            "naming",
+            "use_x_size"
+          ],
+          [
+            "naming",
+            "use_y_size"
+          ],
+          [
+            "naming",
+            "use_z_size"
+          ],
+          [
+            "naming",
+            "axis_order"
+          ],
+          [
+            "naming",
+            "units"
+          ],
+          [
+            "naming",
+            "round_step"
+          ],
+          [
+            "collision",
+            "collision_prefix"
+          ],
+          [
+            "collision",
+            "box_prefix"
+          ],
+          [
+            "collision",
+            "material_name"
+          ],
+          [
+            "collision",
+            "material_color"
+          ],
+          [
+            "collision",
+            "wire_display"
+          ],
+          [
+            "collision",
+            "decimate_angle"
+          ],
+          [
+            "collision",
+            "displace_strength"
+          ],
+          [
+            "collision",
+            "apply_modifiers"
+          ],
+          [
+            "unwrap",
+            "edge_angle"
+          ],
+          [
+            "unwrap",
+            "texel_density"
+          ],
+          [
+            "export",
+            "folder"
+          ],
+          [
+            "export",
+            "one_file_per_module"
+          ],
+          [
+            "export",
+            "filename"
+          ],
+          [
+            "export",
+            "apply_modifiers"
+          ],
+          [
+            "export",
+            "axis_forward"
+          ],
+          [
+            "export",
+            "axis_up"
+          ],
+          [
+            "export",
+            "global_scale"
+          ]
+        ],
+        "ROUND_STEP_ITEMS": [
+          [
+            "1",
+            "1 cm",
+            "Exact centimeters"
+          ],
+          [
+            "10",
+            "10 cm",
+            "Round to tens of centimeters"
+          ],
+          [
+            "100",
+            "100 cm",
+            "Round to whole meters"
+          ]
+        ],
+        "SEVERITY_ITEMS": [
+          [
+            "ERROR",
+            "Error",
+            "Breaks the asset in the engine"
+          ],
+          [
+            "WARNING",
+            "Warning",
+            "Worth a look before export"
+          ],
+          [
+            "INFO",
+            "Info",
+            "Nothing is wrong, just worth knowing"
+          ]
+        ],
+        "SEVERITY_ORDER": [
+          "INFO",
+          "WARNING",
+          "ERROR"
+        ],
+        "SIZE_SUFFIX_KEY": "met_size_suffix",
+        "SKIP_PACKAGES": [
+          "tests",
+          "tools"
+        ],
+        "SOURCE_KEY": "met_source",
+        "STAMP_KEY": "met_source_stamp",
+        "UNIT_ITEMS": [
+          [
+            "cm",
+            "Centimeters",
+            "Write sizes in centimeters"
+          ],
+          [
+            "m",
+            "Meters",
+            "Write sizes in meters, with two decimals"
+          ]
+        ],
+        "UNPARENTED": "UNPARENTED",
+        "UNPROCESSED": "UNPROCESSED",
+        "UNUSED": "UNUSED",
+        "WRAP_MAX": 44,
+        "WRAP_MIN": 18,
+        "WRAP_POPUP": 26,
+        "__all__": [
+          "init",
+          "register",
+          "unregister"
+        ],
+        "_quiet_active_issue": false,
+        "addon_keymaps": []
+      },
+      "id": "modularenvironmenttools",
+      "license": [
+        "SPDX:GPL-3.0-or-later"
+      ],
+      "menus": [
+        {
+          "base": "Menu",
+          "bl_label": "Presets",
+          "class_name": "MET_MT_settings_presets",
+          "docstring": null,
+          "has_poll": false,
+          "module": "presets.py",
+          "properties": []
+        }
+      ],
+      "name": "Modular Environment Tools",
+      "operators": [
+        {
+          "base": "Operator",
+          "bl_description": "Write the dimensions of the selected meshes into their names. Running it twice replaces the sizes instead of appending them again",
+          "bl_idname": "object.add_size_to_name",
+          "bl_label": "Add Size to Name",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "AddSizeToNameOperator",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/AddSizeToName.py",
+          "properties": [
+            {
+              "default": true,
+              "identifier": "use_x_size",
+              "kind": "bool",
+              "label": "X",
+              "owner": "AddSizeToNameOperator",
+              "source": "operators/AddSizeToName.py"
+            },
+            {
+              "default": false,
+              "identifier": "use_y_size",
+              "kind": "bool",
+              "label": "Y",
+              "owner": "AddSizeToNameOperator",
+              "source": "operators/AddSizeToName.py"
+            },
+            {
+              "default": true,
+              "identifier": "use_z_size",
+              "kind": "bool",
+              "label": "Z",
+              "owner": "AddSizeToNameOperator",
+              "source": "operators/AddSizeToName.py"
+            },
+            {
+              "default": "XZY",
+              "identifier": "axis_order",
+              "items": [
+                {
+                  "description": "Width, height, depth - the order this add-on has always written",
+                  "label": "X Z Y",
+                  "value": "XZY"
+                },
+                {
+                  "description": "Blender's own axis order",
+                  "label": "X Y Z",
+                  "value": "XYZ"
+                }
+              ],
+              "kind": "enum",
+              "label": "Order",
+              "owner": "AddSizeToNameOperator",
+              "source": "operators/AddSizeToName.py"
+            },
+            {
+              "default": "cm",
+              "identifier": "units",
+              "items": [
+                {
+                  "description": "Write sizes in centimeters",
+                  "label": "Centimeters",
+                  "value": "cm"
+                },
+                {
+                  "description": "Write sizes in meters, with two decimals",
+                  "label": "Meters",
+                  "value": "m"
+                }
+              ],
+              "kind": "enum",
+              "label": "Units",
+              "owner": "AddSizeToNameOperator",
+              "source": "operators/AddSizeToName.py"
+            },
+            {
+              "default": "10",
+              "identifier": "round_step",
+              "items": [
+                {
+                  "description": "Exact centimeters",
+                  "label": "1 cm",
+                  "value": "1"
+                },
+                {
+                  "description": "Round to tens of centimeters",
+                  "label": "10 cm",
+                  "value": "10"
+                },
+                {
+                  "description": "Round to whole meters",
+                  "label": "100 cm",
+                  "value": "100"
+                }
+              ],
+              "kind": "enum",
+              "label": "Round to",
+              "owner": "AddSizeToNameOperator",
+              "source": "operators/AddSizeToName.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Mark the selected modules as assets and render their previews, so they can be dragged in from the Asset Browser",
+          "bl_idname": "object.met_mark_as_assets",
+          "bl_label": "Mark as assets",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "MarkModulesAsAssets",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/Assets.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Take the asset mark off the selected objects",
+          "bl_idname": "object.met_clear_asset_marks",
+          "bl_label": "Clear asset marks",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "ClearAssetMarks",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/Assets.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Select every object in the scene built from the same meshes as the selected ones",
+          "bl_idname": "object.met_select_instances",
+          "bl_label": "Select instances",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "SelectInstances",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/Assets.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Mark seams by sharp angle and unwrap the selected meshes. World orientation and texel density need ZenUV",
+          "bl_idname": "objects.auto_unwrap",
+          "bl_label": "Auto unwrap",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "AutoUnwrap",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/AutoUnwrap.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Apply rotation and scale to the selected objects together with every instance that shares their mesh",
+          "bl_idname": "object.batch_apply_transform",
+          "bl_label": "Batched apply transform",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "BatchApplyTransform",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/BatchApplyTransform.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Select every collision this add-on generated in the scene",
+          "bl_idname": "object.met_select_generated",
+          "bl_label": "Select generated",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "SelectGeneratedCollisions",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/CollisionMaintenance.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Select collisions whose source mesh was edited after the collision was generated",
+          "bl_idname": "object.met_select_outdated",
+          "bl_label": "Select outdated",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "SelectOutdatedCollisions",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/CollisionMaintenance.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Select collisions whose source mesh is gone from the file",
+          "bl_idname": "object.met_select_orphans",
+          "bl_label": "Select orphans",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "SelectOrphanCollisions",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/CollisionMaintenance.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Regenerate the selected collisions from their sources. With nothing selected, every outdated collision in the scene is rebuilt",
+          "bl_idname": "object.met_rebuild_collisions",
+          "bl_label": "Rebuild collisions",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "RebuildCollisions",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/CollisionMaintenance.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Rename collisions after the module they are parented to, numbering them in order. Run it after renaming modules",
+          "bl_idname": "object.met_sync_collision_names",
+          "bl_label": "Sync collision names",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "SyncCollisionNames",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/CollisionMaintenance.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Delete collisions whose source mesh is gone from the file",
+          "bl_idname": "object.met_delete_orphans",
+          "bl_label": "Delete orphans",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "DeleteOrphanCollisions",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/CollisionMaintenance.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Hide everything that is not a collision, so the hulls can be seen on their own. Press again to bring the scene back",
+          "bl_idname": "object.met_isolate_collisions",
+          "bl_label": "Isolate collisions",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "IsolateCollisions",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/CollisionMaintenance.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Hide every collision in the scene, or bring them all back",
+          "bl_idname": "object.met_toggle_collision_display",
+          "bl_label": "Show/hide collisions",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "ToggleCollisionDisplay",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/CollisionMaintenance.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Count how many unique meshes the selected objects share",
+          "bl_idname": "object.count_unique_object_data",
+          "bl_label": "Count unique object data",
+          "bl_options": [
+            "REGISTER"
+          ],
+          "class_name": "CountUniqueObjectData",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/CountUniqueObjectData.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Write the selected modules and their collisions to FBX, one file per module by default",
+          "bl_idname": "object.met_export_modules",
+          "bl_label": "Export modules",
+          "bl_options": [
+            "REGISTER"
+          ],
+          "class_name": "ExportModules",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/Export.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Duplicate every selected mesh into a collision draft, named and numbered the way the engine expects",
+          "bl_idname": "object.make_collision_draft_for_selected",
+          "bl_label": "Make collision draft for selected objects",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "MakeCollisionDraftsForSelected",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/MakeCollisionDraft.py",
+          "properties": [
+            {
+              "default": 0.0349066,
+              "identifier": "decimate_angle",
+              "kind": "float",
+              "label": "Dissolve angle",
+              "minimum": 0.0,
+              "owner": "MakeCollisionDraftsForSelected",
+              "source": "operators/MakeCollisionDraft.py",
+              "subtype": "ANGLE"
+            },
+            {
+              "default": -0.01,
+              "identifier": "displace_strength",
+              "kind": "float",
+              "label": "Shrink",
+              "owner": "MakeCollisionDraftsForSelected",
+              "soft_maximum": 0.5,
+              "soft_minimum": -0.5,
+              "source": "operators/MakeCollisionDraft.py"
+            },
+            {
+              "default": false,
+              "identifier": "apply_modifiers",
+              "kind": "bool",
+              "label": "Apply modifiers",
+              "owner": "MakeCollisionDraftsForSelected",
+              "source": "operators/MakeCollisionDraft.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Link the selected meshes into the modules library. This is the one place allowed to create the library collection",
+          "bl_idname": "object.met_add_to_library",
+          "bl_label": "Add to library",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "AddToLibrary",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/ModuleLibrary.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Select collisions that are plain axis aligned boxes, so they can be renamed from the hull prefix to the box prefix",
+          "bl_idname": "object.select_collisions_with_box_shape",
+          "bl_label": "Select box shaped collisions",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "SelectCollisionsWithBoxShape",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/SelectCollisionsWithBoxShape.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Find collision islands that are non-manifold or flat among the selected objects",
+          "bl_idname": "object.select_incorrect_collision_geometry",
+          "bl_label": "Select incorrect collision geometry",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "SelectIncorrectCollisionGeometry",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/SelectIncorrectCollisionGeometry.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Select visible meshes whose object data is not in the modules library",
+          "bl_idname": "object.select_unprocessed_modules",
+          "bl_label": "Select Unprocessed Modules",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "SelectUnprocessedModulesOperator",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/SelectUnprocessedModules.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Select modules from the library whose object data has no other user, so nothing in the scene is built out of them",
+          "bl_idname": "object.select_unused_modules",
+          "bl_label": "Select Unused Modules",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "SelectUnusedModules",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/SelectUnusedModules.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Change the box prefix to the convex hull prefix on selected objects",
+          "bl_idname": "object.ubx_to_ucx",
+          "bl_label": "UBX to UCX",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "UBX_To_UCX",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/UBX_To_UCX.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Change the convex hull prefix to the box prefix on selected objects",
+          "bl_idname": "object.ucx_to_ubx",
+          "bl_label": "UCX to UBX",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "UCX_To_UBX",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/UCX_To_UBX.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Check the modules and collisions of the scene and fill the report below",
+          "bl_idname": "object.met_validate",
+          "bl_label": "Validate scene",
+          "bl_options": [
+            "REGISTER"
+          ],
+          "class_name": "ValidateScene",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/Validation.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Empty the validation report",
+          "bl_idname": "object.met_clear_report",
+          "bl_label": "Clear report",
+          "bl_options": [
+            "REGISTER"
+          ],
+          "class_name": "ClearReport",
+          "docstring": null,
+          "has_poll": false,
+          "module": "operators/Validation.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Select the object the highlighted line of the report is about",
+          "bl_idname": "object.met_select_issue",
+          "bl_label": "Select object of the issue",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "SelectIssue",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/Validation.py",
+          "properties": [
+            {
+              "default": -1,
+              "identifier": "index",
+              "kind": "int",
+              "owner": "SelectIssue",
+              "source": "operators/Validation.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Select every object the report lists with the same finding as the highlighted line",
+          "bl_idname": "object.met_select_issue_kind",
+          "bl_label": "Select every object with the same finding",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "SelectIssueKind",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/Validation.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Write the report to a JSON file, so it can be read outside Blender",
+          "bl_idname": "object.met_export_report",
+          "bl_label": "Export report",
+          "bl_options": [
+            "REGISTER"
+          ],
+          "class_name": "ExportReport",
+          "docstring": null,
+          "has_poll": true,
+          "module": "operators/Validation.py",
+          "properties": [
+            {
+              "default": "*.json",
+              "identifier": "filter_glob",
+              "kind": "string",
+              "owner": "ExportReport",
+              "source": "operators/Validation.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Put this preset onto the project settings of the scene",
+          "bl_idname": "object.met_load_preset",
+          "bl_label": "Load preset",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "LoadPreset",
+          "docstring": null,
+          "has_poll": false,
+          "module": "presets.py",
+          "properties": [
+            {
+              "identifier": "name",
+              "kind": "string",
+              "owner": "LoadPreset",
+              "source": "presets.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Write the project settings to the preset folder, so the rest of the project can load them",
+          "bl_idname": "object.met_save_preset",
+          "bl_label": "Save preset",
+          "bl_options": [
+            "REGISTER"
+          ],
+          "class_name": "SavePreset",
+          "docstring": null,
+          "has_poll": false,
+          "module": "presets.py",
+          "properties": [
+            {
+              "default": "project",
+              "identifier": "name",
+              "kind": "string",
+              "label": "Name",
+              "owner": "SavePreset",
+              "source": "presets.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Remove the loaded preset from the folder",
+          "bl_idname": "object.met_delete_preset",
+          "bl_label": "Delete preset",
+          "bl_options": [
+            "REGISTER"
+          ],
+          "class_name": "DeletePreset",
+          "docstring": null,
+          "has_poll": true,
+          "module": "presets.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Show the folder the presets are read from in the file browser",
+          "bl_idname": "object.met_open_preset_folder",
+          "bl_label": "Open preset folder",
+          "bl_options": [
+            "REGISTER"
+          ],
+          "class_name": "OpenPresetFolder",
+          "docstring": null,
+          "has_poll": false,
+          "module": "presets.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Take a preset someone sent, put it in the preset folder and use it. This is the way when there is no folder everyone shares",
+          "bl_idname": "object.met_import_preset",
+          "bl_label": "Import preset",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "ImportPreset",
+          "docstring": null,
+          "has_poll": false,
+          "module": "presets.py",
+          "properties": [
+            {
+              "default": "*.json",
+              "identifier": "filter_glob",
+              "kind": "string",
+              "owner": "ImportPreset",
+              "source": "presets.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Write the project settings to a file anywhere - to hand to someone who has no access to the preset folder",
+          "bl_idname": "object.met_export_preset",
+          "bl_label": "Send preset to file",
+          "bl_options": [
+            "REGISTER"
+          ],
+          "class_name": "ExportPreset",
+          "docstring": null,
+          "has_poll": false,
+          "module": "presets.py",
+          "properties": [
+            {
+              "default": "*.json",
+              "identifier": "filter_glob",
+              "kind": "string",
+              "owner": "ExportPreset",
+              "source": "presets.py"
+            }
+          ]
+        }
+      ],
+      "panels": [
+        {
+          "base": "Panel",
+          "bl_category": "Modular",
+          "bl_idname": "VIEW3D_PT_modular_environment_tools",
+          "bl_label": "Modular Environment Tools",
+          "bl_region_type": "UI",
+          "bl_space_type": "VIEW_3D",
+          "class_name": "VIEW3D_PT_modular_environment_tools",
+          "docstring": "The tab in the sidebar of the 3D view.",
+          "has_poll": true,
+          "module": "panels/ModularEnvironmentToolsPanel.py",
+          "operators": [],
+          "properties": [],
+          "settings": []
+        },
+        {
+          "base": "Panel",
+          "bl_idname": "VIEW3D_PT_modular_environment_tools_popup",
+          "bl_label": "Modular Environment Tools",
+          "bl_region_type": "WINDOW",
+          "bl_space_type": "VIEW_3D",
+          "class_name": "VIEW3D_PT_modular_environment_tools_popup",
+          "docstring": "The same panel, for the shortcut.\n\nIts region type is the one the 3D view has no panels in, so it never shows\nup anywhere by itself - it exists to be called by wm.call_panel, and it\nkeeps working when the sidebar tab is switched off.",
+          "has_poll": false,
+          "module": "panels/ModularEnvironmentToolsPanel.py",
+          "operators": [],
+          "properties": [],
+          "settings": []
+        }
+      ],
+      "property_groups": [
+        {
+          "base": "PropertyGroup",
+          "class_name": "NamingSettings",
+          "docstring": null,
+          "has_poll": false,
+          "module": "props.py",
+          "properties": [
+            {
+              "default": true,
+              "description": "Write the size along X",
+              "identifier": "use_x_size",
+              "kind": "bool",
+              "label": "X",
+              "owner": "NamingSettings",
+              "source": "props.py"
+            },
+            {
+              "default": false,
+              "description": "Write the size along Y",
+              "identifier": "use_y_size",
+              "kind": "bool",
+              "label": "Y",
+              "owner": "NamingSettings",
+              "source": "props.py"
+            },
+            {
+              "default": true,
+              "description": "Write the size along Z",
+              "identifier": "use_z_size",
+              "kind": "bool",
+              "label": "Z",
+              "owner": "NamingSettings",
+              "source": "props.py"
+            },
+            {
+              "default": "XZY",
+              "description": "Order the chosen sizes are written in. It only makes a difference with two or more axes switched on",
+              "identifier": "axis_order",
+              "items": [
+                {
+                  "description": "Width, height, depth - the order this add-on has always written",
+                  "label": "X Z Y",
+                  "value": "XZY"
+                },
+                {
+                  "description": "Blender's own axis order",
+                  "label": "X Y Z",
+                  "value": "XYZ"
+                }
+              ],
+              "kind": "enum",
+              "label": "Order",
+              "owner": "NamingSettings",
+              "source": "props.py"
+            },
+            {
+              "default": "cm",
+              "description": "Unit the sizes are written in",
+              "identifier": "units",
+              "items": [
+                {
+                  "description": "Write sizes in centimeters",
+                  "label": "Centimeters",
+                  "value": "cm"
+                },
+                {
+                  "description": "Write sizes in meters, with two decimals",
+                  "label": "Meters",
+                  "value": "m"
+                }
+              ],
+              "kind": "enum",
+              "label": "Units",
+              "owner": "NamingSettings",
+              "source": "props.py"
+            },
+            {
+              "default": "10",
+              "description": "Sizes are rounded to this step before they go into the name",
+              "identifier": "round_step",
+              "items": [
+                {
+                  "description": "Exact centimeters",
+                  "label": "1 cm",
+                  "value": "1"
+                },
+                {
+                  "description": "Round to tens of centimeters",
+                  "label": "10 cm",
+                  "value": "10"
+                },
+                {
+                  "description": "Round to whole meters",
+                  "label": "100 cm",
+                  "value": "100"
+                }
+              ],
+              "kind": "enum",
+              "label": "Round to",
+              "owner": "NamingSettings",
+              "source": "props.py"
+            }
+          ]
+        },
+        {
+          "base": "PropertyGroup",
+          "class_name": "CollisionSettings",
+          "docstring": null,
+          "has_poll": false,
+          "module": "props.py",
+          "properties": [
+            {
+              "default": "UCX",
+              "description": "Prefix for convex collision, UCX in the Unreal convention",
+              "identifier": "collision_prefix",
+              "kind": "string",
+              "label": "Hull prefix",
+              "owner": "CollisionSettings",
+              "source": "props.py"
+            },
+            {
+              "default": "UBX",
+              "description": "Prefix for box collision, UBX in the Unreal convention",
+              "identifier": "box_prefix",
+              "kind": "string",
+              "label": "Box prefix",
+              "owner": "CollisionSettings",
+              "source": "props.py"
+            },
+            {
+              "default": "Collision",
+              "description": "Material put on every generated collision",
+              "identifier": "material_name",
+              "kind": "string",
+              "label": "Material",
+              "owner": "CollisionSettings",
+              "source": "props.py"
+            },
+            {
+              "default": [
+                0.9,
+                0.15,
+                0.1,
+                0.45
+              ],
+              "description": "Viewport color of the collision material. Changing it repaints the collisions already in the scene",
+              "identifier": "material_color",
+              "kind": "float[]",
+              "label": "Color",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "owner": "CollisionSettings",
+              "source": "props.py",
+              "subtype": "COLOR"
+            },
+            {
+              "default": true,
+              "description": "Draw collisions as wireframe, the way the engine shows them. Off draws them solid in the collision color. Applies to the collisions already in the scene as well",
+              "identifier": "wire_display",
+              "kind": "bool",
+              "label": "Show as wire",
+              "owner": "CollisionSettings",
+              "source": "props.py"
+            },
+            {
+              "description": "Planar dissolve limit of the decimate modifier",
+              "identifier": "decimate_angle",
+              "kind": "float",
+              "label": "Dissolve angle",
+              "minimum": 0.0,
+              "owner": "CollisionSettings",
+              "source": "props.py",
+              "subtype": "ANGLE"
+            },
+            {
+              "default": -0.01,
+              "description": "Displace strength; a negative value pulls the hull inside the mesh",
+              "identifier": "displace_strength",
+              "kind": "float",
+              "label": "Shrink",
+              "owner": "CollisionSettings",
+              "soft_maximum": 0.5,
+              "soft_minimum": -0.5,
+              "source": "props.py"
+            },
+            {
+              "default": false,
+              "description": "Bake the generated modifier stack instead of leaving it live",
+              "identifier": "apply_modifiers",
+              "kind": "bool",
+              "label": "Apply modifiers",
+              "owner": "CollisionSettings",
+              "source": "props.py"
+            }
+          ]
+        },
+        {
+          "base": "PropertyGroup",
+          "class_name": "UnwrapSettings",
+          "docstring": null,
+          "has_poll": false,
+          "module": "props.py",
+          "properties": [
+            {
+              "description": "Edges sharper than this are marked as seams",
+              "identifier": "edge_angle",
+              "kind": "float",
+              "label": "Sharp angle",
+              "minimum": 0.0,
+              "owner": "UnwrapSettings",
+              "source": "props.py",
+              "unit": "ROTATION"
+            },
+            {
+              "default": 1024.0,
+              "description": "Texel density applied through ZenUV, when it is installed",
+              "identifier": "texel_density",
+              "kind": "float",
+              "label": "Texel density",
+              "minimum": 0.0,
+              "owner": "UnwrapSettings",
+              "source": "props.py"
+            }
+          ]
+        },
+        {
+          "base": "PropertyGroup",
+          "class_name": "ExportSettings",
+          "docstring": null,
+          "has_poll": false,
+          "module": "props.py",
+          "properties": [
+            {
+              "description": "Where the FBX files are written. Left empty, they go to an \"export\" folder next to the .blend",
+              "identifier": "folder",
+              "kind": "string",
+              "label": "Folder",
+              "owner": "ExportSettings",
+              "source": "props.py",
+              "subtype": "DIR_PATH"
+            },
+            {
+              "default": true,
+              "description": "Write every module with its collisions into its own file, named after the module. Off writes the whole selection into one file",
+              "identifier": "one_file_per_module",
+              "kind": "bool",
+              "label": "One file per module",
+              "owner": "ExportSettings",
+              "source": "props.py"
+            },
+            {
+              "default": "modules",
+              "description": "Name of the single file, when one file per module is off",
+              "identifier": "filename",
+              "kind": "string",
+              "label": "File name",
+              "owner": "ExportSettings",
+              "source": "props.py"
+            },
+            {
+              "default": true,
+              "description": "Export the evaluated meshes, live collision stacks included",
+              "identifier": "apply_modifiers",
+              "kind": "bool",
+              "label": "Apply modifiers",
+              "owner": "ExportSettings",
+              "source": "props.py"
+            },
+            {
+              "default": "-Z",
+              "identifier": "axis_forward",
+              "kind": "enum",
+              "label": "Forward",
+              "owner": "ExportSettings",
+              "source": "props.py"
+            },
+            {
+              "default": "Y",
+              "identifier": "axis_up",
+              "kind": "enum",
+              "label": "Up",
+              "owner": "ExportSettings",
+              "source": "props.py"
+            },
+            {
+              "default": 1.0,
+              "identifier": "global_scale",
+              "kind": "float",
+              "label": "Scale",
+              "minimum": 0.001,
+              "owner": "ExportSettings",
+              "soft_maximum": 100.0,
+              "source": "props.py"
+            }
+          ]
+        },
+        {
+          "base": "PropertyGroup",
+          "class_name": "Issue",
+          "docstring": "One line of the validation report.",
+          "has_poll": false,
+          "module": "props.py",
+          "properties": [
+            {
+              "identifier": "object_name",
+              "kind": "string",
+              "label": "Object",
+              "owner": "Issue",
+              "source": "props.py"
+            },
+            {
+              "identifier": "kind",
+              "kind": "string",
+              "label": "Kind",
+              "owner": "Issue",
+              "source": "props.py"
+            },
+            {
+              "identifier": "label",
+              "kind": "string",
+              "label": "Label",
+              "owner": "Issue",
+              "source": "props.py"
+            },
+            {
+              "identifier": "detail",
+              "kind": "string",
+              "label": "Detail",
+              "owner": "Issue",
+              "source": "props.py"
+            },
+            {
+              "default": "WARNING",
+              "identifier": "severity",
+              "items": [
+                {
+                  "description": "Breaks the asset in the engine",
+                  "label": "Error",
+                  "value": "ERROR"
+                },
+                {
+                  "description": "Worth a look before export",
+                  "label": "Warning",
+                  "value": "WARNING"
+                },
+                {
+                  "description": "Nothing is wrong, just worth knowing",
+                  "label": "Info",
+                  "value": "INFO"
+                }
+              ],
+              "kind": "enum",
+              "owner": "Issue",
+              "source": "props.py"
+            }
+          ]
+        },
+        {
+          "base": "PropertyGroup",
+          "class_name": "ModularEnvironmentSettings",
+          "docstring": null,
+          "has_poll": false,
+          "module": "props.py",
+          "properties": [
+            {
+              "default": 0,
+              "identifier": "data_version",
+              "kind": "int",
+              "owner": "ModularEnvironmentSettings",
+              "source": "props.py"
+            },
+            {
+              "default": "Collection",
+              "description": "Collection holding the unique modules. When empty, a collection named \"Modules\" is used if it exists",
+              "identifier": "modules_collection",
+              "kind": "pointer",
+              "label": "Modules",
+              "owner": "ModularEnvironmentSettings",
+              "source": "props.py"
+            },
+            {
+              "identifier": "naming",
+              "kind": "pointer",
+              "owner": "ModularEnvironmentSettings",
+              "source": "props.py"
+            },
+            {
+              "identifier": "collision",
+              "kind": "pointer",
+              "owner": "ModularEnvironmentSettings",
+              "source": "props.py"
+            },
+            {
+              "identifier": "unwrap",
+              "kind": "pointer",
+              "owner": "ModularEnvironmentSettings",
+              "source": "props.py"
+            },
+            {
+              "identifier": "export",
+              "kind": "pointer",
+              "owner": "ModularEnvironmentSettings",
+              "source": "props.py"
+            },
+            {
+              "description": "Project preset this scene was last set from",
+              "identifier": "preset_name",
+              "kind": "string",
+              "label": "Preset",
+              "owner": "ModularEnvironmentSettings",
+              "source": "props.py"
+            },
+            {
+              "identifier": "issues",
+              "kind": "collection",
+              "owner": "ModularEnvironmentSettings",
+              "source": "props.py"
+            },
+            {
+              "default": 0,
+              "identifier": "active_issue",
+              "kind": "int",
+              "owner": "ModularEnvironmentSettings",
+              "source": "props.py"
+            },
+            {
+              "default": "ALL",
+              "description": "Which findings the report lists",
+              "identifier": "issue_filter",
+              "items": [
+                {
+                  "description": "Everything the check found",
+                  "label": "All",
+                  "value": "ALL"
+                },
+                {
+                  "description": "Only what breaks the asset in the engine",
+                  "label": "Errors",
+                  "value": "ERROR"
+                },
+                {
+                  "description": "Only what is worth a look",
+                  "label": "Warnings",
+                  "value": "WARNING"
+                },
+                {
+                  "description": "Only the notes",
+                  "label": "Notes",
+                  "value": "INFO"
+                }
+              ],
+              "kind": "enum",
+              "label": "Show",
+              "owner": "ModularEnvironmentSettings",
+              "source": "props.py"
+            },
+            {
+              "identifier": "last_validation",
+              "kind": "string",
+              "owner": "ModularEnvironmentSettings",
+              "source": "props.py"
+            },
+            {
+              "default": 0,
+              "identifier": "error_count",
+              "kind": "int",
+              "owner": "ModularEnvironmentSettings",
+              "source": "props.py"
+            },
+            {
+              "default": 0,
+              "identifier": "warning_count",
+              "kind": "int",
+              "owner": "ModularEnvironmentSettings",
+              "source": "props.py"
+            },
+            {
+              "default": 0,
+              "identifier": "info_count",
+              "kind": "int",
+              "owner": "ModularEnvironmentSettings",
+              "source": "props.py"
+            }
+          ]
+        },
+        {
+          "base": "PropertyGroup",
+          "class_name": "ObjectScaleNamingProperties",
+          "docstring": null,
+          "has_poll": false,
+          "module": "props.py",
+          "properties": [
+            {
+              "default": true,
+              "identifier": "use_x_size",
+              "kind": "bool",
+              "label": "X",
+              "owner": "ObjectScaleNamingProperties",
+              "source": "props.py"
+            },
+            {
+              "default": false,
+              "identifier": "use_y_size",
+              "kind": "bool",
+              "label": "Y",
+              "owner": "ObjectScaleNamingProperties",
+              "source": "props.py"
+            },
+            {
+              "default": true,
+              "identifier": "use_z_size",
+              "kind": "bool",
+              "label": "Z",
+              "owner": "ObjectScaleNamingProperties",
+              "source": "props.py"
+            },
+            {
+              "default": "cm",
+              "identifier": "units",
+              "items": [
+                {
+                  "label": "centimeters",
+                  "value": "cm"
+                },
+                {
+                  "label": "meters",
+                  "value": "m"
+                }
+              ],
+              "kind": "enum",
+              "label": "Units",
+              "owner": "ObjectScaleNamingProperties",
+              "source": "props.py"
+            },
+            {
+              "default": 1,
+              "identifier": "rounding",
+              "kind": "int",
+              "label": "rounding",
+              "owner": "ObjectScaleNamingProperties",
+              "source": "props.py"
+            }
+          ]
+        },
+        {
+          "base": "PropertyGroup",
+          "class_name": "AutoUnwrapProperties",
+          "docstring": null,
+          "has_poll": false,
+          "module": "props.py",
+          "properties": [
+            {
+              "identifier": "edge_angle",
+              "kind": "float",
+              "label": "Sharp angle",
+              "maximum": 360,
+              "minimum": 0,
+              "owner": "AutoUnwrapProperties",
+              "source": "props.py",
+              "unit": "ROTATION"
+            },
+            {
+              "default": 1024,
+              "identifier": "texel_density",
+              "kind": "float",
+              "label": "Texel density",
+              "minimum": 0,
+              "owner": "AutoUnwrapProperties",
+              "source": "props.py"
+            }
+          ]
+        }
+      ],
+      "tagline": "Build modular kits: library, engine ready collisions, naming and UV",
+      "tags": [
+        "Object",
+        "Mesh",
+        "Pipeline"
+      ],
+      "ui_lists": [
+        {
+          "base": "UIList",
+          "class_name": "MET_UL_issues",
+          "docstring": null,
+          "has_poll": false,
+          "module": "panels/ModularEnvironmentToolsPanel.py",
+          "properties": []
+        }
+      ],
+      "version": "2.15.0",
+      "website": "https://github.com/HarichevK/Modular-environment-tools"
+    },
     "qc-bake": {
       "blender_version_min": "5.0.0",
       "constants": {

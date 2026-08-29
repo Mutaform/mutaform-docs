@@ -27,7 +27,9 @@ import re
 import tomllib
 from typing import Any
 
-def resolve_package_dir(source_root: pathlib.Path, source: str) -> pathlib.Path:
+def resolve_package_dir(
+    source_root: pathlib.Path, source: str, local: str | None = None
+) -> pathlib.Path:
     """Найти папку пакета аддона под ``source_root``.
 
     ``source`` в ``addons.yml`` записан так, как устроен сам репозиторий
@@ -40,6 +42,13 @@ def resolve_package_dir(source_root: pathlib.Path, source: str) -> pathlib.Path:
     Возвращается первый существующий путь, иначе — прямой, чтобы вызывающий
     сам решил, что делать с отсутствующими исходниками.
     """
+    if local:
+        # Сторонний аддон может лежать где угодно — например под `_Third-party/`,
+        # — и его пакет бывает в корне репозитория, а не во вложенной папке.
+        # Угадывать такое перебором нечестно, поэтому путь пишется в реестре.
+        spelled = source_root / local
+        if spelled.is_dir():
+            return spelled
     direct = source_root / source
     if direct.is_dir():
         return direct

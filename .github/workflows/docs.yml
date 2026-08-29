@@ -36,10 +36,17 @@ jobs:
       - name: Забрать исходники аддонов
         run: |
           mkdir -p sources
-          while read -r name url; do
+          while read -r name url branch; do
             [ -z "$name" ] && continue
             echo "::group::$name"
-            git clone --depth 1 "$url" "sources/$name"
+            # Третья колонка необязательна: она нужна там, где документация
+            # описывает не ветку по умолчанию — например, студийную ветку
+            # стороннего аддона.
+            if [ -n "$branch" ]; then
+              git clone --depth 1 --branch "$branch" "$url" "sources/$name"
+            else
+              git clone --depth 1 "$url" "sources/$name"
+            fi
             echo "::endgroup::"
           done <<'REPOS'
           qc_bake https://github.com/Mutaform/qc-bake
@@ -48,6 +55,7 @@ jobs:
           qc_maya_viewport https://github.com/Mutaform/qc-maya-viewport
           qc_mutaform_bridge https://github.com/Mutaform/qc-bridge-blender-maya
           qc_bake-maya https://github.com/Mutaform/qc-bake-maya
+          Modular-environment-tools https://github.com/Mutaform/Modular-environment-tools studio/rework
           REPOS
 
       - uses: actions/setup-python@v5

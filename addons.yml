@@ -65,3 +65,18 @@ addons:
     host: Maya
     host_version_min: "2025"
     website: "https://mutaform.github.io/qc-bake-maya/"
+
+  # Сторонний аддон: автор — Кирилл Харичев, лицензия GPL-3.0-or-later.
+  # Пакет лежит в КОРНЕ репозитория, а не во вложенной папке, поэтому в CI
+  # `source` — это имя клона целиком. На студийном диске проект живёт под
+  # `_Third-party/`, и путь до рабочего дерева пишется отдельно: угадывать его
+  # перебором было бы нечестно.
+  - slug: modular-environment-tools
+    source: "Modular-environment-tools"
+    source_local: "_Third-party/Modular-environment-tools/Git"
+    # Форк студии: авторский `master` — версия 1.0.0, наша переработка живёт
+    # в ветке `studio/rework`, её и описывает справочник.
+    clone_url: "https://github.com/Mutaform/Modular-environment-tools"
+    branch: studio/rework
+    upstream_url: "https://github.com/HarichevK/Modular-environment-tools"
+    order: 7

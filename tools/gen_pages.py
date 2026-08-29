@@ -302,7 +302,9 @@ def main() -> int:
         if args.only and args.only != slug:
             continue
 
-        package_dir = resolve_package_dir(source_root, entry["source"])
+        package_dir = resolve_package_dir(
+            source_root, entry["source"], entry.get("source_local")
+        )
         if not package_dir.is_dir():
             # Пропустить молча нельзя: справочник собрался бы без этого
             # аддона, а слепок api-manifest.json потерял бы его данные —

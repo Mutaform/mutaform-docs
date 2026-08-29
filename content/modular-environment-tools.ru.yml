@@ -1,0 +1,459 @@
+# Содержание справочника Modular Environment Tools.
+#
+# Сторонний аддон: автор — Кирилл Харичев, лицензия GPL-3.0-or-later.
+# Описания операторов в коде подробные, поэтому здесь важнее не пересказывать
+# их, а объяснить, когда инструмент нужен и что получится.
+
+title: Что делает каждая кнопка
+intro: >-
+  Панель вызывается сочетанием **++ctrl+shift+m++** прямо во вьюпорте — она
+  всплывает под курсором. Сочетание меняется в настройках аддона, там же
+  включается вкладка **Modular** в боковой панели, если попап неудобен.
+
+  Порядок разделов здесь тот же, что в панели сверху вниз.
+
+sections:
+  - title: Пресеты проекта
+    intro: >-
+      Настройки аддона живут в сцене, а пресет переносит их между файлами и
+      художниками. Строка с меню пресетов стоит в самом верху панели.
+    controls: [preset-menu, preset-save, preset-delete]
+
+  - title: Library — библиотека модулей
+    intro: >-
+      Коллекция уникальных мешей. Всё остальное в сцене — инстансы, то есть
+      объекты, построенные на тех же данных.
+    controls:
+      [library-collection, add-to-library, select-unprocessed, select-unused,
+       select-instances, count-unique, mark-assets]
+
+  - title: Collisions — коллизии
+    intro: >-
+      Черновые коллизии в конвенции движка: выпуклые оболочки с префиксом `UCX`
+      и коробки с `UBX`.
+    controls:
+      [make-draft, rebuild, sync-names, select-incorrect, select-box,
+       select-sets, display-row, collision-prefixes, collision-shape,
+       collision-material]
+
+  - title: Naming — размеры и префиксы в именах
+    controls: [size-axes, size-units, add-size, ucx-ubx]
+
+  - title: Transform
+    controls: [batch-apply]
+
+  - title: UV
+    controls: [unwrap-settings, unwrap]
+
+  - title: Export
+    intro: >-
+      Выгрузка модулей в FBX вместе с их коллизиями.
+    controls: [export-folder, export-options, export-run]
+
+  - title: Validation — проверка сцены
+    intro: >-
+      Прогон по модулям и коллизиям с отчётом, по которому можно ходить.
+    controls: [validate, issue-filter, issue-list, issue-actions, export-report]
+
+controls:
+  preset-menu:
+    label: Меню пресетов
+    shot: c/preset-menu.png
+    covers: [object.met_load_preset, object.met_open_preset_folder,
+             object.met_import_preset, object.met_export_preset, preset_name]
+    what: >-
+      Список пресетов проекта и действия с ними.
+    when: >-
+      Когда на проекте договорились о префиксах, единицах и папке выгрузки, и
+      это должно быть одинаковым у всех.
+    result: >-
+      Пресеты — обычные JSON-файлы в папке, которая задаётся в настройках
+      аддона. Направьте её на сетевую шару или в папку проекта, и весь проект
+      увидит одни и те же пресеты. Кнопка меню показывает, из какого пресета
+      настроена эта сцена.
+    note: >-
+      Внизу меню — **Import from file** и **Send to file**. Общая папка удобнее,
+      но файл работает всегда: импорт кладёт присланный пресет в папку и сразу
+      применяет, поэтому в следующий раз он уже будет в списке.
+
+      Пресет, записанный другой версией аддона, применяется в той части, которая
+      понятна, а не отвергается целиком.
+
+  preset-save:
+    label: Сохранить пресет
+    shot: c/preset-save.png
+    covers: [object.met_save_preset]
+    what: >-
+      Записывает текущие настройки проекта в папку пресетов.
+    when: >-
+      Настроили сцену под проект — сохраните, чтобы остальные загрузили то же
+      самое.
+
+  preset-delete:
+    label: Удалить пресет
+    shot: c/preset-delete.png
+    covers: [object.met_delete_preset]
+    what: >-
+      Убирает загруженный пресет из папки.
+    note: >-
+      Удаляется файл в общей папке, а не только у вас: если папка сетевая,
+      пресет исчезнет у всего проекта.
+
+  library-collection:
+    label: Library
+    shot: c/library-collection.png
+    covers: [modules_collection]
+    what: >-
+      Коллекция, в которой лежат уникальные модули.
+    default: коллекция с именем `Modules`, если она есть
+    when: >-
+      Укажите ту, что уже заведена на проекте. Пустое поле означает «искать
+      `Modules`».
+    note: >-
+      От этого поля зависят почти все инструменты раздела: они считают модулем
+      то, что лежит здесь.
+
+  add-to-library:
+    label: Add selected to library
+    shot: c/add-to-library.png
+    covers: [object.met_add_to_library]
+    what: >-
+      Линкует выделенные меши в библиотеку модулей.
+    when: >-
+      Когда новый модуль готов и должен стать частью набора.
+    note: >-
+      Это **единственная** кнопка, которой разрешено создавать коллекцию
+      библиотеки. Остальные инструменты, не найдя её, честно об этом сообщают, а
+      не заводят молча.
+
+  select-unprocessed:
+    label: Select unprocessed modules
+    shot: c/select-unprocessed.png
+    covers: [object.select_unprocessed_modules]
+    what: >-
+      Выделяет видимые меши, чьи данные не входят в библиотеку.
+    when: >-
+      Проверка «что ещё не занесено». После неё видно, какие объекты сцены
+      живут сами по себе.
+
+  select-unused:
+    label: Select unused modules
+    shot: c/select-unused.png
+    covers: [object.select_unused_modules]
+    what: >-
+      Выделяет модули библиотеки, которыми в сцене никто не пользуется.
+    when: >-
+      Перед сдачей набора: такой модуль либо забыли поставить, либо он лишний.
+
+  select-instances:
+    label: Select instances
+    shot: c/select-instances.png
+    covers: [object.met_select_instances]
+    what: >-
+      Выделяет все объекты сцены, построенные на тех же мешах, что и выделенные.
+    when: >-
+      Чтобы понять, сколько раз модуль стоит в сцене, и найти все его копии
+      разом — например, перед правкой.
+
+  count-unique:
+    label: Count unique modules
+    shot: c/count-unique.png
+    covers: [object.count_unique_object_data]
+    what: >-
+      Считает, сколько уникальных мешей делят выделенные объекты.
+    when: >-
+      Быстрый ответ на вопрос «из скольких разных модулей собран этот кусок
+      уровня». Ничего не меняет.
+
+  mark-assets:
+    label: Mark as assets / Clear marks
+    shot: c/mark-assets.png
+    covers: [object.met_mark_as_assets, object.met_clear_asset_marks]
+    what: >-
+      Помечает выделенные модули как ассеты и рисует им превью — после этого их
+      можно перетаскивать из Asset Browser. Вторая кнопка метку снимает.
+    when: >-
+      Когда набор дошёл до состояния, в котором им пользуются другие: из
+      браузера ассетов модуль ставится перетаскиванием, без открытия исходного
+      файла.
+
+  make-draft:
+    label: Make collision draft
+    shot: c/make-draft.png
+    covers: [object.make_collision_draft_for_selected]
+    what: >-
+      Делает из каждого выделенного меша черновую коллизию, названную и
+      пронумерованную так, как ждёт движок.
+    when: >-
+      Первый шаг по коллизиям: получить оболочку, которую дальше правят руками.
+    result: >-
+      Копия параентится к оригиналу, получает материал коллизии и стек
+      модификаторов — выпуклые оболочки по островам, упрощение и поджатие
+      внутрь. Стек остаётся живым, если не включено **Apply modifiers**.
+
+  rebuild:
+    label: Rebuild collisions
+    shot: c/rebuild.png
+    covers: [object.met_rebuild_collisions]
+    what: >-
+      Пересобирает выделенные коллизии из их источников.
+    when: >-
+      После правки модуля. Без выделения пересобирает **все устаревшие
+      коллизии сцены** — это и есть обычный способ.
+
+  sync-names:
+    label: Sync collision names
+    shot: c/sync-names.png
+    covers: [object.met_sync_collision_names]
+    what: >-
+      Переименовывает коллизии по модулю, к которому они привязаны, с
+      нумерацией по порядку.
+    when: >-
+      Сразу после переименования модулей. Движок связывает коллизию с мешем по
+      имени, поэтому рассинхрон здесь стоит дорого.
+
+  select-incorrect:
+    label: Select incorrect collision
+    shot: c/select-incorrect.png
+    covers: [object.select_incorrect_collision_geometry]
+    what: >-
+      Ищет среди выделенного острова коллизий, которые не замкнуты или
+      вырождены в плоскость.
+    when: >-
+      Перед выгрузкой. Такая оболочка в движке ведёт себя непредсказуемо.
+    result: >-
+      Оставляет сцену в режиме редактирования с подсвеченными проблемными
+      вершинами.
+
+  select-box:
+    label: Select box shaped collision
+    shot: c/select-box.png
+    covers: [object.select_collisions_with_box_shape]
+    what: >-
+      Выделяет коллизии, которые на деле — обычные коробки по осям.
+    when: >-
+      Чтобы переименовать их из префикса выпуклой оболочки в префикс коробки:
+      движку коробка обходится дешевле.
+
+  select-sets:
+    label: Generated / Outdated / Orphans
+    shot: c/select-sets.png
+    covers: [object.met_select_generated, object.met_select_outdated,
+             object.met_select_orphans]
+    what: >-
+      Три набора выделения: всё, что аддон сгенерировал; коллизии, чей исходный
+      меш правили после генерации; коллизии, чей исходник из файла исчез.
+    when: >-
+      **Outdated** — главный: он отвечает на вопрос «что пересобрать».
+      **Orphans** показывает мусор, оставшийся от удалённых модулей.
+
+  display-row:
+    label: Show / hide, Isolate, Delete orphans
+    shot: c/display-row.png
+    covers: [object.met_toggle_collision_display, object.met_isolate_collisions,
+             object.met_delete_orphans]
+    what: >-
+      Скрыть или показать все коллизии сцены; спрятать всё, кроме них; удалить
+      осиротевшие.
+    when: >-
+      **Isolate** — когда оболочки надо разглядеть отдельно от геометрии;
+      повторное нажатие возвращает сцену.
+    note: >-
+      **Delete orphans** удаляет объекты безвозвратно. Сначала посмотрите на них
+      кнопкой **Orphans**.
+
+  collision-prefixes:
+    label: Collision prefix и Box prefix
+    shot: c/collision-prefixes.png
+    covers: [collision_prefix, box_prefix]
+    what: >-
+      Префиксы имён для выпуклой оболочки и для коробки.
+    default: "`UCX` и `UBX`"
+    when: >-
+      Значения по умолчанию — конвенция Unreal. Меняйте, если движок на проекте
+      ждёт другое.
+
+  collision-shape:
+    label: Форма оболочки
+    shot: c/collision-shape.png
+    covers: [decimate_angle, displace_strength, apply_modifiers]
+    what: >-
+      Предел упрощения плоских участков, поджатие оболочки внутрь меша и выбор
+      «запечь стек или оставить живым».
+    when: >-
+      **Displace strength** отрицательный: оболочка утапливается внутрь, чтобы
+      не торчала сквозь геометрию.
+    note: >-
+      Пока **Apply modifiers** выключен, стек остаётся живым, и коллизию можно
+      пересобрать. Включите его, только когда форма окончательная.
+
+  collision-material:
+    label: Материал коллизий
+    shot: c/collision-material.png
+    covers: [material_name, material_color, wire_display]
+    what: >-
+      Имя материала, его цвет во вьюпорте и показ оболочек сеткой.
+    when: >-
+      Цвет меняется на лету и перекрашивает уже созданные коллизии. Сетка — то,
+      как их рисует движок; выключите, чтобы смотреть залитыми.
+
+  size-axes:
+    label: Оси и порядок
+    shot: c/size-axes.png
+    covers: [use_x_size, use_y_size, use_z_size, axis_order]
+    what: >-
+      Какие габариты попадут в имя и в каком порядке.
+    default: X и Z включены, порядок `XZY`
+    note: >-
+      Порядок имеет смысл только при двух и более включённых осях. По умолчанию
+      он `XZY`, а не `XYZ`: в модульных наборах ширина и высота важнее глубины.
+
+  size-units:
+    label: Единицы и округление
+    shot: c/size-units.png
+    covers: [units, round_step]
+    what: >-
+      В чём писать размер и до какого шага округлять.
+    default: сантиметры, шаг 10
+    when: >-
+      Шаг округления — именно шаг, а не число знаков: при 10 размеры лягут на
+      десятки сантиметров, что и нужно модульной сетке.
+
+  add-size:
+    label: Add size to names
+    shot: c/add-size.png
+    covers: [object.add_size_to_name]
+    what: >-
+      Дописывает габариты выделенных мешей в их имена.
+    when: >-
+      Когда набор собран и по имени должно быть видно, какой модуль какого
+      размера.
+    note: >-
+      Повторный запуск **заменяет** размеры, а не дописывает ещё раз, — можно
+      править геометрию и прогонять снова.
+
+  ucx-ubx:
+    label: UCX to UBX и UBX to UCX
+    shot: c/ucx-ubx.png
+    covers: [object.ucx_to_ubx, object.ubx_to_ucx]
+    what: >-
+      Меняет префикс коллизии у выделенных объектов в одну и в другую сторону.
+    when: >-
+      В паре с **Select box shaped collision**: сначала найти коробки, потом
+      перевести их в префикс коробок.
+
+  batch-apply:
+    label: Apply transform for modules
+    shot: c/batch-apply.png
+    covers: [object.batch_apply_transform]
+    what: >-
+      Применяет поворот и масштаб к выделенным объектам и ко всем инстансам,
+      которые делят с ними меш.
+    when: >-
+      Перед выгрузкой: движок ждёт единичный масштаб.
+    note: >-
+      Применить трансформ к одному инстансу нельзя — данные общие, поэтому
+      инструмент и обходит всю группу разом. Положение не трогается.
+
+  unwrap-settings:
+    label: Sharp angle и Texel density
+    shot: c/unwrap-settings.png
+    covers: [edge_angle, texel_density]
+    what: >-
+      Угол, острее которого ребро считается швом, и плотность текселей.
+    default: 22,5° и 1024
+
+  unwrap:
+    label: Unwrap selected
+    shot: c/unwrap.png
+    covers: [objects.auto_unwrap]
+    what: >-
+      Помечает швы по острым рёбрам и разворачивает выделенные меши.
+    when: >-
+      Черновая развёртка модуля, когда важнее скорость, чем ручная раскладка.
+    note: >-
+      Ориентация островов по миру и texel density делаются через **ZenUV**. Без
+      него швы и развёртка всё равно работают — панель прямо пишет об этом под
+      настройками.
+
+  export-folder:
+    label: Куда писать
+    shot: c/export-folder.png
+    covers: [folder, one_file_per_module, filename]
+    what: >-
+      Папка выгрузки и способ раскладки: файл на модуль или всё выделенное в
+      один файл.
+    default: файл на модуль; пустая папка означает `export` рядом с .blend
+    when: >-
+      Движку обычно нужен файл на модуль — так имя файла совпадает с именем
+      ассета.
+
+  export-options:
+    label: Настройки FBX
+    shot: c/export-options.png
+    covers: [apply_modifiers, axis_forward, axis_up, global_scale]
+    what: >-
+      Оси, масштаб и вопрос, выгружать ли модификаторы применёнными.
+    default: "`-Z` вперёд, `Y` вверх, масштаб 1"
+    note: >-
+      **Apply modifiers** включён: живые стеки коллизий выгружаются
+      посчитанными, иначе в движок уедет исходный меш вместо оболочки.
+
+  export-run:
+    label: Export selected modules
+    shot: c/export-run.png
+    covers: [object.met_export_modules]
+    what: >-
+      Пишет выделенные модули вместе с их коллизиями в FBX.
+
+  validate:
+    label: Validate scene
+    shot: c/validate.png
+    covers: [object.met_validate, last_validation, error_count, warning_count,
+             info_count]
+    what: >-
+      Прогоняет сцену по модулям и коллизиям и заполняет отчёт ниже.
+    when: >-
+      Перед сдачей. Счётчики рядом показывают, сколько ошибок, предупреждений и
+      замечаний найдено.
+
+  issue-filter:
+    label: Фильтр отчёта
+    shot: c/issue-filter.png
+    covers: [issue_filter]
+    what: >-
+      Какие находки показывать в списке.
+    default: все
+
+  issue-list:
+    label: Список находок
+    shot: c/issue-list.png
+    covers: [issues, active_issue]
+    what: >-
+      Строки отчёта: значок важности, объект и суть находки.
+    when: >-
+      Клик по строке выделяет объект, о котором она.
+
+  issue-actions:
+    label: Select, All alike, Clear
+    shot: c/issue-actions.png
+    covers: [object.met_select_issue, object.met_select_issue_kind,
+             object.met_clear_report]
+    what: >-
+      Выделить объект выбранной строки; выделить все объекты с такой же
+      находкой; очистить отчёт.
+    when: >-
+      **All alike** — способ чинить пачкой: одна и та же ошибка обычно
+      повторяется по всему набору.
+
+  export-report:
+    label: Export report
+    covers: [object.met_export_report]
+    what: >-
+      Записывает отчёт в JSON.
+    when: >-
+      Когда результат проверки нужен за пределами Blender — приложить к задаче
+      или прогнать сборкой.
+    note: >-
+      **Кнопки для него в панели нет.** Оператор есть, но наружу не выведен:
+      вызывается через поиск — ++f3++ и «Export report».

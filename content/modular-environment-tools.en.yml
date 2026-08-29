@@ -1,0 +1,461 @@
+# English content for the Modular Environment Tools reference.
+#
+# Third-party add-on: author Kirill Kharichev, licensed GPL-3.0-or-later.
+# The operator descriptions in the code are good, so the job here is not to
+# repeat them but to say when a tool is needed and what comes out of it.
+
+title: What every button does
+intro: >-
+  The panel is opened with **++ctrl+shift+m++** in the viewport — it pops up
+  under the cursor. The shortcut is changed in the add-on preferences, and the
+  **Modular** tab in the sidebar is switched on there too, if the popup does not
+  suit you.
+
+  The order of sections here follows the panel from top to bottom.
+
+sections:
+  - title: Project presets
+    intro: >-
+      The settings live in the scene; a preset carries them between files and
+      artists. The preset row sits at the very top of the panel.
+    controls: [preset-menu, preset-save, preset-delete]
+
+  - title: Library — the module library
+    intro: >-
+      A collection of unique meshes. Everything else in the scene is an
+      instance, an object built on the same data.
+    controls:
+      [library-collection, add-to-library, select-unprocessed, select-unused,
+       select-instances, count-unique, mark-assets]
+
+  - title: Collisions
+    intro: >-
+      Draft collisions in the engine's convention: convex hulls with the `UCX`
+      prefix, boxes with `UBX`.
+    controls:
+      [make-draft, rebuild, sync-names, select-incorrect, select-box,
+       select-sets, display-row, collision-prefixes, collision-shape,
+       collision-material]
+
+  - title: Naming — sizes and prefixes in names
+    controls: [size-axes, size-units, add-size, ucx-ubx]
+
+  - title: Transform
+    controls: [batch-apply]
+
+  - title: UV
+    controls: [unwrap-settings, unwrap]
+
+  - title: Export
+    intro: >-
+      Writing modules to FBX together with their collisions.
+    controls: [export-folder, export-options, export-run]
+
+  - title: Validation
+    intro: >-
+      A pass over the modules and collisions of the scene, with a report you can
+      walk through.
+    controls: [validate, issue-filter, issue-list, issue-actions, export-report]
+
+controls:
+  preset-menu:
+    label: The preset menu
+    shot: c/preset-menu.png
+    covers: [object.met_load_preset, object.met_open_preset_folder,
+             object.met_import_preset, object.met_export_preset, preset_name]
+    what: >-
+      The list of project presets and what can be done with them.
+    when: >-
+      When the project has agreed on prefixes, units and an export folder, and
+      everyone has to have the same.
+    result: >-
+      Presets are plain JSON files in a folder named in the add-on preferences.
+      Point it at a share or at the project and everyone on it sees the same
+      presets. The menu button says which preset this scene was set from.
+    note: >-
+      At the bottom of the menu are **Import from file** and **Send to file**. A
+      shared folder is tidier, but a file always works: import drops the preset
+      into the folder and applies it at once, so next time it is in the list.
+
+      A preset written by another version of the add-on is used as far as it is
+      understood instead of being refused whole.
+
+  preset-save:
+    label: Save preset
+    shot: c/preset-save.png
+    covers: [object.met_save_preset]
+    what: >-
+      Writes the current project settings into the preset folder.
+    when: >-
+      Once the scene is set up for the project, save it so the others load the
+      same thing.
+
+  preset-delete:
+    label: Delete preset
+    shot: c/preset-delete.png
+    covers: [object.met_delete_preset]
+    what: >-
+      Removes the loaded preset from the folder.
+    note: >-
+      It deletes the file in the shared folder, not just your copy: on a network
+      share the preset disappears for the whole project.
+
+  library-collection:
+    label: Library
+    shot: c/library-collection.png
+    covers: [modules_collection]
+    what: >-
+      The collection holding the unique modules.
+    default: a collection named `Modules`, when one exists
+    when: >-
+      Point it at whichever the project already uses. Left empty, it means "look
+      for `Modules`".
+    note: >-
+      Almost every tool in this section depends on this field: a module is what
+      lies here.
+
+  add-to-library:
+    label: Add selected to library
+    shot: c/add-to-library.png
+    covers: [object.met_add_to_library]
+    what: >-
+      Links the selected meshes into the module library.
+    when: >-
+      When a new module is finished and should become part of the kit.
+    note: >-
+      This is the **only** button allowed to create the library collection. The
+      other tools say so plainly when they cannot find it, rather than making
+      one behind your back.
+
+  select-unprocessed:
+    label: Select unprocessed modules
+    shot: c/select-unprocessed.png
+    covers: [object.select_unprocessed_modules]
+    what: >-
+      Selects visible meshes whose data is not in the library.
+    when: >-
+      The "what is not filed yet" check. After it you can see which objects in
+      the scene are on their own.
+
+  select-unused:
+    label: Select unused modules
+    shot: c/select-unused.png
+    covers: [object.select_unused_modules]
+    what: >-
+      Selects library modules that nothing in the scene is built from.
+    when: >-
+      Before handing the kit over: such a module was either forgotten or is not
+      needed.
+
+  select-instances:
+    label: Select instances
+    shot: c/select-instances.png
+    covers: [object.met_select_instances]
+    what: >-
+      Selects every object in the scene built from the same meshes as the
+      selected ones.
+    when: >-
+      To see how many times a module stands in the scene, and to get all its
+      copies at once — before editing it, for instance.
+
+  count-unique:
+    label: Count unique modules
+    shot: c/count-unique.png
+    covers: [object.count_unique_object_data]
+    what: >-
+      Counts how many unique meshes the selected objects share.
+    when: >-
+      A quick answer to "how many different modules is this piece of level built
+      from". Changes nothing.
+
+  mark-assets:
+    label: Mark as assets / Clear marks
+    shot: c/mark-assets.png
+    covers: [object.met_mark_as_assets, object.met_clear_asset_marks]
+    what: >-
+      Marks the selected modules as assets and renders their previews, so they
+      can be dragged in from the Asset Browser. The second button takes the mark
+      off.
+    when: >-
+      When the kit is good enough for other people to use: from the browser a
+      module is placed by dragging, without opening the source file.
+
+  make-draft:
+    label: Make collision draft
+    shot: c/make-draft.png
+    covers: [object.make_collision_draft_for_selected]
+    what: >-
+      Turns each selected mesh into a draft collision, named and numbered the
+      way the engine expects.
+    when: >-
+      The first step on collisions: get a hull that is then tuned by hand.
+    result: >-
+      The copy is parented to the original, gets the collision material and a
+      modifier stack — convex hulls per island, a simplification pass and a pull
+      inwards. The stack stays live unless **Apply modifiers** is on.
+
+  rebuild:
+    label: Rebuild collisions
+    shot: c/rebuild.png
+    covers: [object.met_rebuild_collisions]
+    what: >-
+      Regenerates the selected collisions from their sources.
+    when: >-
+      After editing a module. With nothing selected it rebuilds **every outdated
+      collision in the scene** — which is the usual way to use it.
+
+  sync-names:
+    label: Sync collision names
+    shot: c/sync-names.png
+    covers: [object.met_sync_collision_names]
+    what: >-
+      Renames collisions after the module they are parented to, numbering them
+      in order.
+    when: >-
+      Right after renaming modules. The engine ties a collision to its mesh by
+      name, so a mismatch here is expensive.
+
+  select-incorrect:
+    label: Select incorrect collision
+    shot: c/select-incorrect.png
+    covers: [object.select_incorrect_collision_geometry]
+    what: >-
+      Looks through the selection for collision islands that are non-manifold or
+      flattened.
+    when: >-
+      Before export. Such a hull behaves unpredictably in the engine.
+    result: >-
+      Leaves the scene in Edit Mode with the offending vertices selected.
+
+  select-box:
+    label: Select box shaped collision
+    shot: c/select-box.png
+    covers: [object.select_collisions_with_box_shape]
+    what: >-
+      Selects collisions that are in fact plain axis-aligned boxes.
+    when: >-
+      So they can be renamed from the hull prefix to the box prefix: a box is
+      cheaper for the engine.
+
+  select-sets:
+    label: Generated / Outdated / Orphans
+    shot: c/select-sets.png
+    covers: [object.met_select_generated, object.met_select_outdated,
+             object.met_select_orphans]
+    what: >-
+      Three selections: everything the add-on generated; collisions whose source
+      mesh was edited afterwards; collisions whose source is gone from the file.
+    when: >-
+      **Outdated** is the important one: it answers "what needs rebuilding".
+      **Orphans** shows the leftovers of deleted modules.
+
+  display-row:
+    label: Show / hide, Isolate, Delete orphans
+    shot: c/display-row.png
+    covers: [object.met_toggle_collision_display, object.met_isolate_collisions,
+             object.met_delete_orphans]
+    what: >-
+      Hide or show every collision in the scene; hide everything that is not one;
+      delete the orphaned ones.
+    when: >-
+      **Isolate** is for looking at the hulls away from the geometry; press it
+      again to bring the scene back.
+    note: >-
+      **Delete orphans** removes objects for good. Look at them with **Orphans**
+      first.
+
+  collision-prefixes:
+    label: Collision prefix and Box prefix
+    shot: c/collision-prefixes.png
+    covers: [collision_prefix, box_prefix]
+    what: >-
+      The name prefixes for a convex hull and for a box.
+    default: "`UCX` and `UBX`"
+    when: >-
+      The defaults are the Unreal convention. Change them if the engine on the
+      project expects something else.
+
+  collision-shape:
+    label: The shape of the hull
+    shot: c/collision-shape.png
+    covers: [decimate_angle, displace_strength, apply_modifiers]
+    what: >-
+      How far flat areas are simplified, how far the hull is pulled inside the
+      mesh, and whether the stack is baked or left live.
+    when: >-
+      **Shrink** is negative: the hull is pulled inwards so it does not poke
+      through the geometry.
+    note: >-
+      While **Apply modifiers** is off the stack stays live and the collision can
+      be rebuilt. Switch it on only when the shape is final.
+
+  collision-material:
+    label: The collision material
+    shot: c/collision-material.png
+    covers: [material_name, material_color, wire_display]
+    what: >-
+      The material name, its viewport colour, and whether hulls are drawn as
+      wireframe.
+    when: >-
+      Changing the colour repaints the collisions already in the scene. Wireframe
+      is how the engine shows them; switch it off to see them solid.
+
+  size-axes:
+    label: Axes and order
+    shot: c/size-axes.png
+    covers: [use_x_size, use_y_size, use_z_size, axis_order]
+    what: >-
+      Which dimensions go into the name, and in which order.
+    default: X and Z on, order `XZY`
+    note: >-
+      The order only matters with two or more axes on. It defaults to `XZY`
+      rather than `XYZ`: in a modular kit width and height matter more than
+      depth.
+
+  size-units:
+    label: Units and rounding
+    shot: c/size-units.png
+    covers: [units, round_step]
+    what: >-
+      What the size is written in, and the step it is rounded to.
+    default: centimetres, step 10
+    when: >-
+      The rounding is a step, not a number of digits: at 10 the sizes land on
+      tens of centimetres, which is what a modular grid wants.
+
+  add-size:
+    label: Add size to names
+    shot: c/add-size.png
+    covers: [object.add_size_to_name]
+    what: >-
+      Writes the dimensions of the selected meshes into their names.
+    when: >-
+      When the kit is assembled and the name should say what size a module is.
+    note: >-
+      Running it again **replaces** the sizes instead of appending them, so the
+      geometry can be edited and the tool run once more.
+
+  ucx-ubx:
+    label: UCX to UBX and UBX to UCX
+    shot: c/ucx-ubx.png
+    covers: [object.ucx_to_ubx, object.ubx_to_ucx]
+    what: >-
+      Swaps the collision prefix on the selected objects, either way.
+    when: >-
+      In pair with **Select box shaped collision**: find the boxes first, then
+      move them to the box prefix.
+
+  batch-apply:
+    label: Apply transform for modules
+    shot: c/batch-apply.png
+    covers: [object.batch_apply_transform]
+    what: >-
+      Applies rotation and scale to the selected objects and to every instance
+      sharing their mesh.
+    when: >-
+      Before export: the engine expects a scale of one.
+    note: >-
+      A transform cannot be applied to a single instance — the data is shared —
+      which is why the tool walks the whole group. Location is left alone.
+
+  unwrap-settings:
+    label: Sharp angle and Texel density
+    shot: c/unwrap-settings.png
+    covers: [edge_angle, texel_density]
+    what: >-
+      The angle above which an edge counts as a seam, and the texel density.
+    default: 22.5° and 1024
+
+  unwrap:
+    label: Unwrap selected
+    shot: c/unwrap.png
+    covers: [objects.auto_unwrap]
+    what: >-
+      Marks seams along sharp edges and unwraps the selected meshes.
+    when: >-
+      A draft layout for a module, when speed matters more than hand-packing.
+    note: >-
+      World orientation and texel density go through **ZenUV**. Without it seams
+      and unwrapping still work — the panel says so under the settings.
+
+  export-folder:
+    label: Where the files go
+    shot: c/export-folder.png
+    covers: [folder, one_file_per_module, filename]
+    what: >-
+      The export folder, and whether each module gets its own file or the whole
+      selection goes into one.
+    default: one file per module; an empty folder means `export` next to the .blend
+    when: >-
+      An engine usually wants a file per module, so the filename matches the
+      asset name.
+
+  export-options:
+    label: FBX settings
+    shot: c/export-options.png
+    covers: [apply_modifiers, axis_forward, axis_up, global_scale]
+    what: >-
+      Axes, scale, and whether modifiers are exported evaluated.
+    default: "`-Z` forward, `Y` up, scale 1"
+    note: >-
+      **Apply modifiers** is on: live collision stacks are exported evaluated,
+      otherwise the engine would receive the source mesh instead of the hull.
+
+  export-run:
+    label: Export selected modules
+    shot: c/export-run.png
+    covers: [object.met_export_modules]
+    what: >-
+      Writes the selected modules together with their collisions to FBX.
+
+  validate:
+    label: Validate scene
+    shot: c/validate.png
+    covers: [object.met_validate, last_validation, error_count, warning_count,
+             info_count]
+    what: >-
+      Runs the checks over modules and collisions and fills the report below.
+    when: >-
+      Before handing the scene over. The counters beside it show how many errors,
+      warnings and notes were found.
+
+  issue-filter:
+    label: The report filter
+    shot: c/issue-filter.png
+    covers: [issue_filter]
+    what: >-
+      Which findings the list shows.
+    default: all
+
+  issue-list:
+    label: The list of findings
+    shot: c/issue-list.png
+    covers: [issues, active_issue]
+    what: >-
+      The rows of the report: a severity icon, the object, and what was found.
+    when: >-
+      Clicking a row selects the object it is about.
+
+  issue-actions:
+    label: Select, All alike, Clear
+    shot: c/issue-actions.png
+    covers: [object.met_select_issue, object.met_select_issue_kind,
+             object.met_clear_report]
+    what: >-
+      Select the object of the highlighted row; select every object with the same
+      finding; empty the report.
+    when: >-
+      **All alike** is how you fix things in batches: the same mistake usually
+      repeats across a kit.
+
+  export-report:
+    label: Export report
+    covers: [object.met_export_report]
+    what: >-
+      Writes the report to JSON.
+    when: >-
+      When the result of a check is needed outside Blender — attached to a task,
+      or read by a build.
+    note: >-
+      **There is no button for it in the panel.** The operator exists but is not
+      exposed: reach it through search — ++f3++ and "Export report".

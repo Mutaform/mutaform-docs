@@ -129,6 +129,9 @@ nav:
       - QC Bake for Maya:
           - Обзор: qc-bake-maya/index.md
           - Справочник: qc-bake-maya/reference.md
+      - Modular Environment Tools:
+          - Обзор: modular-environment-tools/index.md
+          - Справочник: modular-environment-tools/reference.md
 
 extra:
   # Ссылки переключателя языка здесь НЕ прописываются. Жёсткий путь вроде
