@@ -9,50 +9,8 @@ scripts in Maya.
 
 ![The bridge panel](img/panel.png){ .screenshot }
 
-## Installing in Blender
-
-1. `Edit → Preferences → Get Extensions`
-2. Gear icon → `Repositories` → `+` → `Add Remote Repository`
-3. The URL:
-
-    ```text
-    https://mutaform.github.io/qc-bridge-blender-maya/index.json
-    ```
-
-4. Install `QC Bridge Maya-Blender by Mutaform`
-
-Panel: ++n++ in the viewport → **QC Maya Bridge** tab. Requires Blender 4.2 or
-newer.
-
-## Installing in Maya
-
-1. Close Maya.
-2. Download [mutaform_bridge_maya_v1.zip](https://mutaform.github.io/qc-bridge-blender-maya/mutaform_bridge_maya_v1.zip)
-   and unpack it.
-3. Put the `mutaform_bridge` folder from the archive here:
-
-    ```text
-    C:\Users\YOUR_USERNAME\Documents\maya\2025\scripts\
-    ```
-
-    You should end up with `...\scripts\mutaform_bridge\`.
-
-4. Start Maya, open `Windows → General Editors → Script Editor` and switch to
-   the **Python** tab.
-5. Paste and run this, with your own username:
-
-    ```python
-    import sys
-
-    path = r"C:\Users\YOUR_USERNAME\Documents\maya\2025\scripts\mutaform_bridge"
-    if path not in sys.path:
-        sys.path.append(path)
-
-    import install_shelf_button
-    install_shelf_button.install()
-    ```
-
-A bridge button appears on the shelf. This is a one-time setup.
+How to install it is on its own page:
+**[Installation](install.en.md)**.
 
 ## The exchange folder
 

@@ -9,29 +9,8 @@ Everything it does is renaming and regrouping. It never touches geometry.
 
 ![The QC Bake for Maya panel](img/panel-main.png){ .screenshot }
 
-## Installation
-
-Maya has no add-on repository, so installation is its own thing — but only three
-steps.
-
-1. Download [`qc_bake_maya.zip`](https://mutaform.github.io/qc-bake-maya/qc_bake_maya.zip)
-2. Unpack it **somewhere it will stay**: a tools folder, a network share —
-   anywhere permanent
-3. Drag `install/install.py` from the unpacked folder into Maya's viewport
-
-The installer registers a Maya module, adds a **QC Bake** button to the
-*Mutaform* shelf and opens the panel. Maya picks the tool up on every launch
-after that.
-
-Requires Maya 2025.
-
-!!! warning "The unpacked folder is the installation"
-    Nothing is copied into Maya's internal directories: the module file is a
-    pointer to the unpacked folder. That makes updating a matter of replacing
-    one folder. The other side of it: delete or move that folder and the tool
-    falls off — unpack it again and drag `install.py` once more.
-
-To remove it: `install.uninstall()`. The folder itself is left alone.
+How to install it is on its own page:
+**[Installation](install.en.md)**.
 
 ## Quick start
 

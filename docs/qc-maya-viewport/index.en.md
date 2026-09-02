@@ -10,17 +10,8 @@ menu with the settings.
 
 ![The menu in the viewport header](img/header-menu.png){ .screenshot }
 
-## Installation
-
-1. `Edit → Preferences → Get Extensions`
-2. Gear icon → `Repositories` → `+` → `Add Remote Repository`
-3. The URL:
-
-    ```text
-    https://mutaform.github.io/qc-maya-viewport/index.json
-    ```
-
-Requires Blender 5.1 or newer.
+How to install it is on its own page:
+**[Installation](install.en.md)**.
 
 ## Modes
 

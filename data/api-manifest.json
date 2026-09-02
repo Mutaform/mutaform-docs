@@ -2280,7 +2280,7 @@
       "website": "https://mutaform.studio"
     },
     "qc-daily-render": {
-      "blender_version_min": "5.2.0",
+      "blender_version_min": "5.1.2",
       "constants": {
         "ACTIVE_KEY": "mutaform_studio_active",
         "BACKUP_KEY": "mutaform_studio_backup",
@@ -2326,7 +2326,7 @@
         "VERSION": [
           1,
           6,
-          0
+          2
         ],
         "__all__": [
           "MutaformCameraProps",
@@ -2950,7 +2950,7 @@
         "Lighting"
       ],
       "ui_lists": [],
-      "version": "1.6.0",
+      "version": "1.6.2",
       "website": "https://mutaform.com"
     },
     "qc-maya-viewport": {

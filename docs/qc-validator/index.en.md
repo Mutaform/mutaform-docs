@@ -10,20 +10,8 @@ demanding them before texturing is mandatory.
 
 ![The validator panel](img/panel-main.png){ .screenshot }
 
-## Installation
-
-1. `Edit → Preferences → Get Extensions`
-2. Gear icon → `Repositories` → `+` → `Add Remote Repository`
-3. The URL:
-
-    ```text
-    https://mutaform.github.io/qc-validator/index.json
-    ```
-
-4. Find `Scene QC Validator` and install it
-
-Panel: press ++n++ in the 3D viewport → **QC Validator** tab. Requires Blender
-4.5 or newer.
+How to install it is on its own page:
+**[Installation](install.en.md)**.
 
 ## First run
 

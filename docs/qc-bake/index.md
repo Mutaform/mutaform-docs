@@ -10,32 +10,8 @@
 
 ![Панель QC Bake](img/panel-main.png){ .screenshot }
 
-## Установка
-
-=== "Через репозиторий (рекомендуется)"
-
-    Так аддон будет сам предлагать обновления.
-
-    1. `Edit → Preferences → Get Extensions`
-    2. Шестерёнка справа сверху → `Repositories` → `+` → `Add Remote Repository`
-    3. Вставить ссылку:
-
-        ```text
-        https://mutaform.github.io/qc-bake/index.json
-        ```
-
-    4. Включить `Check for Updates on Startup`, нажать `Create`
-    5. В поиске по расширениям набрать `QC Bake` и установить
-
-=== "Из файла"
-
-    1. Скачать `qc_bake.zip` из релизов
-    2. `Edit → Preferences → Get Extensions → ▼ → Install from Disk…`
-    3. Выбрать скачанный архив
-
-Панель появится в 3D-вьюпорте: клавиша ++n++ → вкладка **QC Bake**.
-
-Нужен Blender 5.0 или новее.
+Как поставить аддон — на отдельной странице:
+**[Установка](install.md)**.
 
 ## Быстрый старт
 

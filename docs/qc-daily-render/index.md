@@ -10,14 +10,8 @@
 
 ![Панель Studio Render](img/panel.png){ .screenshot }
 
-## Установка
-
-Репозитория у этого аддона пока нет, ставится из файла.
-
-1. Взять свежий `mutaform_studio_render_vX.Y.Z_extension.zip`
-2. `Edit → Preferences → Get Extensions → ▼ → Install from Disk…`
-
-Панель: ++n++ во вьюпорте → вкладка **QC Render**. Нужен Blender 5.2 или новее.
+Как поставить аддон — на отдельной странице:
+**[Установка](install.md)**.
 
 ## Как снять кадр
 

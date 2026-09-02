@@ -6,7 +6,7 @@ The versions these docs were built from. The number in the add-on's panel header
 | --- | --- | --- |
 | QC Bake | `2.0.0` | Blender 5.0+ |
 | Scene QC Validator by Mutaform Studio | `1.9.2` | Blender 4.5+ |
-| QC Daily Render | `1.6.0` | Blender 5.2+ |
+| QC Daily Render | `1.6.2` | Blender 5.1.2+ |
 | QC Maya Viewport | `0.34.1` | Blender 5.1+ |
 | QC Bridge Maya-Blender by Mutaform | `1.1.8` | Blender 4.2+ |
 | QC Bake for Maya | `1.2.4` | Maya 2025 |
@@ -107,7 +107,27 @@ texture set. Covers the changes since 1.8.7.
 
 ## QC Daily Render
 
-_No change history in the add-on repository yet._
+### 1.6.2
+
+- Fixed a Blender crash when rendering heavy scenes. The temporary camera was
+  removed inside the render-completion handler, and deleting an object at that
+  moment poked a half-torn-down depsgraph. The teardown is now deferred to a
+  timer and happens at a safe point.
+- **The minimum Blender version is lowered from 5.2 to 5.1.2.** The whole flow —
+  studio setup, engine switch, render and restore — was verified on 5.1.2.
+
+### 1.6.0
+
+- The add-on is renamed to **QC Daily Render**. It used to carry four different
+  names: the package and the extension id said `mutaform_studio_render`, the
+  panel said "Mutaform Studio Render", while the project folder, the repository
+  and the reference slug said `qc-daily-render`.
+
+!!! warning "An update from 1.5.x will not arrive on its own"
+    The **extension id** changed along with the name, so Blender sees this as a
+    different add-on rather than a new version of the old one. The old copy has
+    to be removed and the new one installed — the steps are on the
+    [installation page](qc-daily-render/install.en.md).
 
 ## Modular Environment Tools
 

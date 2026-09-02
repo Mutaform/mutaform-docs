@@ -9,33 +9,8 @@ geometry.
 
 ![The QC Bake panel](img/panel-main.png){ .screenshot }
 
-## Installation
-
-=== "From the repository (recommended)"
-
-    This way the add-on offers its own updates.
-
-    1. `Edit → Preferences → Get Extensions`
-    2. Gear icon → `Repositories` → `+` → `Add Remote Repository`
-    3. Paste the URL:
-
-        ```text
-        https://mutaform.github.io/qc-bake/index.json
-        ```
-
-    4. Enable `Check for Updates on Startup`, press `Create`
-    5. Search the extension list for `QC Bake` and install it
-
-=== "From a file"
-
-    1. Download `qc_bake.zip` from the releases page
-    2. `Edit → Preferences → Get Extensions → ▼ → Install from Disk…`
-    3. Pick the archive
-
-The panel lands in the 3D viewport sidebar: press ++n++ and open the **QC Bake**
-tab.
-
-Requires Blender 5.0 or newer.
+How to install it is on its own page:
+**[Installation](install.en.md)**.
 
 ## Quick start
 

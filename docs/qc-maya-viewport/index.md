@@ -9,17 +9,8 @@
 
 ![Меню в шапке вьюпорта](img/header-menu.png){ .screenshot }
 
-## Установка
-
-1. `Edit → Preferences → Get Extensions`
-2. Шестерёнка → `Repositories` → `+` → `Add Remote Repository`
-3. Ссылка:
-
-    ```text
-    https://mutaform.github.io/qc-maya-viewport/index.json
-    ```
-
-Нужен Blender 5.1 или новее.
+Как поставить аддон — на отдельной странице:
+**[Установка](install.md)**.
 
 ## Режимы
 

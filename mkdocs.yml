@@ -112,24 +112,31 @@ nav:
   # Обзор пишется руками, справочник генерируется из исходников аддона.
   - Аддоны:
       - QC Bake:
+          - Установка: qc-bake/install.md
           - Обзор: qc-bake/index.md
           - Справочник: qc-bake/reference.md
       - Scene QC Validator:
+          - Установка: qc-validator/install.md
           - Обзор: qc-validator/index.md
           - Справочник: qc-validator/reference.md
       - QC Daily Render:
+          - Установка: qc-daily-render/install.md
           - Обзор: qc-daily-render/index.md
           - Справочник: qc-daily-render/reference.md
       - QC Maya Viewport:
+          - Установка: qc-maya-viewport/install.md
           - Обзор: qc-maya-viewport/index.md
           - Справочник: qc-maya-viewport/reference.md
       - QC Bridge Maya ↔ Blender:
+          - Установка: qc-bridge/install.md
           - Обзор: qc-bridge/index.md
           - Справочник: qc-bridge/reference.md
       - QC Bake for Maya:
+          - Установка: qc-bake-maya/install.md
           - Обзор: qc-bake-maya/index.md
           - Справочник: qc-bake-maya/reference.md
       - Modular Environment Tools:
+          - Установка: modular-environment-tools/install.md
           - Обзор: modular-environment-tools/index.md
           - Справочник: modular-environment-tools/reference.md
 

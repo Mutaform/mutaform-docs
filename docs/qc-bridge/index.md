@@ -9,49 +9,8 @@
 
 ![Панель моста](img/panel.png){ .screenshot }
 
-## Установка в Blender
-
-1. `Edit → Preferences → Get Extensions`
-2. Шестерёнка → `Repositories` → `+` → `Add Remote Repository`
-3. Ссылка:
-
-    ```text
-    https://mutaform.github.io/qc-bridge-blender-maya/index.json
-    ```
-
-4. Установить `QC Bridge Maya-Blender by Mutaform`
-
-Панель: ++n++ во вьюпорте → вкладка **QC Maya Bridge**. Нужен Blender 4.2 или новее.
-
-## Установка в Maya
-
-1. Закрыть Maya.
-2. Скачать [mutaform_bridge_maya_v1.zip](https://mutaform.github.io/qc-bridge-blender-maya/mutaform_bridge_maya_v1.zip)
-   и распаковать.
-3. Папку `mutaform_bridge` из архива положить сюда:
-
-    ```text
-    C:\Users\ИМЯ_ПОЛЬЗОВАТЕЛЯ\Documents\maya\2025\scripts\
-    ```
-
-    Должно получиться `...\scripts\mutaform_bridge\`.
-
-4. Запустить Maya, открыть `Windows → General Editors → Script Editor`,
-   перейти на вкладку **Python**.
-5. Вставить и выполнить, заменив имя пользователя на своё:
-
-    ```python
-    import sys
-
-    path = r"C:\Users\ИМЯ_ПОЛЬЗОВАТЕЛЯ\Documents\maya\2025\scripts\mutaform_bridge"
-    if path not in sys.path:
-        sys.path.append(path)
-
-    import install_shelf_button
-    install_shelf_button.install()
-    ```
-
-На полке появится кнопка моста. Делается один раз.
+Как поставить аддон — на отдельной странице:
+**[Установка](install.md)**.
 
 ## Папка обмена
 

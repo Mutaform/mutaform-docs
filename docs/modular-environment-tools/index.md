@@ -12,15 +12,8 @@
 
 ![Панель Modular Environment Tools](img/popup.png){ .screenshot }
 
-## Установка
-
-Репозитория расширений у аддона нет, поэтому ставится из файла.
-
-1. Взять свежий `modular_environment_tools_vX.Y.Z.zip`
-2. `Edit → Preferences → Get Extensions → ▼ → Install from Disk…`
-3. Выбрать архив
-
-Нужен Blender 4.2 или новее.
+Как поставить аддон — на отдельной странице:
+**[Установка](install.md)**.
 
 ## Как открыть панель
 

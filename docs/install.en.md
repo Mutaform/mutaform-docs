@@ -1,97 +1,48 @@
 # Installation
 
-Almost all studio add-ons are Blender Extensions. You can install them one by one
-from a file, but the right way is to add the repository once and let Blender find
-the add-ons and offer updates on its own.
+Every add-on has its own installation page, with the link to paste and a
+recording of where to click. Pick the one you need:
 
-The exception is **QC Bake for Maya**: it lives in Maya, installs differently and
-updates itself. The steps are [in its overview](qc-bake-maya/index.en.md),
-and in short below.
+| Add-on | What it does | Installation |
+| --- | --- | --- |
+| **QC Bake** | high/low pairs and bake groups | [Blender 5.0+](qc-bake/install.en.md) |
+| **Scene QC Validator** | checking a scene before handover | [Blender 4.5+](qc-validator/install.en.md) |
+| **QC Daily Render** | a studio render of a model in one press | [Blender 5.1.2+](qc-daily-render/install.en.md) |
+| **QC Maya Viewport** | a Maya-like viewport for reviewing maps | [Blender 5.1+](qc-maya-viewport/install.en.md) |
+| **QC Bridge Maya ↔ Blender** | moving scenes between the two | [Blender 4.2+ and Maya](qc-bridge/install.en.md) |
+| **QC Bake for Maya** | the same QC Bake, inside Maya | [Maya 2025](qc-bake-maya/install.en.md) |
+| **Modular Environment Tools** | modular environments for an engine | [Blender 4.2+](modular-environment-tools/install.en.md) |
 
-## Add the repository
+## How it works
 
-Done once per machine.
+Most of the studio's add-ons are **Blender extensions**, and they install the
+same way: add the repository once, and Blender finds the add-on and offers
+updates from then on. Each add-on has its own repository; the link is on its
+installation page.
 
-1. `Edit → Preferences → Get Extensions`
-2. Gear icon, top right → `Repositories`
-3. `+` → `Add Remote Repository`
-4. Paste the URL of the add-on you need (see the table below)
-5. Tick `Check for Updates on Startup`
-6. `Create`
+Three are different:
 
-A new source appears in the extension list. Find the add-on by name and press
-`Install`.
-
-## Repository URLs
-
-| Add-on | URL |
-| --- | --- |
-| QC Bake | `https://mutaform.github.io/qc-bake/index.json` |
-| Scene QC Validator | `https://mutaform.github.io/qc-validator/index.json` |
-| QC Maya Viewport | `https://mutaform.github.io/qc-maya-viewport/index.json` |
-| QC Bridge Maya ↔ Blender | `https://mutaform.github.io/qc-bridge-blender-maya/index.json` |
-
-!!! note "Studio Render"
-    QC Daily Render is file-install only for now — it has no repository.
-    Grab the latest `mutaform_studio_render_vX.Y.Z_extension.zip` and use
-    `Install from Disk…`.
-
-## Blender version requirements
-
-The minimums differ because the add-ons lean on different parts of the API.
-
-| Add-on | Minimum Blender |
-| --- | --- |
-| QC Bridge Maya ↔ Blender | 4.2 |
-| Scene QC Validator | 4.5 |
-| QC Bake | 5.0 |
-| QC Maya Viewport | 5.1 |
-| QC Daily Render | 5.2 |
-
-Blender refuses to install an extension into a version below its minimum — if an
-add-on does not show up in the list, check the Blender version first.
-
-## Updating
-
-With `Check for Updates on Startup` enabled, Blender checks on launch and shows
-what is available under `Get Extensions`. Manually: `Get Extensions` → gear →
-`Check for Updates`.
+- **QC Bake for Maya** lives in Maya and installs by dragging the installer into
+  the viewport;
+- **QC Bridge** has two halves — an extension in Blender and scripts in Maya,
+  and both are needed;
+- **Modular Environment Tools** installs from a file: it has no repository.
 
 ## Finding the installed version
 
-The version is printed on the right of the add-on's own panel header:
-`ver 2.0.0`. It is read from the installed extension's manifest, so it is always
-the real one.
+The version is written on the right of the add-on's panel header: `ver 2.0.0`.
+It is read from the installed extension itself, so it is always the real one.
 
-You need that number to pick the matching documentation — the version switcher
-sits in the site header.
+You need it to read the right documentation: if the number in the panel is lower
+than the one in the table on the [Changelog](changelog.en.md) page, switch the
+documentation version in the site header.
 
-## Installing from a file
+## If nothing installs
 
-Useful when you need a specific version, or have no network access.
+The first thing to check is the Blender version itself: `Help → About Blender`.
+Blender refuses to install an extension into a version below its minimum, and
+the add-on simply never shows up in the list.
 
-1. `Edit → Preferences → Get Extensions`
-2. The `▼` arrow, top right → `Install from Disk…`
-3. Pick the add-on's zip
-
-An add-on installed from a file will not update itself.
-
-## Add-ons for Maya
-
-Maya has no extension repository, so installation is its own thing.
-
-**QC Bake for Maya** — download
-[`qc_bake_maya.zip`](https://mutaform.github.io/qc-bake-maya/qc_bake_maya.zip),
-unpack it somewhere it will stay, and drag `install/install.py` into Maya's
-viewport. The installer registers the module, adds a button to the *Mutaform*
-shelf and opens the panel. Requires Maya 2025.
-
-The unpacked folder is the installation: the module file points at it. Move or
-delete that folder and the tool falls off. It updates itself from the panel,
-without restarting Maya.
-
-## The Maya half of the bridge
-
-QC Bridge has a second half that lives in Maya and installs separately — copy an
-archive into your `scripts` folder and run the shelf installer. The steps are in
-the bridge's own section.
+The second is network access. If the repository will not load, ask the studio
+for the archive and install from file: `Get Extensions` → the `▼` icon in the
+top right corner → **Install from Disk…**

@@ -11,14 +11,8 @@ render settings included.
 
 ![The Studio Render panel](img/panel.png){ .screenshot }
 
-## Installation
-
-This add-on has no repository yet — install it from a file.
-
-1. Get the latest `mutaform_studio_render_vX.Y.Z_extension.zip`
-2. `Edit → Preferences → Get Extensions → ▼ → Install from Disk…`
-
-Panel: ++n++ in the viewport → **QC Render** tab. Requires Blender 5.2 or newer.
+How to install it is on its own page:
+**[Installation](install.en.md)**.
 
 ## Taking a shot
 

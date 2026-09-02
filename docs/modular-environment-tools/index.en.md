@@ -13,15 +13,8 @@ in order and checks the scene before export.
 
 ![The Modular Environment Tools panel](img/popup.png){ .screenshot }
 
-## Installation
-
-The add-on has no extension repository, so it installs from a file.
-
-1. Take the latest `modular_environment_tools_vX.Y.Z.zip`
-2. `Edit → Preferences → Get Extensions → ▼ → Install from Disk…`
-3. Pick the archive
-
-Requires Blender 4.2 or newer.
+How to install it is on its own page:
+**[Installation](install.en.md)**.
 
 ## Opening the panel
 

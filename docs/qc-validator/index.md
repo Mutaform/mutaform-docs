@@ -10,19 +10,8 @@
 
 ![Панель валидатора](img/panel-main.png){ .screenshot }
 
-## Установка
-
-1. `Edit → Preferences → Get Extensions`
-2. Шестерёнка → `Repositories` → `+` → `Add Remote Repository`
-3. Ссылка:
-
-    ```text
-    https://mutaform.github.io/qc-validator/index.json
-    ```
-
-4. Найти `Scene QC Validator` и установить
-
-Панель: ++n++ в 3D-вьюпорте → вкладка **QC Validator**. Нужен Blender 4.5 или новее.
+Как поставить аддон — на отдельной странице:
+**[Установка](install.md)**.
 
 ## Первый запуск
 

@@ -191,4 +191,4 @@
 
 ---
 
-*Страница собрана из файла `content/qc-daily-render.ru.yml`. Снимки сделаны в **QC Daily Render 1.6.0**.*
+*Страница собрана из файла `content/qc-daily-render.ru.yml`. Снимки сделаны в **QC Daily Render 1.6.2**.*
