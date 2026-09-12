@@ -1874,10 +1874,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#minimum-segments-even-counts-only" class="md-nav__link">
+  <a href="#minimum-maximum-segments-even-counts-only" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Minimum Segments и Even Counts Only
+        Minimum, Maximum Segments и Even Counts Only
       
     </span>
   </a>
@@ -2168,10 +2168,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#minimum-segments-even-counts-only" class="md-nav__link">
+  <a href="#minimum-maximum-segments-even-counts-only" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Minimum Segments и Even Counts Only
+        Minimum, Maximum Segments и Even Counts Only
       
     </span>
   </a>
@@ -2304,7 +2304,7 @@
 <h3 id="_3">Отчёт<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
 <p><img alt="Отчёт" class="control-shot" src="../img/c/report.png" /></p>
 <p>Построчно: что аддон нашёл и что с этим сделал. По строке на форму.</p>
-<p><strong>Когда пригодится.</strong> Читать всегда, а не только когда что-то пошло не так. <code>40 cm, 36 → 82</code> — диаметр, было и стало; <code>already right</code> — форма и так правильная, её не трогали; <code>no cylindrical form</code> — аддон ничего не узнал и <strong>ничего не испортил</strong>.</p>
+<p><strong>Когда пригодится.</strong> Читать всегда, а не только когда что-то пошло не так. <code>40 cm, 36 → 82</code> — диаметр, было и стало; <code>already right</code> — форма и так правильная, её не трогали; <code>no cylindrical form</code> — аддон ничего не узнал и <strong>ничего не испортил</strong>; <code>capped: check the object scale</code> — число упёрлось в потолок из настроек, и это почти всегда неверный масштаб объекта, а не исполинская деталь.</p>
 <div class="admonition warning">
 <p class="admonition-title">Обратите внимание</p>
 <p>Строк показывается не больше двенадцати, остальные сворачиваются в «… and N more». Не узнаны бывают формы, приваренные к остальной геометрии, меши с shape keys и замкнутые кольца секций — это известные границы, а не поломка.</p>
@@ -2321,17 +2321,22 @@
 <p class="admonition-title">Обратите внимание</p>
 <p>Таблица живёт в настройках Blender, а не в файле сцены: она общая для всех сцен на этой машине и переживает перезапуск. Если правите таблицу под конкретный проект, помните, что соседний проект на той же машине увидит те же значения.</p>
 </div>
-<h3 id="minimum-segments-even-counts-only">Minimum Segments и Even Counts Only<a class="headerlink" href="#minimum-segments-even-counts-only" title="Permanent link">&para;</a></h3>
-<p><img alt="Minimum Segments и Even Counts Only" class="control-shot" src="../img/c/prefs-limits.png" /></p>
-<p>Нижняя граница числа сечений и округление до чётного.</p>
+<h3 id="minimum-maximum-segments-even-counts-only">Minimum, Maximum Segments и Even Counts Only<a class="headerlink" href="#minimum-maximum-segments-even-counts-only" title="Permanent link">&para;</a></h3>
+<p><img alt="Minimum, Maximum Segments и Even Counts Only" class="control-shot" src="../img/c/prefs-limits.png" /></p>
+<p>Границы числа сечений снизу и сверху и округление до чётного.</p>
 <p><strong>Когда пригодится.</strong> Минимум держит совсем мелкие детали от вырождения: без него правило на диаметре 2 см выдало бы четырёхгранник. Чётность нужна, чтобы цилиндр остался симметричным по обеим осям — так его проще резать пополам и зеркалить.</p>
-<p><strong>По умолчанию:</strong> минимум 6, чётность включена</p>
+<p><strong>Что получится.</strong> Максимум — страховка от неверного масштаба. Ассет, у которого сантиметры прочитаны как метры, даёт кнопку «диаметром» в двадцать метров, и правило честно насчитывает ей больше тысячи сечений на кольцо. Теперь такая форма упирается в потолок, а в отчёте появляется <code>capped: check the object scale</code>.</p>
+<p><strong>По умолчанию:</strong> минимум 6, максимум 256, чётность включена</p>
+<div class="admonition warning">
+<p class="admonition-title">Обратите внимание</p>
+<p>На <strong>Manual Segments</strong> потолок не действует: если число назначено руками, значит его и хотели.</p>
+</div>
 <h3 id="preview">Preview<a class="headerlink" href="#preview" title="Permanent link">&para;</a></h3>
 <p><img alt="Preview" class="control-shot" src="../img/c/prefs-preview.png" /></p>
 <p>Что правило выдаёт на восьми характерных диаметрах.</p>
 <p><strong>Когда пригодится.</strong> Проверять правку, не выходя из настроек: поправили точку — строчка пересчиталась. Быстрее, чем строить пробные цилиндры.</p>
 <hr />
-<p><em>Страница собрана из файла <code>content/qc-smart-cylinder.ru.yml</code>. Снимки сделаны в </em><em>QC Smart Cylinder 1.6.0</em><em>.</em></p>
+<p><em>Страница собрана из файла <code>content/qc-smart-cylinder.ru.yml</code>. Снимки сделаны в </em><em>QC Smart Cylinder 1.6.2</em><em>.</em></p>
 
 
 

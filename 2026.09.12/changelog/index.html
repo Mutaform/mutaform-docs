@@ -1049,6 +1049,28 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#162_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#161" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#160_1" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2876,6 +2898,28 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#162_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#161" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#160_1" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2975,7 +3019,7 @@
 </tr>
 <tr>
 <td>QC Smart Cylinder</td>
-<td><code>1.6.0</code></td>
+<td><code>1.6.2</code></td>
 <td>Blender 4.2+</td>
 </tr>
 </tbody>
@@ -3398,6 +3442,19 @@ Maya: распаковать в постоянное место и перета�
 <h3 id="_4">Более ранние версии<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
 <p><em>До 1.2.0 история изменений не велась.</em></p>
 <h2 id="qc-smart-cylinder">QC Smart Cylinder<a class="headerlink" href="#qc-smart-cylinder" title="Permanent link">&para;</a></h2>
+<h3 id="162_1">1.6.2<a class="headerlink" href="#162_1" title="Permanent link">&para;</a></h3>
+<p>У числа сечений появился потолок — <strong>Maximum Segments</strong>, 256 по умолчанию,
+рядом с минимумом в настройках.</p>
+<p>Он нужен из-за масштаба. Ассет, у которого сантиметры прочитаны как метры,
+даёт кнопку «диаметром» в двадцать метров; правило честно насчитывало ей за
+тысячу сечений на кольцо, и снятая галочка <strong>Manual Segments</strong> заливала меш
+сеткой. Теперь такая форма останавливается на потолке, а в отчёте появляется
+<code>capped: check the object scale</code>. На число, заданное руками, потолок не
+действует.</p>
+<h3 id="161">1.6.1<a class="headerlink" href="#161" title="Permanent link">&para;</a></h3>
+<p>Цилиндры, у которых крышка набрана лесенкой из квадов, без единого
+треугольника, теперь распознаются: раньше обход петель читал такую крышку как
+рваную сетку, и форма не находилась. Крышки возвращаются одним n-гоном.</p>
 <h3 id="160_1">1.6.0<a class="headerlink" href="#160_1" title="Permanent link">&para;</a></h3>
 <p>Первая версия, попавшая в документацию студии.</p>
 <p>Аддон добавляет один пункт в <code>Add &gt; Mesh</code>, сразу под обычным Cylinder. Что он

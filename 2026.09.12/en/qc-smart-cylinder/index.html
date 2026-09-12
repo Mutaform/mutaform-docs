@@ -1941,6 +1941,10 @@ you go. Segments and Edge Length cannot be edited — they are the rule's answer
 not a setting.</p>
 <p>The diameter is a diameter, not a radius, as in the studio table. Type any unit
 you like: enter <code>40 cm</code> and Blender converts it. The scene scale is honoured.</p>
+<p><img alt="What it looks like in use" class="screenshot" src="../../qc-smart-cylinder/img/new-cylinder.gif" /></p>
+<p>In the recording the cylinders are built one after another: the diameter
+changes, the segment count follows, and the finished part has one mesh density
+throughout.</p>
 <div class="admonition note">
 <p class="admonition-title">The edge length is not decoration</p>
 <p>It tells you whether the rule is working or you have wandered off the end
@@ -1957,6 +1961,9 @@ one count along its whole length: the add-on splits it into sections where the
 diameter changes, gives each the count its own diameter calls for, and stitches
 neighbouring sections together with triangle bridges. A lathed part, a pipe
 with a reduction, a rod with a thicker end — all handled in one call.</p>
+<p><img alt="Rebuilding a finished part" class="screenshot" src="../../qc-smart-cylinder/img/fix-selected.gif" /></p>
+<p>The UV editor is open on the left of the recording. The part is rebuilt whole —
+and the unwrap is still there: the same islands, the seams where they were.</p>
 <p>What survives the rebuild:</p>
 <ul>
 <li><strong>the unwrap</strong> — UVs are carried over to the new mesh, elbows and caps
@@ -1989,6 +1996,10 @@ with a reduction, a rod with a thicker end — all handled in one call.</p>
 <td><code>no cylindrical form</code></td>
 <td>The add-on recognised nothing — and broke nothing</td>
 </tr>
+<tr>
+<td><code>capped: check the object scale</code></td>
+<td>The segment ceiling was hit. Almost always that means a wrong object scale, not a huge part</td>
+</tr>
 </tbody>
 </table>
 <h2 id="the-rule-lives-in-the-preferences">The rule lives in the preferences<a class="headerlink" href="#the-rule-lives-in-the-preferences" title="Permanent link">&para;</a></h2>
@@ -1999,6 +2010,9 @@ so there are more steps than rows. Outside the table the edge length of the
 nearest anchor is kept.</p>
 <p>The studio values: 10 cm → 20, 20 → 28, 40 → 36, 60 → 40, 80 → 48, 100 → 68.
 The arrow button always brings them back.</p>
+<p>Below the table are the limits: <strong>Minimum Segments</strong> (6), <strong>Maximum Segments</strong>
+(256) and even rounding. The ceiling is not there to save polygons: a form that
+hits it is almost always sitting in the scene at the wrong scale.</p>
 <div class="admonition warning">
 <p class="admonition-title">The table is shared by every scene</p>
 <p>It lives in Blender's preferences, not in the scene file. Tailor it to one

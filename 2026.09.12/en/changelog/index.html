@@ -1049,6 +1049,28 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#162_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#161" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#160_1" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2876,6 +2898,28 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#162_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#161" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6.1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#160_1" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2975,7 +3019,7 @@
 </tr>
 <tr>
 <td>QC Smart Cylinder</td>
-<td><code>1.6.0</code></td>
+<td><code>1.6.2</code></td>
 <td>Blender 4.2+</td>
 </tr>
 </tbody>
@@ -3401,6 +3445,18 @@ Bake and the validator. Nothing to do by hand — the installer moves it.</p>
 <h3 id="earlier-versions">Earlier versions<a class="headerlink" href="#earlier-versions" title="Permanent link">&para;</a></h3>
 <p><em>No change history was kept before 1.2.0.</em></p>
 <h2 id="qc-smart-cylinder">QC Smart Cylinder<a class="headerlink" href="#qc-smart-cylinder" title="Permanent link">&para;</a></h2>
+<h3 id="162_1">1.6.2<a class="headerlink" href="#162_1" title="Permanent link">&para;</a></h3>
+<p>The segment count gained a ceiling — <strong>Maximum Segments</strong>, 256 by default,
+next to the minimum in the preferences.</p>
+<p>It exists because of scale. An asset whose centimetres were read as metres
+gives you a button twenty metres across; the rule dutifully worked out over a
+thousand segments per ring, and clearing <strong>Manual Segments</strong> flooded the mesh.
+Such a form now stops at the ceiling and the report says <code>capped: check the
+object scale</code>. A count set by hand is never capped.</p>
+<h3 id="161">1.6.1<a class="headerlink" href="#161" title="Permanent link">&para;</a></h3>
+<p>Cylinders whose caps are filled with a ladder of quads, without a single
+triangle, are now recognised: the loop walk used to read such a cap as a broken
+grid and the form was not found. The caps come back as one n-gon each.</p>
 <h3 id="160_1">1.6.0<a class="headerlink" href="#160_1" title="Permanent link">&para;</a></h3>
 <p>The first version to reach the studio documentation.</p>
 <p>The add-on puts one item into <code>Add &gt; Mesh</code>, directly under the ordinary

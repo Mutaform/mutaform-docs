@@ -1874,10 +1874,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#minimum-segments-and-even-counts-only" class="md-nav__link">
+  <a href="#minimum-maximum-segments-and-even-counts-only" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Minimum Segments and Even Counts Only
+        Minimum, Maximum Segments and Even Counts Only
       
     </span>
   </a>
@@ -2168,10 +2168,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#minimum-segments-and-even-counts-only" class="md-nav__link">
+  <a href="#minimum-maximum-segments-and-even-counts-only" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Minimum Segments and Even Counts Only
+        Minimum, Maximum Segments and Even Counts Only
       
     </span>
   </a>
@@ -2304,7 +2304,7 @@
 <h3 id="the-report">The report<a class="headerlink" href="#the-report" title="Permanent link">&para;</a></h3>
 <p><img alt="The report" class="control-shot" src="../../../qc-smart-cylinder/img/c/report.png" /></p>
 <p>Line by line: what the add-on found and what it did with it. One line per form.</p>
-<p><strong>When you need it.</strong> Worth reading always, not only when something went wrong. <code>40 cm, 36 → 82</code> is the diameter, before and after; <code>already right</code> means the form was correct and was left alone; <code>no cylindrical form</code> means the add-on recognised nothing and <strong>broke nothing</strong>.</p>
+<p><strong>When you need it.</strong> Worth reading always, not only when something went wrong. <code>40 cm, 36 → 82</code> is the diameter, before and after; <code>already right</code> means the form was correct and was left alone; <code>no cylindrical form</code> means the add-on recognised nothing and <strong>broke nothing</strong>; <code>capped: check the object scale</code> means the count hit the ceiling from the preferences, and that is almost always a wrong object scale rather than a colossal part.</p>
 <div class="admonition warning">
 <p class="admonition-title">Worth knowing</p>
 <p>At most twelve lines are shown; the rest collapse into "… and N more". Forms welded to the rest of the geometry, meshes with shape keys and closed rings of sections are the ones that go unrecognised — these are known limits, not a fault.</p>
@@ -2321,17 +2321,22 @@
 <p class="admonition-title">Worth knowing</p>
 <p>The table lives in Blender's preferences, not in the scene file: it is shared by every scene on this machine and survives a restart. If you tailor it to one project, remember that the next project on the same machine sees the same numbers.</p>
 </div>
-<h3 id="minimum-segments-and-even-counts-only">Minimum Segments and Even Counts Only<a class="headerlink" href="#minimum-segments-and-even-counts-only" title="Permanent link">&para;</a></h3>
-<p><img alt="Minimum Segments and Even Counts Only" class="control-shot" src="../../../qc-smart-cylinder/img/c/prefs-limits.png" /></p>
-<p>The floor under the segment count, and rounding to an even number.</p>
+<h3 id="minimum-maximum-segments-and-even-counts-only">Minimum, Maximum Segments and Even Counts Only<a class="headerlink" href="#minimum-maximum-segments-and-even-counts-only" title="Permanent link">&para;</a></h3>
+<p><img alt="Minimum, Maximum Segments and Even Counts Only" class="control-shot" src="../../../qc-smart-cylinder/img/c/prefs-limits.png" /></p>
+<p>The floor and the ceiling under the segment count, and rounding to an even number.</p>
 <p><strong>When you need it.</strong> The minimum keeps very small parts from degenerating: without it the rule would hand a 2 cm diameter a four-sided shape. Even counts keep the cylinder symmetric on both axes, which makes it easier to cut in half and mirror.</p>
-<p><strong>Default:</strong> minimum 6, even counts on</p>
+<p><strong>What happens.</strong> The maximum is insurance against a wrong scale. An asset whose centimetres were read as metres gives you a button twenty metres across, and the rule dutifully works out over a thousand segments per ring. Such a form now stops at the ceiling, and the report says <code>capped: check the object scale</code>.</p>
+<p><strong>Default:</strong> minimum 6, maximum 256, even counts on</p>
+<div class="admonition warning">
+<p class="admonition-title">Worth knowing</p>
+<p>The ceiling does not apply to <strong>Manual Segments</strong>: a count set by hand is a count someone wanted.</p>
+</div>
 <h3 id="preview">Preview<a class="headerlink" href="#preview" title="Permanent link">&para;</a></h3>
 <p><img alt="Preview" class="control-shot" src="../../../qc-smart-cylinder/img/c/prefs-preview.png" /></p>
 <p>What the rule gives at eight representative diameters.</p>
 <p><strong>When you need it.</strong> For checking an edit without leaving the preferences: move an anchor and the line recomputes. Quicker than building test cylinders.</p>
 <hr />
-<p><em>Assembled from <code>content/qc-smart-cylinder.en.yml</code>. Screenshots taken in </em><em>QC Smart Cylinder 1.6.0</em><em>.</em></p>
+<p><em>Assembled from <code>content/qc-smart-cylinder.en.yml</code>. Screenshots taken in </em><em>QC Smart Cylinder 1.6.2</em><em>.</em></p>
 
 
 
