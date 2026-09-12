@@ -1,8 +1,8 @@
 # What every button does
 
-A walk through the bridge panel. Every transfer goes through a single file in a shared folder: one side writes, the other reads. When something does not work, the report line at the top of the panel is the first place to look.
+A breakdown of both halves of the bridge: the Blender menu first, then the Maya panel. In Blender the bridge has lived **in the 3D viewport header** since 1.2.0: a blue Maya icon right after the Proportional Editing buttons, with a dropdown behind it. There is no sidebar tab any more. In Maya, since 1.3.0, it is a **dockable panel** opened by the **QC Bridge** button on the *Mutaform* shelf. Every transfer goes through one file in a shared folder: one side writes it, the other reads it. When something does not work, the report line is the first place to look: at the top of the menu in Blender, in the status strip under the buttons in Maya.
 
-## Transferring
+## Blender — transferring
 
 The three buttons the bridge exists for. They use the exchange folder set at the bottom of the panel.
 
@@ -42,7 +42,7 @@ Two export buttons. The left one sends the selected objects, the right one sends
 !!! warning "Worth knowing"
     It is always the same file with the name from the settings. Every export overwrites the previous one — if a colleague has not collected theirs yet, it is gone.
 
-## Convert Scene — hierarchy
+## Blender — Convert Scene, hierarchy
 
 Collapsed by default. Needed because Maya builds hierarchy out of transform nodes and Blender out of collections, and FBX does not translate one into the other by itself.
 
@@ -87,7 +87,7 @@ The reverse: Blender collections become empties that Maya reads as groups.
 
 **When you need it.** Before exporting, when the other side needs hierarchy. **Send Scope** picks the whole scene or the active collection.
 
-## Settings — the exchange folder
+## Blender — Settings, the exchange folder
 
 Also collapsed. Set once and then left alone.
 
@@ -112,6 +112,98 @@ The folder transfers go through, and the name of the file in it.
 !!! warning "Worth knowing"
     The `.fbx` extension is appended automatically if you leave it out. An empty name falls back to the default.
 
+## Maya — the bridge panel
+
+The other half. Since 1.3.0 it is a dockable panel in the same style as QC Bake for Maya and the validator: a title with the version number, one blue primary button, a status strip and three folds. The folds remember whether they were left open or closed.
+
+### Import From Blender and FBX
+
+![Import From Blender and FBX](img/m/maya-import.png){ .control-shot }
+
+Takes the exchange file the Blender side wrote and tidies the scene up at once. The narrow **FBX** button beside it does the same for any other file, picked in a dialog.
+
+**When you need it.** The main action in Maya. The cleanup is the point of the button: empties become groups, and names, transforms, history and materials are sorted out.
+
+!!! warning "Worth knowing"
+    What exactly gets cleaned is set by the ticks in the **Import Options** fold below.
+
+### Export To Blender
+
+![Export To Blender](img/m/maya-export.png){ .control-shot }
+
+Writes the selected roots into the exchange file for Blender to pick up.
+
+**When you need it.** The other direction. Select the roots of the hierarchies — everything below them travels along.
+
+### The selection line
+
+![The selection line](img/m/maya-hint.png){ .control-shot }
+
+A grey line saying what the panel will work on right now: what is selected, or that nothing is.
+
+**When you need it.** Read it before pressing. A button that did nothing is an answer with the reason left out, so the panel says it aloud: `Nothing selected.` plus the reminder that export takes the selected roots and the tools fall back to the whole scene.
+
+### The status strip
+
+![The status strip](img/m/maya-status.png){ .control-shot }
+
+The outcome of the last action, coloured by severity.
+
+**When you need it.** The first place to look when it seems nothing happened. The import report lands here too — how many roots arrived, what was fixed, how many materials were rebuilt — along with error messages.
+
+**Default:** empty until something is done
+
+### Import Options
+
+![Import Options](img/m/maya-import-options.png){ .control-shot }
+
+A fold with four ticks: what to do with the arriving scene right after import. **Clean FBX suffix names** — strips the `FBXASC046###` tails FBX turns Blender's `.001` names into, on nodes, shapes and materials. **Unlock transforms** — unlocks translate, rotate, scale and visibility. **Clean geometry history** — deletes construction history on the incoming meshes. **Rebuild Blinn materials** — replaces the imported shaders with clean Blinns that keep the diffuse, normal and opacity textures.
+
+**Default:** all four on
+
+!!! warning "Worth knowing"
+    The ticks are remembered between Maya sessions.
+
+### Random Sharp — Find and Fix
+
+![Random Sharp — Find and Fix](img/m/maya-random-sharp.png){ .control-shot }
+
+**Find** selects hard edges that are not UV borders. **Fix** softens them.
+
+**When you need it.** These are exactly the edges the **Random Sharp** check in the validator reports. Here they can be seen and fixed without going back to Blender.
+
+!!! warning "Worth knowing"
+    Works on the selection, or on the whole scene when nothing is selected.
+
+### Unlock Normals
+
+![Unlock Normals](img/m/maya-normals.png){ .control-shot }
+
+Converts locked normals that arrived with the import into ordinary Maya soft and hard edges.
+
+**What happens.** The split is kept — it becomes hard edges — and the normals themselves are unlocked, so the mesh behaves like one built in Maya.
+
+### Exchange — Folder and FBX
+
+![Exchange — Folder and FBX](img/m/maya-exchange.png){ .control-shot }
+
+The exchange folder and the file name in it, with a browse button beside the folder field.
+
+**When you need it.** Set once. The one requirement: **Maya and Blender must point at the same folder**. If a transfer does nothing, check that before anything else.
+
+!!! warning "Worth knowing"
+    Since 1.2.0 the folder and the name are remembered between sessions.
+
+### Updates
+
+![Updates](img/m/maya-updates.png){ .control-shot }
+
+A **Check on Open** tick and a **Check for Updates Now** button.
+
+**What happens.** When a newer version exists, a strip with **Install** and **Skip** appears at the top of the panel. **Install** downloads the archive, verifies the checksum and swaps the folder — without restarting Maya; the old version is kept until the new one has loaded.
+
+**Default:** the check on open is on
+
 ---
 
-*Assembled from `content/qc-bridge.en.yml`. Screenshots taken in **QC Bridge Maya-Blender by Mutaform 1.1.8**.*
+*Assembled from `content/qc-bridge.en.yml`. Screenshots taken in **QC Bridge Maya-Blender by Mutaform 1.3.0**.*

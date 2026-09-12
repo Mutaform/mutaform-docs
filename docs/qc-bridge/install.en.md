@@ -46,7 +46,15 @@ That is it. Preferences can be closed.
 
 ## Step 3. Check that it worked
 
-The panel appears in the 3D viewport: press ++n++ → the **QC Maya Bridge** tab.
+A blue Maya icon appears in the **3D viewport header**, right after the
+Proportional Editing buttons. Clicking it opens the bridge menu.
+
+![The bridge button in the viewport header](../qc-bridge/img/header-button.png){ .screenshot }
+
+!!! note "There is no sidebar tab any more"
+    Before 1.2.0 the bridge lived in a **QC Maya Bridge** tab in the
+    sidebar. If you updated from an older version and are looking for it —
+    it was removed on purpose, everything moved into this menu.
 
 If the panel is there, the installation is done.
 
@@ -67,40 +75,49 @@ the version switcher is in the header of this site.
 | --- | --- |
 | The search finds nothing | The repository was not added, or the URL has a typo. Go back to step 1 and check the whole address |
 | The add-on is listed but `Install` does nothing | Your Blender is older than **4.2**. Update Blender |
-| It installed but there is no panel | Make sure you pressed ++n++ inside the viewport, and look through the tabs on the side: there can be many, and the one you want may be collapsed |
+| It installed but there is no button | The bridge lives in the **3D viewport header**, not in the sidebar: a blue Maya icon right after the Proportional Editing buttons. If the header is narrow, some buttons in it are hidden — scroll it with the mouse wheel |
 | The repository list is empty | No network access, or a proxy blocks it. Ask the studio for the archive and install from file: `Get Extensions` → the `▼` icon top right → **Install from Disk…** |
 
 ## The other half — in Maya
 
 The bridge has two halves and **both are needed**. The steps above installed the
-Blender half; now Maya.
+Blender half; now Maya. It installs by dragging one file.
 
-1. Close Maya
-2. Download [`mutaform_bridge_maya_v1.zip`](https://mutaform.github.io/qc-bridge-blender-maya/mutaform_bridge_maya_v1.zip) and unpack it
-3. Put the `mutaform_bridge` folder from the archive here:
+1. Download [`mutaform_bridge_maya.zip`](https://mutaform.github.io/qc-bridge-blender-maya/mutaform_bridge_maya.zip)
+2. Unpack it **somewhere it will stay for good**: a tools folder, a network
+   share — anywhere permanent
+3. Start Maya and drag `install/install.py` from the unpacked folder **into the
+   viewport with the mouse**
 
-    ```text
-    C:\Users\USERNAME\Documents\maya\2025\scripts\
-    ```
+The installer registers the Maya module and adds a **QC Bridge** button to the
+*Mutaform* shelf. This is done once; Maya picks the bridge up on every launch
+after that.
 
-    You should end up with `...\scripts\mutaform_bridge\`.
+!!! warning "Where you unpack it is where it lives"
+    The unpacked folder **is** the installation: Maya only gets a pointer to it.
+    Move or delete the folder and the bridge falls off — unpack it again and
+    drag `install.py` once more.
 
-4. Start Maya, open `Windows → General Editors → Script Editor` and switch to
-   the **Python** tab
-5. Paste this in, replacing the user name with yours, and run it:
+!!! danger "If the bridge was already installed — versions 1.1.x"
+    The Maya half used to install differently: the folder was copied into
+    `scripts\` and the button was created by running code in the Script Editor.
+    The 1.2.0 installer clears that away itself — it removes the old buttons
+    from the shelves, deletes the old copy from `scripts\` and unloads it from
+    Maya's memory.
 
-    ```python
-    import sys
+    Nothing extra to do, but worth knowing: **the button moved**. It used to sit
+    on the *Polygons* shelf; now it is on *Mutaform*, next to QC Bake and the
+    validator.
 
-    path = r"C:\Users\USERNAME\Documents\maya\2025\scripts\mutaform_bridge"
-    if path not in sys.path:
-        sys.path.append(path)
+## Updating the Maya half
 
-    import install_shelf_button
-    install_shelf_button.install()
-    ```
+The bridge checks for updates every time its panel opens. When a newer version
+exists, a bar with **Install** and **Skip** appears at the top. **Install**
+downloads the archive, verifies the checksum and swaps the folder — without
+restarting Maya. The previous version is kept until the new one has loaded.
 
-The bridge button appears on the shelf. This is done once.
+To switch the check off or run one by hand: **Settings → Updates** in the bridge
+panel.
 
 !!! warning "Both sides must point at the same folder"
     The one condition for the bridge to work: **the exchange folder is the same
