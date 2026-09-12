@@ -80,3 +80,8 @@ addons:
     branch: studio/rework
     upstream_url: "https://github.com/HarichevK/Modular-environment-tools"
     order: 7
+
+  - slug: qc-smart-cylinder
+    source: "qc_SmartCylinder/qc_smart_cylinder"
+    clone_url: "https://github.com/Mutaform/qc-smart-cylinder"
+    order: 8

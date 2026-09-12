@@ -1,0 +1,264 @@
+# English content for the QC Smart Cylinder reference.
+
+title: What every button does
+intro: >-
+  The add-on has no panel of its own: it adds one item to the `Add > Mesh` menu,
+  and all its settings live in the **Adjust Last Operation** box — the one that
+  opens in the bottom-left corner of the viewport after an action, or with
+  ++f9++.
+
+  Which settings that box shows depends on what the add-on is doing: building a
+  new cylinder, or rebuilding a selected one. Both sets are covered below,
+  along with the rule table in the add-on preferences.
+
+sections:
+  - title: Where it lives
+    intro: >-
+      One item, directly under the built-in Cylinder.
+    controls: [menu-item]
+
+  - title: New Cylinder
+    intro: >-
+      The settings in Adjust Last Operation when the mode is **New Cylinder**.
+      Change the diameter and the segment count is recomputed on the spot.
+    controls: [mode, diameter, depth, readout, cap-fill, uvs, transform]
+
+  - title: Fix Selected
+    intro: >-
+      The same operator, but instead of a new cylinder it rebuilds forms that
+      already exist. The add-on switches to this mode by itself when something
+      is selected as you call it.
+    controls: [count-mode, section-step, diameter-source, manual, report]
+
+  - title: Add-on preferences
+    intro: >-
+      `Edit → Preferences… → Add-ons → QC Smart Cylinder`. The rule itself lives
+      here: the table the segment count is computed from.
+    controls: [prefs-anchors, prefs-limits, prefs-preview]
+
+controls:
+  menu-item:
+    label: Add → Mesh → qc Smart Cylinder
+    shot: c/menu-item.png
+    covers: [mesh.qc_smart_cylinder_add, mode]
+    what: >-
+      The only way in. The item sits **directly under the built-in Cylinder**,
+      so your hand goes where it always went.
+    when: >-
+      What it does depends on the selection. Nothing selected — a new cylinder
+      appears at the 3D cursor. A mesh with a cylindrical form selected — the
+      add-on rebuilds it. The mode can be switched afterwards in Adjust Last
+      Operation.
+    note: >-
+      When the selection holds no cylindrical form, the add-on does **not** drop
+      a surprise cylinder beside it — it writes the reason into the report.
+
+  mode:
+    label: Mode
+    shot: c/mode.png
+    covers: [mode]
+    what: >-
+      Switches between **New Cylinder** and **Fix Selected**.
+    default: picked from the selection at the moment of the call
+    when: >-
+      When the add-on guessed wrong. Say a cylinder is selected but you want a
+      new one beside it rather than that one repaired: switch to New Cylinder
+      right in the box, without clearing the selection.
+
+  diameter:
+    label: Diameter
+    shot: c/diameter.png
+    covers: [diameter]
+    what: >-
+      The cylinder's diameter — not its radius. The segment count comes from it.
+    default: "`0.4 m`, i.e. 40 cm — 36 segments by the table."
+    when: >-
+      The main field in New mode. Type any unit you like: enter `40 cm` and
+      Blender converts it. The scene scale (`Scene → Units → Unit Scale`) is
+      honoured — the rule works in real centimetres, not in nominal units.
+
+  depth:
+    label: Depth
+    shot: c/depth.png
+    covers: [depth]
+    what: >-
+      The height of the cylinder.
+    default: "`1 m`"
+    when: >-
+      It has no effect on the segment count: the rule only ever looks at the
+      diameter.
+
+  readout:
+    label: Segments and Edge Length
+    shot: c/readout.png
+    covers: [segments, edge_length]
+    what: >-
+      Two fields you cannot edit: how many segments the rule produced and how
+      long an edge came out.
+    when: >-
+      This is how you see what the rule actually does. Drag the diameter and the
+      count climbs in steps while the edge length stays roughly put. That is
+      what the table exists for: one edge length across meshes of every size.
+    note: >-
+      The edge length is the real chord between neighbouring vertices, not the
+      arc length.
+
+  cap-fill:
+    label: Cap Fill Type
+    shot: c/cap-fill.png
+    covers: [end_fill_type]
+    what: >-
+      How the ends are closed: **N-Gon**, **Triangle Fan** or not at all.
+    default: N-Gon
+    when: >-
+      The same thing as on the built-in Cylinder, and it means the same. N-Gon
+      is the usual low-poly choice: one face, easy to select and cut into.
+
+  uvs:
+    label: Generate UVs
+    shot: c/uvs.png
+    covers: [calc_uvs]
+    what: >-
+      Make a plain unwrap right away.
+    default: "on"
+    when: >-
+      Leave it on: you will need the unwrap anyway, and a mesh with no UV layer
+      is easy to walk past on the way to baking.
+
+  transform:
+    label: Align, Location, Rotation
+    shot: c/transform.png
+    covers: [align, location, rotation]
+    what: >-
+      Where the new cylinder lands and how it is turned.
+    default: "`Align: World`, placed at the 3D cursor."
+    when: >-
+      Blender's standard block, the same on every primitive. **Align: View**
+      faces the cylinder at the camera, **3D Cursor** takes the cursor's
+      rotation.
+
+  count-mode:
+    label: Segments — Per Section or Whole Form
+    shot: c/count-mode.png
+    covers: [count_mode]
+    what: >-
+      Whether every section of a form gets its own count, or one count covers
+      the whole form.
+    default: Per Section
+    when: >-
+      **Per Section** is for parts whose diameter changes: lathed shapes, pipes
+      with reductions, rods with thicker ends. The wide part gets more segments,
+      the narrow one fewer, and the add-on bridges between them with triangles.
+
+      **Whole Form** is for a part that has to stay one even cylinder with no
+      transitions. The count comes from a single ring, chosen below.
+
+  section-step:
+    label: Section Step
+    shot: c/section-step.png
+    covers: [section_step]
+    what: >-
+      How much the diameter has to change between neighbouring rings for the
+      add-on to call it the start of a new section.
+    default: "25 %"
+    when: >-
+      Only appears in Per Section mode. Too many sections — raise it; the part
+      split more coarsely than you wanted — lower it.
+    note: >-
+      A flat ledge between two radii always starts a new section, whatever this
+      number says.
+
+  diameter-source:
+    label: Diameter From
+    shot: c/diameter-source.png
+    covers: [diameter_source]
+    what: >-
+      Which ring sets a section's diameter when its rings differ in size:
+      **Largest Ring**, **Average Ring** or **Smallest Ring**.
+    default: Largest Ring
+    when: >-
+      By default the widest ring decides, so the silhouette stays smooth where
+      it shows most. Average is worth having on long cones, where the top ring
+      is far narrower than the bottom one and "by the widest" comes out
+      excessive.
+
+  manual:
+    label: Manual Segments
+    shot: c/manual.png
+    covers: [use_manual_segments, manual_segments]
+    what: >-
+      Overrule the rule and rebuild with the count typed in by hand.
+    default: "off"
+    when: >-
+      For cases the rule has nothing to do with: the neighbouring part is
+      already built on 24 segments and the new one has to match it. Or a form
+      the add-on skipped as ambiguous — the count can be forced on it.
+    note: >-
+      The number field is greyed out while the tick is off. Nothing is broken:
+      that is how you see the value affects nothing right now.
+
+  report:
+    label: The report
+    shot: c/report.png
+    covers: [fix_report]
+    what: >-
+      Line by line: what the add-on found and what it did with it. One line per
+      form.
+    when: >-
+      Worth reading always, not only when something went wrong. `40 cm, 36 → 82`
+      is the diameter, before and after; `already right` means the form was
+      correct and was left alone; `no cylindrical form` means the add-on
+      recognised nothing and **broke nothing**.
+    note: >-
+      At most twelve lines are shown; the rest collapse into "… and N more".
+      Forms welded to the rest of the geometry, meshes with shape keys and
+      closed rings of sections are the ones that go unrecognised — these are
+      known limits, not a fault.
+
+  prefs-anchors:
+    label: The anchor table
+    shot: c/prefs-anchors.png
+    what: >-
+      The rule itself: how many segments at which diameter. The rows are anchor
+      points, not ranges.
+    default: >-
+      the studio table: 10 cm → 20, 20 → 28, 40 → 36, 60 → 40, 80 → 48,
+      100 → 68.
+    when: >-
+      Between anchors the count is interpolated, so there are more steps than
+      rows: 15 cm → 24, 30 → 32, 50 → 38. Outside the table the edge length of
+      the nearest anchor is kept — below 10 cm the count falls in proportion to
+      the diameter, above 100 cm it grows the same way.
+    result: >-
+      The buttons on the right: **+** adds an anchor 10 cm above the largest,
+      **–** removes the selected one, the circular arrow restores the studio
+      table.
+
+      An edit takes effect at once, on new cylinders and on rebuilds alike — the
+      rule is read on every call.
+    note: >-
+      The table lives in Blender's preferences, not in the scene file: it is
+      shared by every scene on this machine and survives a restart. If you
+      tailor it to one project, remember that the next project on the same
+      machine sees the same numbers.
+
+  prefs-limits:
+    label: Minimum Segments and Even Counts Only
+    shot: c/prefs-limits.png
+    what: >-
+      The floor under the segment count, and rounding to an even number.
+    default: "minimum 6, even counts on"
+    when: >-
+      The minimum keeps very small parts from degenerating: without it the rule
+      would hand a 2 cm diameter a four-sided shape. Even counts keep the
+      cylinder symmetric on both axes, which makes it easier to cut in half and
+      mirror.
+
+  prefs-preview:
+    label: Preview
+    shot: c/prefs-preview.png
+    what: >-
+      What the rule gives at eight representative diameters.
+    when: >-
+      For checking an edit without leaving the preferences: move an anchor and
+      the line recomputes. Quicker than building test cylinders.

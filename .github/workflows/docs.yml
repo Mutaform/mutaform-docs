@@ -56,6 +56,7 @@ jobs:
           qc_mutaform_bridge https://github.com/Mutaform/qc-bridge-blender-maya
           qc_bake-maya https://github.com/Mutaform/qc-bake-maya
           Modular-environment-tools https://github.com/Mutaform/Modular-environment-tools studio/rework
+          qc_SmartCylinder https://github.com/Mutaform/qc-smart-cylinder
           REPOS
 
       - uses: actions/setup-python@v5

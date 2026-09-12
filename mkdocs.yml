@@ -139,6 +139,10 @@ nav:
           - Установка: modular-environment-tools/install.md
           - Обзор: modular-environment-tools/index.md
           - Справочник: modular-environment-tools/reference.md
+      - QC Smart Cylinder:
+          - Установка: qc-smart-cylinder/install.md
+          - Обзор: qc-smart-cylinder/index.md
+          - Справочник: qc-smart-cylinder/reference.md
 
 extra:
   # Ссылки переключателя языка здесь НЕ прописываются. Жёсткий путь вроде

@@ -2095,17 +2095,22 @@
     "qc-bridge": {
       "blender_version_min": "4.2.0",
       "constants": {
-        "BRIDGE_VERSION": "1.1.8",
+        "BRIDGE_TITLE": "QC Bridge Maya-Blender",
+        "BRIDGE_VERSION": "1.3.0",
+        "FALLBACK_HEADER_ICON": "OUTLINER",
         "MAYA_TO_BLENDER_UNIT_SCALE": 0.01,
         "PIVOT_ATTRS": [
           "mbr_pivot_world_x",
           "mbr_pivot_world_y",
           "mbr_pivot_world_z"
         ],
+        "POPOVER_WIDTH_UNITS": 17,
         "QC_MATRIX_KEY": "qc_maya_matrix_local",
+        "REPORT_WRAP_CHARS": 46,
         "TOOL_MODULES": [
           "maya_bridge"
-        ]
+        ],
+        "_header_button_drawn": false
       },
       "id": "mutaform_bridge",
       "license": [
@@ -2254,13 +2259,15 @@
       "panels": [
         {
           "base": "Panel",
-          "bl_category": "QC Maya Bridge",
-          "bl_idname": "MUTAFORMBRIDGE_PT_panel",
-          "bl_label": "QC Bridge Maya-Blender by Mutaform",
-          "bl_region_type": "UI",
+          "bl_idname": "MUTAFORMBRIDGE_PT_popover",
+          "bl_label": "QC Bridge Maya-Blender",
+          "bl_options": [
+            "HIDE_HEADER"
+          ],
+          "bl_region_type": "HEADER",
           "bl_space_type": "VIEW_3D",
-          "class_name": "MUTAFORMBRIDGE_PT_panel",
-          "docstring": null,
+          "class_name": "MUTAFORMBRIDGE_PT_popover",
+          "docstring": "Popover body opened from the Maya icon in the 3D Viewport header.",
           "has_poll": false,
           "module": "__init__.py",
           "operators": [],
@@ -2276,7 +2283,7 @@
         "Scene"
       ],
       "ui_lists": [],
-      "version": "1.1.8",
+      "version": "1.3.0",
       "website": "https://mutaform.studio"
     },
     "qc-daily-render": {
@@ -3364,6 +3371,371 @@
       ],
       "version": "0.34.1",
       "website": null
+    },
+    "qc-smart-cylinder": {
+      "blender_version_min": "4.2.0",
+      "constants": {
+        "AMBIGUOUS_SEGMENTS": 4,
+        "ANCHORS": [
+          [
+            10.0,
+            20
+          ],
+          [
+            20.0,
+            28
+          ],
+          [
+            40.0,
+            36
+          ],
+          [
+            60.0,
+            40
+          ],
+          [
+            80.0,
+            48
+          ],
+          [
+            100.0,
+            68
+          ]
+        ],
+        "FIX_MODES": [
+          "OBJECT",
+          "EDIT_MESH"
+        ],
+        "MAX_REPORT_LINES": 12,
+        "MENU_ICON": "MESH_CYLINDER",
+        "MENU_TEXT": "qc Smart Cylinder",
+        "MIN_SEGMENTS": 6,
+        "PREVIEW_DIAMETERS": [
+          5.0,
+          10.0,
+          15.0,
+          30.0,
+          50.0,
+          75.0,
+          100.0,
+          150.0
+        ],
+        "_BUILTIN_DRAW_QUALNAME": "VIEW3D_MT_mesh_add.draw",
+        "_BUILTIN_MENU": "VIEW3D_MT_mesh_add",
+        "_CAP_MAX_TURN": 72.0,
+        "_EPSILON": 1e-12,
+        "_HEIGHT_TOLERANCE": 0.002,
+        "_INSERT_AFTER": "mesh.primitive_cylinder_add",
+        "_MIN_RING": 5,
+        "_RADIUS_GAP": 0.05,
+        "_RADIUS_TOLERANCE": 0.03,
+        "_WELD_DIGITS": 5,
+        "_WRAPPER_TAG": "_qc_smart_cylinder_builtin_draw"
+      },
+      "id": "qc_smart_cylinder",
+      "license": [
+        "SPDX:GPL-2.0-or-later"
+      ],
+      "menus": [],
+      "name": "QC Smart Cylinder",
+      "operators": [
+        {
+          "base": "Operator",
+          "bl_description": null,
+          "bl_idname": "mesh.qc_smart_cylinder_add",
+          "bl_label": "Add Smart Cylinder",
+          "bl_options": [
+            "REGISTER",
+            "UNDO"
+          ],
+          "class_name": "QC_OT_smart_cylinder_add",
+          "docstring": "Add a cylinder whose segment count follows its diameter, or fix the selected cylindrical meshes",
+          "has_poll": false,
+          "module": "ui/operator.py",
+          "properties": [
+            {
+              "default": "NEW",
+              "identifier": "mode",
+              "items": [
+                {
+                  "description": "Add a new cylinder at the 3D cursor",
+                  "label": "New Cylinder",
+                  "value": "NEW"
+                },
+                {
+                  "description": "Rebuild the cylindrical forms of the selected meshes with the segment count their diameter calls for",
+                  "label": "Fix Selected",
+                  "value": "FIX"
+                }
+              ],
+              "kind": "enum",
+              "label": "Mode",
+              "owner": "QC_OT_smart_cylinder_add",
+              "source": "ui/operator.py"
+            },
+            {
+              "default": 0.4,
+              "description": "Cylinder diameter; the segment count follows it",
+              "identifier": "diameter",
+              "kind": "float",
+              "label": "Diameter",
+              "minimum": 0.0,
+              "owner": "QC_OT_smart_cylinder_add",
+              "soft_maximum": 2.0,
+              "source": "ui/operator.py",
+              "subtype": "DISTANCE",
+              "unit": "LENGTH"
+            },
+            {
+              "default": 1.0,
+              "identifier": "depth",
+              "kind": "float",
+              "label": "Depth",
+              "minimum": 0.0,
+              "owner": "QC_OT_smart_cylinder_add",
+              "soft_maximum": 2.0,
+              "source": "ui/operator.py",
+              "subtype": "DISTANCE",
+              "unit": "LENGTH"
+            },
+            {
+              "default": "NGON",
+              "identifier": "end_fill_type",
+              "items": [
+                {
+                  "description": "Don't fill at all",
+                  "label": "Nothing",
+                  "value": "NOTHING"
+                },
+                {
+                  "description": "Use n-gons",
+                  "label": "N-Gon",
+                  "value": "NGON"
+                },
+                {
+                  "description": "Use triangle fans",
+                  "label": "Triangle Fan",
+                  "value": "TRIFAN"
+                }
+              ],
+              "kind": "enum",
+              "label": "Cap Fill Type",
+              "owner": "QC_OT_smart_cylinder_add",
+              "source": "ui/operator.py"
+            },
+            {
+              "default": true,
+              "description": "Generate a default UV map",
+              "identifier": "calc_uvs",
+              "kind": "bool",
+              "label": "Generate UVs",
+              "owner": "QC_OT_smart_cylinder_add",
+              "source": "ui/operator.py"
+            },
+            {
+              "default": 6,
+              "description": "Segment count derived from the diameter",
+              "identifier": "segments",
+              "kind": "int",
+              "label": "Segments",
+              "minimum": 3,
+              "owner": "QC_OT_smart_cylinder_add",
+              "source": "ui/operator.py"
+            },
+            {
+              "default": 0.0,
+              "description": "Length of one edge around the cylinder at this diameter and segment count",
+              "identifier": "edge_length",
+              "kind": "float",
+              "label": "Edge Length",
+              "minimum": 0.0,
+              "owner": "QC_OT_smart_cylinder_add",
+              "source": "ui/operator.py",
+              "subtype": "DISTANCE",
+              "unit": "LENGTH"
+            },
+            {
+              "default": "SECTIONS",
+              "description": "Whether every section of a form gets its own count",
+              "identifier": "count_mode",
+              "items": [
+                {
+                  "description": "Split the form where the diameter changes and give every section the count its own diameter calls for; sections of different counts are joined by triangle bridges",
+                  "label": "Per Section",
+                  "value": "SECTIONS"
+                },
+                {
+                  "description": "One count for the whole form, from the ring chosen below",
+                  "label": "Whole Form",
+                  "value": "FORM"
+                }
+              ],
+              "kind": "enum",
+              "label": "Segments",
+              "owner": "QC_OT_smart_cylinder_add",
+              "source": "ui/operator.py"
+            },
+            {
+              "default": 25.0,
+              "description": "Diameter change between rings that starts a new section (a flat ledge between two radii always starts one)",
+              "identifier": "section_step",
+              "kind": "float",
+              "label": "Section Step",
+              "maximum": 200.0,
+              "minimum": 1.0,
+              "owner": "QC_OT_smart_cylinder_add",
+              "source": "ui/operator.py",
+              "subtype": "PERCENTAGE"
+            },
+            {
+              "default": "MAX",
+              "description": "Which ring of a section (or of the whole form) sets its segment count when the rings differ in diameter",
+              "identifier": "diameter_source",
+              "items": [
+                {
+                  "description": "The widest section decides",
+                  "label": "Largest Ring",
+                  "value": "MAX"
+                },
+                {
+                  "description": "The average section diameter decides",
+                  "label": "Average Ring",
+                  "value": "MEAN"
+                },
+                {
+                  "description": "The narrowest section decides",
+                  "label": "Smallest Ring",
+                  "value": "MIN"
+                }
+              ],
+              "kind": "enum",
+              "label": "Diameter From",
+              "owner": "QC_OT_smart_cylinder_add",
+              "source": "ui/operator.py"
+            },
+            {
+              "default": false,
+              "description": "Use the count below instead of the rule",
+              "identifier": "use_manual_segments",
+              "kind": "bool",
+              "label": "Manual Segments",
+              "owner": "QC_OT_smart_cylinder_add",
+              "source": "ui/operator.py"
+            },
+            {
+              "default": 32,
+              "description": "Segment count to rebuild the selected forms with",
+              "identifier": "manual_segments",
+              "kind": "int",
+              "label": "Segments",
+              "minimum": 3,
+              "owner": "QC_OT_smart_cylinder_add",
+              "soft_maximum": 256,
+              "source": "ui/operator.py"
+            },
+            {
+              "identifier": "fix_report",
+              "kind": "string",
+              "label": "Report",
+              "owner": "QC_OT_smart_cylinder_add",
+              "source": "ui/operator.py"
+            }
+          ]
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Add an anchor point 10 cm above the largest one, with the count the rule gives there",
+          "bl_idname": "qc_smart_cylinder.anchor_add",
+          "bl_label": "Add Anchor",
+          "bl_options": [
+            "INTERNAL"
+          ],
+          "class_name": "QC_OT_smart_cylinder_anchor_add",
+          "docstring": null,
+          "has_poll": false,
+          "module": "ui/preferences.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Remove the selected anchor point",
+          "bl_idname": "qc_smart_cylinder.anchor_remove",
+          "bl_label": "Remove Anchor",
+          "bl_options": [
+            "INTERNAL"
+          ],
+          "class_name": "QC_OT_smart_cylinder_anchor_remove",
+          "docstring": null,
+          "has_poll": true,
+          "module": "ui/preferences.py",
+          "properties": []
+        },
+        {
+          "base": "Operator",
+          "bl_description": "Replace the anchor points with the studio table",
+          "bl_idname": "qc_smart_cylinder.anchors_reset",
+          "bl_label": "Reset to Studio Table",
+          "bl_options": [
+            "INTERNAL"
+          ],
+          "class_name": "QC_OT_smart_cylinder_anchors_reset",
+          "docstring": null,
+          "has_poll": false,
+          "module": "ui/preferences.py",
+          "properties": []
+        }
+      ],
+      "panels": [],
+      "property_groups": [
+        {
+          "base": "PropertyGroup",
+          "class_name": "QC_SmartCylinderAnchor",
+          "docstring": null,
+          "has_poll": false,
+          "module": "ui/preferences.py",
+          "properties": [
+            {
+              "default": 10.0,
+              "description": "Section diameter in centimetres",
+              "identifier": "diameter_cm",
+              "kind": "float",
+              "label": "Diameter",
+              "minimum": 0.01,
+              "owner": "QC_SmartCylinderAnchor",
+              "soft_maximum": 500.0,
+              "source": "ui/preferences.py"
+            },
+            {
+              "default": 20,
+              "description": "Segment count a cylinder of this diameter gets",
+              "identifier": "segments",
+              "kind": "int",
+              "label": "Segments",
+              "minimum": 3,
+              "owner": "QC_SmartCylinderAnchor",
+              "soft_maximum": 512,
+              "source": "ui/preferences.py"
+            }
+          ]
+        }
+      ],
+      "tagline": "Cylinders with the segment count their diameter calls for",
+      "tags": [
+        "Add Mesh",
+        "Modeling"
+      ],
+      "ui_lists": [
+        {
+          "base": "UIList",
+          "class_name": "QC_UL_smart_cylinder_anchors",
+          "docstring": null,
+          "has_poll": false,
+          "module": "ui/preferences.py",
+          "properties": []
+        }
+      ],
+      "version": "1.6.0",
+      "website": "https://mutaform.studio/"
     },
     "qc-validator": {
       "blender_version_min": "4.5.0",
