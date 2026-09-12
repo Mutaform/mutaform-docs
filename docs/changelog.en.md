@@ -11,7 +11,7 @@ The versions these docs were built from. The number in the add-on's panel header
 | QC Bridge Maya-Blender by Mutaform | `1.3.0` | Blender 4.2+ and Maya 2025 |
 | QC Bake for Maya | `1.2.4` | Maya 2025 |
 | Modular Environment Tools | `2.15.0` | Blender 4.2+ |
-| QC Smart Cylinder | `1.6.0` | Blender 4.2+ |
+| QC Smart Cylinder | `1.6.2` | Blender 4.2+ |
 
 Each add-on's change history lives in its own repository; it is copied here by hand when the docs are updated.
 
@@ -473,6 +473,23 @@ remembered between sessions.
 
 _No change history was kept before 1.2.0._
 ## QC Smart Cylinder
+
+### 1.6.2
+
+The segment count gained a ceiling — **Maximum Segments**, 256 by default,
+next to the minimum in the preferences.
+
+It exists because of scale. An asset whose centimetres were read as metres
+gives you a button twenty metres across; the rule dutifully worked out over a
+thousand segments per ring, and clearing **Manual Segments** flooded the mesh.
+Such a form now stops at the ceiling and the report says `capped: check the
+object scale`. A count set by hand is never capped.
+
+### 1.6.1
+
+Cylinders whose caps are filled with a ladder of quads, without a single
+triangle, are now recognised: the loop walk used to read such a cap as a broken
+grid and the form was not found. The caps come back as one n-gon each.
 
 ### 1.6.0
 

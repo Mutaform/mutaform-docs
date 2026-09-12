@@ -148,7 +148,7 @@ Overrule the rule and rebuild with the count typed in by hand.
 
 Line by line: what the add-on found and what it did with it. One line per form.
 
-**When you need it.** Worth reading always, not only when something went wrong. `40 cm, 36 → 82` is the diameter, before and after; `already right` means the form was correct and was left alone; `no cylindrical form` means the add-on recognised nothing and **broke nothing**.
+**When you need it.** Worth reading always, not only when something went wrong. `40 cm, 36 → 82` is the diameter, before and after; `already right` means the form was correct and was left alone; `no cylindrical form` means the add-on recognised nothing and **broke nothing**; `capped: check the object scale` means the count hit the ceiling from the preferences, and that is almost always a wrong object scale rather than a colossal part.
 
 !!! warning "Worth knowing"
     At most twelve lines are shown; the rest collapse into "… and N more". Forms welded to the rest of the geometry, meshes with shape keys and closed rings of sections are the ones that go unrecognised — these are known limits, not a fault.
@@ -172,15 +172,20 @@ The rule itself: how many segments at which diameter. The rows are anchor points
 !!! warning "Worth knowing"
     The table lives in Blender's preferences, not in the scene file: it is shared by every scene on this machine and survives a restart. If you tailor it to one project, remember that the next project on the same machine sees the same numbers.
 
-### Minimum Segments and Even Counts Only
+### Minimum, Maximum Segments and Even Counts Only
 
-![Minimum Segments and Even Counts Only](img/c/prefs-limits.png){ .control-shot }
+![Minimum, Maximum Segments and Even Counts Only](img/c/prefs-limits.png){ .control-shot }
 
-The floor under the segment count, and rounding to an even number.
+The floor and the ceiling under the segment count, and rounding to an even number.
 
 **When you need it.** The minimum keeps very small parts from degenerating: without it the rule would hand a 2 cm diameter a four-sided shape. Even counts keep the cylinder symmetric on both axes, which makes it easier to cut in half and mirror.
 
-**Default:** minimum 6, even counts on
+**What happens.** The maximum is insurance against a wrong scale. An asset whose centimetres were read as metres gives you a button twenty metres across, and the rule dutifully works out over a thousand segments per ring. Such a form now stops at the ceiling, and the report says `capped: check the object scale`.
+
+**Default:** minimum 6, maximum 256, even counts on
+
+!!! warning "Worth knowing"
+    The ceiling does not apply to **Manual Segments**: a count set by hand is a count someone wanted.
 
 ### Preview
 
@@ -192,4 +197,4 @@ What the rule gives at eight representative diameters.
 
 ---
 
-*Assembled from `content/qc-smart-cylinder.en.yml`. Screenshots taken in **QC Smart Cylinder 1.6.0**.*
+*Assembled from `content/qc-smart-cylinder.en.yml`. Screenshots taken in **QC Smart Cylinder 1.6.2**.*

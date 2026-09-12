@@ -208,7 +208,9 @@ controls:
       Worth reading always, not only when something went wrong. `40 cm, 36 → 82`
       is the diameter, before and after; `already right` means the form was
       correct and was left alone; `no cylindrical form` means the add-on
-      recognised nothing and **broke nothing**.
+      recognised nothing and **broke nothing**; `capped: check the object
+      scale` means the count hit the ceiling from the preferences, and that is
+      almost always a wrong object scale rather than a colossal part.
     note: >-
       At most twelve lines are shown; the rest collapse into "… and N more".
       Forms welded to the rest of the geometry, meshes with shape keys and
@@ -243,16 +245,26 @@ controls:
       machine sees the same numbers.
 
   prefs-limits:
-    label: Minimum Segments and Even Counts Only
+    label: Minimum, Maximum Segments and Even Counts Only
     shot: c/prefs-limits.png
     what: >-
-      The floor under the segment count, and rounding to an even number.
-    default: "minimum 6, even counts on"
+      The floor and the ceiling under the segment count, and rounding to an
+      even number.
+    default: "minimum 6, maximum 256, even counts on"
     when: >-
       The minimum keeps very small parts from degenerating: without it the rule
       would hand a 2 cm diameter a four-sided shape. Even counts keep the
       cylinder symmetric on both axes, which makes it easier to cut in half and
       mirror.
+    result: >-
+      The maximum is insurance against a wrong scale. An asset whose
+      centimetres were read as metres gives you a button twenty metres across,
+      and the rule dutifully works out over a thousand segments per ring. Such
+      a form now stops at the ceiling, and the report says `capped: check the
+      object scale`.
+    note: >-
+      The ceiling does not apply to **Manual Segments**: a count set by hand is
+      a count someone wanted.
 
   prefs-preview:
     label: Preview

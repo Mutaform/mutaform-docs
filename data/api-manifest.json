@@ -3407,6 +3407,7 @@
           "EDIT_MESH"
         ],
         "MAX_REPORT_LINES": 12,
+        "MAX_SEGMENTS": 256,
         "MENU_ICON": "MESH_CYLINDER",
         "MENU_TEXT": "qc Smart Cylinder",
         "MIN_SEGMENTS": 6,
@@ -3734,7 +3735,7 @@
           "properties": []
         }
       ],
-      "version": "1.6.0",
+      "version": "1.6.2",
       "website": "https://mutaform.studio/"
     },
     "qc-validator": {

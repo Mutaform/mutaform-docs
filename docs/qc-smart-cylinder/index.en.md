@@ -48,6 +48,12 @@ not a setting.
 The diameter is a diameter, not a radius, as in the studio table. Type any unit
 you like: enter `40 cm` and Blender converts it. The scene scale is honoured.
 
+![What it looks like in use](img/new-cylinder.gif){ .screenshot }
+
+In the recording the cylinders are built one after another: the diameter
+changes, the segment count follows, and the finished part has one mesh density
+throughout.
+
 !!! note "The edge length is not decoration"
     It tells you whether the rule is working or you have wandered off the end
     of the table. At any sensible diameter it stays between roughly 1.5 and
@@ -66,6 +72,11 @@ one count along its whole length: the add-on splits it into sections where the
 diameter changes, gives each the count its own diameter calls for, and stitches
 neighbouring sections together with triangle bridges. A lathed part, a pipe
 with a reduction, a rod with a thicker end — all handled in one call.
+
+![Rebuilding a finished part](img/fix-selected.gif){ .screenshot }
+
+The UV editor is open on the left of the recording. The part is rebuilt whole —
+and the unwrap is still there: the same islands, the seams where they were.
 
 What survives the rebuild:
 
@@ -87,6 +98,7 @@ Worth reading always, not only when something went wrong:
 | `40 cm, 36 → 82` | The diameter, the count before and after |
 | `36 already right` | The form was correct and was left alone |
 | `no cylindrical form` | The add-on recognised nothing — and broke nothing |
+| `capped: check the object scale` | The segment ceiling was hit. Almost always that means a wrong object scale, not a huge part |
 
 ## The rule lives in the preferences
 
@@ -100,6 +112,10 @@ nearest anchor is kept.
 
 The studio values: 10 cm → 20, 20 → 28, 40 → 36, 60 → 40, 80 → 48, 100 → 68.
 The arrow button always brings them back.
+
+Below the table are the limits: **Minimum Segments** (6), **Maximum Segments**
+(256) and even rounding. The ceiling is not there to save polygons: a form that
+hits it is almost always sitting in the scene at the wrong scale.
 
 !!! warning "The table is shared by every scene"
     It lives in Blender's preferences, not in the scene file. Tailor it to one
