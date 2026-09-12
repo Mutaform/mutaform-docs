@@ -12,6 +12,7 @@
 | **QC Bridge Maya ↔ Blender** | передача сцен между пакетами | [Blender 4.2+ и Maya](qc-bridge/install.md) |
 | **QC Bake for Maya** | тот же QC Bake, но в Maya | [Maya 2025](qc-bake-maya/install.md) |
 | **Modular Environment Tools** | модульное окружение под движок | [Blender 4.2+](modular-environment-tools/install.md) |
+| **QC Smart Cylinder** | цилиндры с числом сечений по диаметру | [Blender 4.2+](qc-smart-cylinder/install.md) |
 
 ## Как это устроено
 

@@ -12,6 +12,7 @@ recording of where to click. Pick the one you need:
 | **QC Bridge Maya ↔ Blender** | moving scenes between the two | [Blender 4.2+ and Maya](qc-bridge/install.en.md) |
 | **QC Bake for Maya** | the same QC Bake, inside Maya | [Maya 2025](qc-bake-maya/install.en.md) |
 | **Modular Environment Tools** | modular environments for an engine | [Blender 4.2+](modular-environment-tools/install.en.md) |
+| **QC Smart Cylinder** | cylinders with the segment count their diameter calls for | [Blender 4.2+](qc-smart-cylinder/install.en.md) |
 
 ## How it works
 

@@ -8,9 +8,10 @@ The versions these docs were built from. The number in the add-on's panel header
 | Scene QC Validator by Mutaform Studio | `1.9.2` | Blender 4.5+ |
 | QC Daily Render | `1.6.2` | Blender 5.1.2+ |
 | QC Maya Viewport | `0.34.1` | Blender 5.1+ |
-| QC Bridge Maya-Blender by Mutaform | `1.1.8` | Blender 4.2+ |
+| QC Bridge Maya-Blender by Mutaform | `1.3.0` | Blender 4.2+ and Maya 2025 |
 | QC Bake for Maya | `1.2.4` | Maya 2025 |
 | Modular Environment Tools | `2.15.0` | Blender 4.2+ |
+| QC Smart Cylinder | `1.6.0` | Blender 4.2+ |
 
 Each add-on's change history lives in its own repository; it is copied here by hand when the docs are updated.
 
@@ -420,4 +421,88 @@ Diagnostic GPU viewport: `Normal Only`, `Normal + AO`, `AO Only`,
 
 ## QC Bridge Maya-Blender by Mutaform
 
-_No change history in the add-on repository yet._
+### 1.3.0
+
+The Maya half was rebuilt as a panel in the same style as QC Bake for Maya and
+the validator. The tools and what they do are unchanged — what changed is how
+it looks and where things live.
+
+It used to be a separate window with an **Advanced** fold holding everything at
+once. It is now a dockable panel: a title with the version number, a blue
+**Import From Blender** button with a narrow **FBX** beside it, **Export To
+Blender** below them, the selection line and a coloured status strip, then
+three labelled folds — **Import Options** (what to clean in the incoming
+scene), **Tools** (Random Sharp and Unlock Normals) and **Settings** (exchange
+folder, FBX name, updates).
+
+- The panel docks like any Maya panel and stays where you put it across
+  restarts.
+- The Import Options ticks and which folds are open are remembered between
+  sessions.
+- The selection line always says what the tool will work on, instead of a
+  greyed-out button with no explanation.
+
+Blender: version number only.
+
+### 1.2.0
+
+An architectural release: the Maya half gained an installer and self-updating,
+and in Blender the bridge moved from the sidebar into the viewport header.
+
+**Blender.** The sidebar tab is gone. A blue Maya icon sits in the 3D viewport
+header right after the Proportional Editing controls and opens a menu with the
+same items: Import From Maya, Export Selected, Export Selected Collection,
+Convert Scene, Settings. The report line wraps instead of being clipped.
+
+**Maya.** The Maya half is now a package and installs the way QC Bake for Maya
+does: unpack it somewhere permanent and drag `install/install.py` into the
+viewport. The installer writes the module file, puts a **QC Bridge** button on
+the *Mutaform* shelf, and clears away the previous installation — the old copy
+in `scripts\` and the old shelf buttons.
+
+The window checks for updates every time it opens and, when a newer release
+exists, offers to install it in one press: download, checksum, folder swap and
+a reload without restarting Maya. The exchange folder and FBX name are now
+remembered between sessions.
+
+!!! warning "The Maya button moved"
+    It used to sit on the *Polygons* shelf; now it is on *Mutaform*, next to QC
+    Bake and the validator. Nothing to do by hand — the installer moves it.
+
+### Earlier versions
+
+_No change history was kept before 1.2.0._
+## QC Smart Cylinder
+
+### 1.6.0
+
+The first version to reach the studio documentation.
+
+The add-on puts one item into `Add > Mesh`, directly under the ordinary
+Cylinder. What it does depends on the selection:
+
+- **nothing selected** — it builds a cylinder whose segment count is computed
+  from the diameter by the studio table: 10 cm → 20, 40 → 36, 100 → 68, with
+  interpolation in between and the edge length kept outside. The Adjust Last
+  Operation box shows both the count and the edge length it produced;
+- **a mesh selected** — it rebuilds the cylindrical forms found in it. A part
+  of changing diameter is split into sections: more segments where it is
+  wider, fewer where it is narrower, triangle bridges in between. The unwrap
+  is carried over, and anything that is not a form is left alone.
+
+It works in Edit Mode too: a partial vertex selection limits the repair to the
+forms it touches.
+
+The rule is editable in `Preferences → Add-ons → QC Smart Cylinder`: the anchor
+table, the minimum count, even rounding and a preview at eight diameters.
+
+!!! note "What the add-on skips"
+    A form welded to the rest of the geometry; a mesh with shape keys; a closed
+    ring of sections; a four-sided cylinder that cannot be told from a cube. In
+    these cases it writes the reason into the report and **leaves** the
+    geometry alone. The count can be forced with **Manual Segments**.
+
+### Earlier versions
+
+_Before 1.6.0 the add-on was not part of the studio documentation; the build
+history is in the [repository](https://github.com/Mutaform/qc-smart-cylinder)._

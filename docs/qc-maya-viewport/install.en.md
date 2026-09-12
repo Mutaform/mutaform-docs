@@ -69,7 +69,7 @@ the version switcher is in the header of this site.
 | --- | --- |
 | The search finds nothing | The repository was not added, or the URL has a typo. Go back to step 1 and check the whole address |
 | The add-on is listed but `Install` does nothing | Your Blender is older than **5.1**. Update Blender |
-| It installed but there is no panel | Make sure you pressed ++n++ inside the viewport, and look through the tabs on the side: there can be many, and the one you want may be collapsed |
+| It installed but there is no button | Look in the **3D viewport header**, to the right of the shading buttons, not in the sidebar. If the header is narrow, some buttons in it are hidden — scroll it with the mouse wheel |
 | The repository list is empty | No network access, or a proxy blocks it. Ask the studio for the archive and install from file: `Get Extensions` → the `▼` icon top right → **Install from Disk…** |
 
 ## Next
